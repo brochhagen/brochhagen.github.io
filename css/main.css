@@ -47,15 +47,3 @@ ul.posts li {
 nav>ul>li {
 	font-size: 1.2em;
 }
-
-.nav{
-	text-align:center;
-    }
-
-.nav li{
-    display:inline;
-}
-.nav a{
-    display:inline-block;
-    padding:10px;
-}
