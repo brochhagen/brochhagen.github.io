@@ -44,13 +44,13 @@ ul.posts li {
 }
 
 nav {
-	font-size: 10em;
+	font-size: 1em;
     }
 
 nav>ul {
-	font-size: 10em;
+	font-size: 2em;
 	}
 
 nav>ul>li {
-	font-size: 10em;
+	font-size: 3em;
 }
