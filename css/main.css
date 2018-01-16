@@ -13,9 +13,6 @@ nav ul li, footer ul li {
     margin-right: 20px;
 }
 
-.nav a{
-	font-size:3em;
-      }
 a {
     text-decoration: none;
     color: #990000;
@@ -28,7 +25,7 @@ h1 {
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 p {
-    font-size: 1.2em;
+    font-size: 1.1em;
     line-height: 1.4em;
     color: #333;
 }
@@ -44,4 +41,16 @@ ul.posts {
 
 ul.posts li {
     list-style: none;
+}
+
+nav {
+	font-size: 10em;
+    }
+
+nav>ul {
+	font-size: 10em;
+	}
+
+nav>ul>li {
+	font-size: 10em;
 }
