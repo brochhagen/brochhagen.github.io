@@ -1,2 +1,3 @@
 name: T.S. Brochhagen
 markdown: kramdown
+permalink: /blog/:year/:month/:day/:title
