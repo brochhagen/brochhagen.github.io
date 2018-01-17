@@ -25,7 +25,7 @@ h1 {
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 p {
-    font-size: 1.15em;
+    font-size: 1.2em;
     line-height: 1.4em;
     color: #333;
 }
@@ -45,5 +45,5 @@ ul.posts li {
 
 
 nav>ul>li {
-	font-size: 1.25em;
+	font-size: 1.3em;
 }
