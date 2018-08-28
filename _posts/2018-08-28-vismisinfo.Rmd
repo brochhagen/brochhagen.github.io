@@ -1,10 +1,11 @@
 ---
+layout: post
 title: "Lo mostrado y lo implicado"
 output:
   tufte::tufte_html: default
   tufte::tufte_handout: default
 author: "Thomas Brochhagen"
-date: "`r Sys.Date()`"
+date: 2018-08-28
 runtime: shiny
 ---
 ```{r setup, include=FALSE}
