@@ -14,31 +14,26 @@ knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
 options(htmltools.dir.version = FALSE)
 ```
 
-```{r, echo=FALSE}
-library("ggplot2"); theme_set(theme_light())
-d1 <- data.frame("percent" = c(30.7, 22.8,27.3),
-                    "year" = c("2010", "2013", "2016"))
-myred <- 'red'
-myblue <- 'blue'
-myalpha <- 0.75
-```
+El 21 de Agosto se presentaron los resultados de la encuesta Casen 2017.^[La presentación, los resultados, la metodología, y los cuestionarios utilizados están publicados en la [página el Ministerio de Desarrollo Social de Chile](http://observatorio.ministeriodesarrollosocial.gob.cl), quien mandata la encuesta.] Este levantamiento es una de las principales caracterizaciones de desarrollos socio-económicos en Chile. Por ejemplo, busca cuantificar como ha cambiado la pobreza en el país. Por ende, muchos estudios y decisiones políticas se basan en esta encuesta.
 
-El 21 de Agosto se presentaron los resultados de la encuesta Casen 2017.^[[http://observatorio.ministeriodesarrollosocial.gob.cl](http://observatorio.ministeriodesarrollosocial.gob.cl)] Este levantamiento es una de las herramientas principales que caracterizan desarrollos socio-económicos en Chile. Estudios y decisiones políticas se basan en ella. Tanto los resultados, como información sobre metodología y cuestionarios están publicados en la página el Ministerio de Desarrollo Social de Chile, quien mandata la encuesta. Hay mucho que decir sobre detalles finos de la encuesta, pero por ahora solo quiero enfocarme en la [presentación de los resultados](http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Presentacion_Sintesis_de_Resultados_Casen_2017.pdf) En particular, en decisiones de visualización y análisis llamativas. Espero que de ellas podamos aprender como hacer mejores presentaciones y levantamientos en el futuro. 
+Los detalles más finos de la encuesta dan para mucha discusión pero aquí solo quiero enfocarme en la [presentación de los resultados](http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Presentacion_Sintesis_de_Resultados_Casen_2017.pdf). En particular, en decisiones de visualización y análisis llamativas. Espero que de ellas se pueda aprender algo, tanto sobre los resultados de este año como para futuros levantamientos. 
 
-Enfocarse solamente en la presentación de los resultados no es solamente conveniente.^[Son 84 folios. El informe completo tiene 302 páginas.] También se motiva por el hecho de que, salvo por un grupo pequeño expertos en el área, la mayoría de la gente, incluyendo políticos, solo ven esta información. Por eso es muy importante clarificar que tan bien sintetizan la información, y dónde hay problemas.
+Enfocarse solamente en la presentación del 21 de Agosto no es solamente conveniente por ser más corta que el informe completo. También me motiva la suposición que, salvo por un grupo pequeño expertos, la mayoría de la gente solo ve e interpreta la presentación de los resultados. Por eso es importante clarificar que tan bien se sintetiza la información y dónde hay problemas.
 
-En vez de repasar la presentación en el orden en el que se presenta, agruparé folios según temáticas interesantes. 
+En vez de repasar la presentación folio por folio, agrupé mis comentarios según temáticas que, a mi parecer, merecen discusión.
 
-# Indice temático
+# Indice temático y links
 ## Visualización 
 * [Ejes que engañan](./casen2017/01ejes.html)
-* Gráficos circulares
-* Tablas agrupando lo in-agrupable
+* [Gráficos circulares](./casen2017/02pie-charts.html)
+* [Tablas que agrupan lo in-agrupable](./casen2017/03tablas)
 
-##Estadística
-* Estimados de puntos y perdida de información
-* Hipótesis nula (casi) no interpretable
-* El coeficiente Gini
+## Análisis y metodología estadística
+* [Estimados de puntos y perdida de información](./casen2017/04point-estimates.html)
+* [Hipótesis nula (casi) no interpretable](./casen2017/05nht.html)
+* [El coeficiente Gini](./casen2017/06gini.html)
 
 # Conclusión
-Resumiendo, algunos problemas (gráficos cirulares) son pequeños, otros más graves (hipótesis nula; estimados de puntos; ejes; tablas), y otros requieren información crítica que probablemente no tiene el público al cual se le presenta (coeficiente Gini). Lo que más llama la atención es que, aparte del último punto, todos estos problemas son conocidos hace tiempo y fáciles de evitar. Que aparezcan en un informe tan importante sugiere que los organizmos involucrados no han hecho bien sus tareas. El análisis y su presentacián no son adecuados para el siglo 21 y reflejan un mensaje torcido a favor del actual gobierno. 
+Resumiendo, algunos problemas son menores (gráficos cirulares), otros son más severos (hipótesis nula; estimados de puntos; ejes; tablas), y otros requieren una visión crítica que probablemente le falta a la audiencia (coeficiente Gini). 
+
+Lo que más llama la atención es que, aparte del último punto, todos estos problemas son conocidos y fáciles de evitar. Que aparezcan en un informe tan importante sugiere que los organismos involucrados tienen que hacer mejor sus tareas si su intensión es informar. El análisis y su presentación no son adecuados para el siglo 21.

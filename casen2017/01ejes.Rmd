@@ -1,10 +1,11 @@
 ---
-title: "Lo mostrado y lo implicado"
+title: "Visualización I"
+subtitle: "Ejes que engañan"
 output:
   tufte::tufte_html: default
   tufte::tufte_handout: default
 author: "Thomas Brochhagen"
-date: "`r Sys.Date()`"
+date: "Última actualización: `r Sys.Date()`" 
 ---
 ```{r setup, include=FALSE}
 library(tufte)
@@ -43,3 +44,16 @@ ggplot(d1, aes(x = year, y = percent, fill = c('na','ba','na'))) +
 
 Una de las *curiosidades* que dej?? el debate presidencial de Noviembre fueron los gr??ficos empleados por Sebasti??n Pi??era. No solo por traer gr??ficos impresos a un debate, si no porque hab??a o ignorancia o una intenci??n de manipulaci??n en su dise??o. Las barras de su gr??fico^[![](data/small-pin.png) Fuente: CNN] contrastando delincuencia del 2010, 2013 y 2016 no usan la misma escala: La barra representando la criminalidad del 2013, cuando Pi??era fue presidente por primera vez, es mucho m??s baja de lo que deber??a ser. O las otras dos demasiado altas, es lo mismo. El punto es que visualmente esta manipulaci??n sugiere que con Pi??era hay (notablemente) menos criminalidad al incrementar, visualmente, la diferencia visual con las otras dos barras. La presentaci??n de la encuesta Casen 2017^[La encuesta [Casen](http://observatorio.ministeriodesarrollosocial.gob.cl) es una de las herramientas principales que caracterizan desarrollos socio-econ??micos. Estudios y decisiones pol??ticas se basan en ella. Es mandatada por el Ministerio de Desarrollo Social de Chile.], publicada la semana pasada, muestra que nada se quiere aprender; o bien, lo mucho que se quiere manipular. 
 
+
+---
+# Indice temático y links
+## [Introducción](../casen2017-intro.html)
+## Visualización 
+* Ejes que engañan
+* [Gráficos circulares](./casen2017/02pie-charts.html)
+* [Tablas que agrupan lo in-agrupable](./casen2017/03tablas)
+
+## Análisis y metodología estadística
+* [Estimados de puntos y perdida de información](./casen2017/04point-estimates.html)
+* [Hipótesis nula (casi) no interpretable](./casen2017/05nht.html)
+* [El coeficiente Gini](./casen2017/06gini.html)

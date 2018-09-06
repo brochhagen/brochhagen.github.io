@@ -1,0 +1,31 @@
+---
+title: "Visualización III"
+subtitle: "Tablas que agrupan lo in-agrupable"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout: default
+author: "Thomas Brochhagen"
+date: "Última actualización: `r Sys.Date()`" 
+---
+```{r setup, include=FALSE}
+library(tufte)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+```
+
+
+
+
+---
+# Indice temático y links
+## [Introducción](../casen2017-intro.html)
+## Visualización 
+* [Ejes que engañan](./casen2017/01ejes.html)
+* [Gráficos circulares](./casen2017/02pie-charts.html)
+* Tablas que agrupan lo in-agrupable
+
+## Análisis y metodología estadística
+* [Estimados de puntos y perdida de información](./casen2017/04point-estimates.html)
+* [Hipótesis nula (casi) no interpretable](./casen2017/05nht.html)
+* [El coeficiente Gini](./casen2017/06gini.html)
