@@ -4,3 +4,5 @@ tufte
 ggplot2
 knitr
 png
+dplyr
+bindrcpp

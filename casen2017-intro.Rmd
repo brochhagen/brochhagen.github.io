@@ -31,7 +31,7 @@ En vez de repasar la presentación folio por folio, agrupé mis comentarios seg�
 ## Análisis y metodología estadística
 * [Estimados de puntos y perdida de información](./casen2017/04point-estimates.html)
 * [Hipótesis nula (casi) no interpretable](./casen2017/05nht.html)
-* [El coeficiente Gini](./casen2017/06gini.html)
+* [El Coeficiente de Gini](./casen2017/06gini.html)
 
 # Conclusión
 Resumiendo, algunos problemas son menores (gráficos cirulares), otros son más severos (hipótesis nula; estimados de puntos; ejes; tablas), y otros requieren un trasfondo crítico que probablemente le falta a la audiencia (coeficiente Gini). 

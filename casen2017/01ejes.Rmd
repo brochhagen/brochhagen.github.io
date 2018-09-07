@@ -1,6 +1,6 @@
 ---
 title: "Visualización I"
-subtitle: "Ejes que engañan"
+subtitle: "Ejes que engañan; diferencias que no son"
 output:
   tufte::tufte_html: default
   tufte::tufte_handout: default
@@ -16,42 +16,99 @@ options(htmltools.dir.version = FALSE)
 
 ```{r, echo=FALSE}
 library("ggplot2"); theme_set(theme_light())
-d1 <- data.frame("percent" = c(30.7, 22.8,27.3),
-                    "year" = c("2010", "2013", "2016"))
-myred <- 'red'
-myblue <- 'blue'
-myalpha <- 0.75
-
 library("knitr")
 library("png")
 ```
 
-Una de las decisiones más llamativas, y de las que más se habló en los medios, es la libertad con la que se manipulan los ejes de gráficos que presentan datos sobre la distribución de ingresos (folios 25, 28,31). Hay dos problemas principales. El primero es que los ejes de los gráficos de barras están ajustados para sugerir, visualmente, el mismo incremento en todos los indices. Por ejemplo, si uno mira los números en los eje, la diferencia de magnitudes entre estos dos gráficos es enorme:
+Una de las decisiones más llamativas, y de las que más se habló en los medios,^[Por ejemplo, en [El Dínamo](https://www.eldinamo.cl/nacional/2018/08/22/casen-los-abultados-graficos-sobre-desigualdad-que-se-utilizaron-para-diferencias-no-significativas/) y [El Desconcierto](http://www.eldesconcierto.cl/2018/08/21/graficos-vuelven-a-penar-a-pinera-la-curiosa-forma-de-presentar-los-datos-de-distrubucion-de-ingresos-en-la-casen/).] es la libertad con la que se manipulan los ejes de gráficos que presentan datos sobre la distribución de ingresos. Hay dos problemas principales.
 
-```{r, fig-fullwidth, fig.width = 100, fig.height = 20, fig.fullwidth = TRUE, warning=FALSE, message=FALSE, cache=TRUE, echo = FALSE}
+## 1. Diferencias exageradas por ejes manipulados
+
+El primero es que los ejes de los gráficos de barras están ajustados para sugerir, visualmente, el mismo incremento en todos los indices. El efecto se magnifica al poner gráficos con ejes muy diferentes uno al lado del otro. Al mirar los números en los eje es evidente que la diferencias diferencias entre el 2015 y el 2016 que muestra cada gráfico es enorme. Un ejemplo:
+
+```{r, fig-fullwidth, fig.width = 10, fig.height = 2, out.width = 800, fig.fullwidth = TRUE, warning=FALSE, message=FALSE, cache=TRUE, echo = FALSE}
 include_graphics("./data/01ejes.png")
 ```
 
+El gráfico de la izquierda muestra una diferencia de *1,2* entre el *2015* y el *2017*. El de la derecha una de tan solo *0,1*. Las barras, por otro lado, sugieren que es casi idéntica. La diferencia de magnitudes no es nada obvia, visualmente. La razón es que las barras entre los dos gráficos están alineadas a pesare de tener ejes con rangos numéricos muy diferentes. Están ajustados para sugerir que la diferencia del 2015, gestión del gobierno de Michelle Bachelet, al 2017, gestión de Sebastián Piñera, es alta. 
 
-# Here
+Es cierto que los números están en los ejes. No podemos hablar directamente de una manipulación de datos.^[En comparación con los gráficos de Sebastián Piñera en el debate presidencial del Noviembre pasado. <br> ![](data/small-pin.png)] La manipulación es visual. Se aprovecha la manera en la que procesamos información cuando nos es presentada de esta manera: Cuando diferencias son grandes, esperamos que estas sean reflejadas, proporcionalmente, por diferencias de altura en las barras. Si se presenta el mismo tipo de información, por ejemplo, indicadores de la distribución del ingreso, se debería usar la misma escala en diferentes gráficos. Más aún si se posiciona uno al lado del otro.  
 
-```{r fig-margin, fig.margin = TRUE, fig.cap = "Arriba: Barras con escala com??n. Abajo: Barras rid??culas", fig.width=3.5, fig.height=3.5, cache=TRUE, message=FALSE, echo=FALSE}
-ggplot(d1, aes(x = year, y = percent, fill = c('na','ba','na'))) +
-            geom_bar(stat="identity", position = "dodge", alpha = myalpha) +
-            scale_fill_manual(values=c(myblue, myred)) +
-            theme(legend.position="none") + # remove legend (that comes from dummy categories)
-            geom_text(aes(label=percent), vjust=3.6, color="white", size=8) +
-            theme(axis.title.x=element_blank(),
-                  axis.title.y=element_blank(),
-                  axis.text.x = element_text(size=14),
-                  axis.text.y = element_text(size=14))
+## 2. Sugerencias de diferencias no encontradas
+
+El segundo problema es un poco más sutil pero mucho más importante. Los gráficos  en estos folios sugieren que hay una diferencia entre el 2015 y el 2017. En términos políticos, que la situación ha cambiado en el año de gestión de Sebastián Piñera en comparación con el gobierno de Michelle Bachelet. Los números de los gráficos por si solos no son informativos con respecto a esto. Para alguien que no ha visto el análisis completo no está claro si una diferencia de 0,1 en el *Índice 10/40* ni la de 1,2 en el otro índice, es un incremento notable; si podría ser un artefacto de como se condujo la encuesta; o si es cae en el rango de la variabilidad esperada año por año. 
+
+La tarea principal una visualización de resultados, en particular la de una tan importante como esta, es presentar de manera compacta los resultados del análisis de los datos que responde estas preguntas. Intuitivamente: grandes diferencias visuales indican que el análisis estadístico, escondido de la audiencia en una presentación de esta naturaleza, sugiere que hay una diferencia importante entre estos dos años. Puesto de otra manera, una buena visualización refleja el análisis técnico. Lo condensa, informando de manera simple y directa. Es en este aspecto donde más se criticó la presentación. El caso más obvio es el incremento del Coeficiente de Gini sugerido en el folio 28:
+
+```{r, fig-fullwidth2, fig.width = 10, fig.height = 2, out.width = 500, fig.align="center", fig.fullwidth = TRUE, warning=FALSE, message=FALSE, cache=TRUE, echo = FALSE}
+include_graphics("./data/02ejes-gini.png")
 ```
 
+No solo se ha elegido un eje ínfimo (0,49 - 0,504) para exagerar el alza del Coeficiente entre el 2015 y el 2017. Lo peor es que en una nota de pie nos informan que la diferencia no es significativa.^[También hay problemas con la [metodología estadística empleada](./casen2017/05nht.html) y críticas que mencionar sobre el uso del [Coeficiente de Gini](./casen2017/06gini.html). Aquí solo me enfoco en lo visual. Véase el índice abajo.] En otras palabras, los mismos analistas nos dicen que la diferencia entre los dos años, sugerida enfáticamente por el gráfico, no es de fiarse El coeficiente no ha cambiado lo suficiente como para decir que hay una diferencia entre un año y el otro. Sería mucho más verosimil, si no se adivina una diferencia, tomar un eje más amplio y así mostrar una linea recta en vez de una empinada a favor del actual gobierno. 
 
+# Resumen
 
-Una de las *curiosidades* que dej?? el debate presidencial de Noviembre fueron los gr??ficos empleados por Sebasti??n Pi??era. No solo por traer gr??ficos impresos a un debate, si no porque hab??a o ignorancia o una intenci??n de manipulaci??n en su dise??o. Las barras de su gr??fico^[![](data/small-pin.png) Fuente: CNN] contrastando delincuencia del 2010, 2013 y 2016 no usan la misma escala: La barra representando la criminalidad del 2013, cuando Pi??era fue presidente por primera vez, es mucho m??s baja de lo que deber??a ser. O las otras dos demasiado altas, es lo mismo. El punto es que visualmente esta manipulaci??n sugiere que con Pi??era hay (notablemente) menos criminalidad al incrementar, visualmente, la diferencia visual con las otras dos barras. La presentaci??n de la encuesta Casen 2017^[La encuesta [Casen](http://observatorio.ministeriodesarrollosocial.gob.cl) es una de las herramientas principales que caracterizan desarrollos socio-econ??micos. Estudios y decisiones pol??ticas se basan en ella. Es mandatada por el Ministerio de Desarrollo Social de Chile.], publicada la semana pasada, muestra que nada se quiere aprender; o bien, lo mucho que se quiere manipular. 
+Una buena visualización informa sobre los datos y su análisis. Diferencias representadas tienen que ser diferencias que importan. Su magnitud tiene que reflejar la magnitud del efecto. Usar diferentes ejes al hablar sobre datos de la misma naturaleza es suboptimo. Forzar que las escalas muestren distancias parecidas entre barras con ejes completamente diferentes es sugestión Mostrar alzas donde ni siquiera el análisis que uno mismo condujo es manipulación. Visualización es política.
 
+## Algunas soluciones prácticas
+1. Usar el mismo eje para datos del mismo tipo. Así queda claro que, por ejemplo, la diferencia entre el año *2015* y el año *2017* es menor en el *Indice 10/40* que en el *Indice 20/20*.
 
+```{r, echo = FALSE, fig.width = 6, fig.heigth = 4, out.width = 1000, full.width=TRUE,  warning=FALSE, message=FALSE, cache=TRUE}
+
+distribucion <- data.frame("idx" = factor(c("Indice 20/20","Indice 20/20", 'Indice 10/40', 'Indice 10/40'), levels = c("Indice 20/20", "Indice 10/40")),
+                           "year" = c("2015","2017","2015","2017"),
+                           "value" = c(10.7,11.9,2.4,2.5))
+myred <- 'red'
+myblue <- 'blue'
+myalpha <- 0.75
+
+ggplot(distribucion, aes(x = year, y = value, fill = c('r','b', 'r','b'))) + 
+                   geom_bar(stat="identity", position = "dodge", alpha = myalpha) +
+                   facet_wrap(~ idx) +
+                   scale_fill_manual(values=c(myblue, myred)) + 
+                   theme(legend.position="none") + # remove legend (that comes from dummy categories)
+                   geom_text(aes(label=value), vjust=2.6, color="white", size=8) +
+                  theme(axis.title.x=element_blank(),
+                  axis.title.y=element_blank(),
+                  axis.text.x = element_text(size=14),
+                  axis.text.y = element_text(size=14),
+                  strip.text.x = element_text(size = 18, color = "black"))
+  
+```
+
+2. Apilar los indices. Así vemos tanto si la diferencia es grande o pequeña tanto para un índice mismo, como como se compara con diferencias entre otros índices (de nuevo: usando el mismo eje para mantener la paridad). La desventaja es que si las diferencias son pequeñas para algunos indices, podrían llegar a ser dificiles de ver, como es el caso para el *Indice 10/40*. **LEGEND MISSING**
+
+```{r, echo = FALSE, fig.width = 6, fig.heigth = 4, out.width = 1000, full.width=TRUE,  warning=FALSE, message=FALSE, cache=TRUE}
+library("dplyr")
+distribucion["diffvalue"] <- c(10.7,1.2,2.4,0.1)
+ggplot(distribucion, aes(x = idx, y = diffvalue, fill = factor(year, levels = c("2017", "2015")))) +
+  geom_bar(stat = "identity", alpha = myalpha) +
+                     scale_fill_manual(values=c(myblue, myred)) + 
+                   theme(legend.position="none") + # remove legend (that comes from dummy categories) +
+                  theme(axis.title.x=element_blank(),
+                  axis.title.y=element_blank(),
+                  axis.text.x = element_text(size=20),
+                  axis.text.y = element_text(size=14),
+                  strip.text.x = element_text(size = 18, color = "black"))
+  
+```
+
+3. Los gráficos muestran que se ha jugado mucho con los ejes. Esto se puede usar para el bien de la presentación si se modifica para mejor comunicar lo aprendido del análisis. Si queremos expresar que no hay una diferencia significativa, por ejemplo, podemos elegir el rango numérico del eje-*y* para que la linea que une los dos años refleje que el cambio es poco o irrelevante.
+
+```{r, echo = FALSE, fig.width = 6, fig.heigth = 4, out.width = 500, full.width=TRUE,  warning=FALSE, message=FALSE, cache=TRUE}
+
+gini <- data.frame("year" = c("2015", "2017"), "value" = c(0.495, 0.502))
+ggplot(gini, aes(x = year, y = value, group = 1)) +
+        geom_point(size=3.5, color = myblue, alpha = myalpha+0.15) +
+        geom_line(size=1.5, color = myblue, alpha = myalpha) +
+        ylim(0.325,0.625) + 
+        ggtitle("Coeficiente de Gini") +
+        theme(axis.title.x=element_blank(),
+                  axis.title.y=element_blank(),
+                  axis.text.x = element_text(size=20),
+                  axis.text.y = element_text(size=14), 
+                  plot.title = element_text(size=22, face="bold.italic", hjust = 0.5))
+```
 ---
 # Indice temático y links
 ## [Introducción](../casen2017-intro.html)
@@ -63,4 +120,4 @@ Una de las *curiosidades* que dej?? el debate presidencial de Noviembre fueron l
 ## Análisis y metodología estadística
 * [Estimados de puntos y perdida de información](./casen2017/04point-estimates.html)
 * [Hipótesis nula (casi) no interpretable](./casen2017/05nht.html)
-* [El coeficiente Gini](./casen2017/06gini.html)
+* [El Coeficiente de Gini](./casen2017/06gini.html)
