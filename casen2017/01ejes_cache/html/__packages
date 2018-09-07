@@ -2,3 +2,5 @@ base
 shiny
 tufte
 ggplot2
+knitr
+png

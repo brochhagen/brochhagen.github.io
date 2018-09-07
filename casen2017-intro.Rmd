@@ -14,11 +14,11 @@ knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
 options(htmltools.dir.version = FALSE)
 ```
 
-El 21 de Agosto se presentaron los resultados de la encuesta Casen 2017.^[La presentación, los resultados, la metodología, y los cuestionarios utilizados están publicados en la [página el Ministerio de Desarrollo Social de Chile](http://observatorio.ministeriodesarrollosocial.gob.cl), quien mandata la encuesta.] Este levantamiento es una de las principales caracterizaciones de desarrollos socio-económicos en Chile. Por ejemplo, busca cuantificar como ha cambiado la pobreza en el país. Por ende, muchos estudios y decisiones políticas se basan en esta encuesta.
+El 21 de Agosto se presentaron los resultados de la encuesta Casen 2017^[La presentación, los resultados, la metodología, y los cuestionarios utilizados están publicados en la [página el Ministerio de Desarrollo Social de Chile](http://observatorio.ministeriodesarrollosocial.gob.cl), quien mandata la encuesta.], una de las principales caracterizaciones de desarrollos socio-económicos en Chile. Por ejemplo, este levantamiento busca cuantificar como ha cambiado la pobreza en el país: estamos peor, mejor, o igual que antes? Por ende, muchos estudios y decisiones políticas se basan en esta encuesta.
 
-Los detalles más finos de la encuesta dan para mucha discusión pero aquí solo quiero enfocarme en la [presentación de los resultados](http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Presentacion_Sintesis_de_Resultados_Casen_2017.pdf). En particular, en decisiones de visualización y análisis llamativas. Espero que de ellas se pueda aprender algo, tanto sobre los resultados de este año como para futuros levantamientos. 
+Los detalles más finos de la encuesta dan para mucha discusión pero aquí solo quiero enfocarme en como se [presentaron los resultados](http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Presentacion_Sintesis_de_Resultados_Casen_2017.pdf). En particular, en decisiones de visualización y análisis que llaman la atención. Espero que de ellas se pueda aprender algo, tanto sobre los resultados de este año como para futuros levantamientos. 
 
-Enfocarse solamente en la presentación del 21 de Agosto no es solamente conveniente por ser más corta que el informe completo. También me motiva la suposición que, salvo por un grupo pequeño expertos, la mayoría de la gente solo ve e interpreta la presentación de los resultados. Por eso es importante clarificar que tan bien se sintetiza la información y dónde hay problemas.
+Enfocarse solamente en la presentación del 21 de Agosto no es solamente conveniente por ser más corta que el informe completo. También me motiva la suposición que, salvo por un grupo pequeño expertos, la mayoría de la gente solo ve e interpreta esta exposición de los resultados. Por eso es importante clarificar que tan bien se sintetiza la información y dónde hay problemas.
 
 En vez de repasar la presentación folio por folio, agrupé mis comentarios según temáticas que, a mi parecer, merecen discusión.
 
@@ -34,6 +34,6 @@ En vez de repasar la presentación folio por folio, agrupé mis comentarios seg�
 * [El coeficiente Gini](./casen2017/06gini.html)
 
 # Conclusión
-Resumiendo, algunos problemas son menores (gráficos cirulares), otros son más severos (hipótesis nula; estimados de puntos; ejes; tablas), y otros requieren una visión crítica que probablemente le falta a la audiencia (coeficiente Gini). 
+Resumiendo, algunos problemas son menores (gráficos cirulares), otros son más severos (hipótesis nula; estimados de puntos; ejes; tablas), y otros requieren un trasfondo crítico que probablemente le falta a la audiencia (coeficiente Gini). 
 
-Lo que más llama la atención es que, aparte del último punto, todos estos problemas son conocidos y fáciles de evitar. Que aparezcan en un informe tan importante sugiere que los organismos involucrados tienen que hacer mejor sus tareas si su intensión es informar. El análisis y su presentación no son adecuados para el siglo 21.
+Lo que más llama la atención es que, aparte del último punto, todos estos problemas son conocidos y fáciles de evitar. Que aparezcan en un informe tan importante sugiere que los organismos involucrados tienen que hacer mejor sus tareas si su intensión es informar -- y no torcer los datos a favor de un particular mensaje del gobierno.

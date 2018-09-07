@@ -21,14 +21,19 @@ d1 <- data.frame("percent" = c(30.7, 22.8,27.3),
 myred <- 'red'
 myblue <- 'blue'
 myalpha <- 0.75
+
+library("knitr")
+library("png")
+```
+
+Una de las decisiones más llamativas, y de las que más se habló en los medios, es la libertad con la que se manipulan los ejes de gráficos que presentan datos sobre la distribución de ingresos (folios 25, 28,31). Hay dos problemas principales. El primero es que los ejes de los gráficos de barras están ajustados para sugerir, visualmente, el mismo incremento en todos los indices. Por ejemplo, si uno mira los números en los eje, la diferencia de magnitudes entre estos dos gráficos es enorme:
+
+```{r, fig-fullwidth, fig.width = 100, fig.height = 20, fig.fullwidth = TRUE, warning=FALSE, message=FALSE, cache=TRUE, echo = FALSE}
+include_graphics("./data/01ejes.png")
 ```
 
 
-# TO DO
-* Recortar Pi??era con grafico y poner como marginnote
-* Texto: Preambulo, explicaci??n, proporcionalidad, shiny ejemplo 1A (Pi??i), ejemplo 1B (CASE), ejemplo 2 (CASE)
-
-# Una es ninguna; m??s son un patr??n
+# Here
 
 ```{r fig-margin, fig.margin = TRUE, fig.cap = "Arriba: Barras con escala com??n. Abajo: Barras rid??culas", fig.width=3.5, fig.height=3.5, cache=TRUE, message=FALSE, echo=FALSE}
 ggplot(d1, aes(x = year, y = percent, fill = c('na','ba','na'))) +
@@ -41,6 +46,8 @@ ggplot(d1, aes(x = year, y = percent, fill = c('na','ba','na'))) +
                   axis.text.x = element_text(size=14),
                   axis.text.y = element_text(size=14))
 ```
+
+
 
 Una de las *curiosidades* que dej?? el debate presidencial de Noviembre fueron los gr??ficos empleados por Sebasti??n Pi??era. No solo por traer gr??ficos impresos a un debate, si no porque hab??a o ignorancia o una intenci??n de manipulaci??n en su dise??o. Las barras de su gr??fico^[![](data/small-pin.png) Fuente: CNN] contrastando delincuencia del 2010, 2013 y 2016 no usan la misma escala: La barra representando la criminalidad del 2013, cuando Pi??era fue presidente por primera vez, es mucho m??s baja de lo que deber??a ser. O las otras dos demasiado altas, es lo mismo. El punto es que visualmente esta manipulaci??n sugiere que con Pi??era hay (notablemente) menos criminalidad al incrementar, visualmente, la diferencia visual con las otras dos barras. La presentaci??n de la encuesta Casen 2017^[La encuesta [Casen](http://observatorio.ministeriodesarrollosocial.gob.cl) es una de las herramientas principales que caracterizan desarrollos socio-econ??micos. Estudios y decisiones pol??ticas se basan en ella. Es mandatada por el Ministerio de Desarrollo Social de Chile.], publicada la semana pasada, muestra que nada se quiere aprender; o bien, lo mucho que se quiere manipular. 
 
