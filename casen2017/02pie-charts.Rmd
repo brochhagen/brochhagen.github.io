@@ -18,27 +18,30 @@ library("ggplot2"); theme_set(theme_light())
 library("knitr")
 library("png")
 ```
-Este problema es menor pero tan fácil de corregir que tendrá que ser repetido hasta que deje de ser cometido. Gráficos circulares no son efectivos medios de comunicación visual.^[**fuentes**] Miremos, por ejemplo, el que se nos presenta en el folio *6*:
+En el contexto de la presentación este problema es muy menor. Pero es tan fácil de corregir que tendrá que ser mencionado hasta que deje de ser cometido. Gráficos circulares no son (casi nunca) efectivos medios de comunicación visual. Miremos, por ejemplo, el que se nos presenta en el folio *6*:
 
 ```{r, fig-fullwidth, fig.width = 10, fig.height = 2, out.width = 800, fig.fullwidth = TRUE, warning=FALSE, message=FALSE, cache=TRUE, echo = FALSE}
 include_graphics("./data/03circulos.png")
 ```
 
-Ignorando la cantidad de información presentada en la leyenda, la pregunta es si esta representación circular nos ayuda a entender los datos presentados. En su esencia, un gráfico circular codifica información por (i) areas y (ii) ángulos. Algo que ya se sabe hace mucho -- por lo menos a quien le interesa si su presentación es entendible -- por su intenso estudio es que el ojo humano es pésimo comparando áreas y ángulos ¿Hay solución? Si, nuestros ojos son mucho mejores comparando diferencias de líneas y posiciones. Comparemos la misma información en forma de un gráfico de barras:
+Ignorando la cantidad de información presentada en la leyenda, la pregunta es si esta representación circular nos ayuda a entender los datos presentados. Se nos presentan dos grupos a comparar. El primero compara tres categorias: *No pobres* con *Pobres extremos* con *Pobres no extremos*. Este grupo es el que muestra el circulo y sus áreas delimitadas. El segundo es de un nivel hierarquico más alto. Compara *No pobres* con *Pobres*. Como no se encontró una manera de meter esta información en el círculo, se añadieron llaves que aglutinan los dos tipos de pobreza, sumando *8,6%*, en un momento de poca inspiración.
+
+En su esencia, un gráfico circular codifica información por (i) areas y (ii) ángulos. Algo de lo que se tiene evidencia por lo menos desde los años *80*^[Cleveland & McGill (1984): *Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods*. Journal of the American Statistical Association.] y que lleva años siendo repetido por expertos en visualización^[Por ejemplo, [Edward Tufte](https://www.edwardtufte.com/tufte/books_vdqi) y [Stephen Few](https://www.perceptualedge.com/articles/visual_business_intelligence/save_the_pies_for_dessert.pdf). Para opiniones sobre cuando gráficos circulares si pueden ser una buena opción veáse también artículos de [Ann K. Emery](http://annkemery.com/pie-chart-guidelines/) y [Randy Olson](https://www.oreilly.com/ideas/in-defense-of-the-pie-chart).] es que los humanos somos malos comparando áreas y ángulos.
+
+¿Hay solución? Sí. Somos mucho mejores comparando diferencias representadas por líneas y posiciones. Por eso (casi siempre) es mejor remplazar gráficos circulares por gráficos de barras. Por ejemplo, aquí está la misma información del círculo de arriba en forma de un gráfico de barras:
 
 ```{r, echo = FALSE}
-data <- data.frame("percentage" = c(0.914, 0.063, 0.023), type = factor(c("No pobres", "Pobres no extremos", "Pobres extremos"), levels = c("Pobres extremos", "Pobres no extremos","No pobres")))
+data <- data.frame("percentage" = c(0.914, 0.063, 0.023), type = factor(c("No pobres", "Pobres no extremos", "Pobres extremos"), levels = rev(c("Pobres extremos", "Pobres no extremos","No pobres"))))
 
 myred <- 'red'
 myblue <- 'blue'
-myalpha <- 0.75
+myalpha <- 0.8
 
 ggplot(data, aes(x = type, y = percentage, fill = c('a','b','c'))) +
              geom_bar(stat = "identity", alpha = myalpha) +
-             coord_flip() +
                    scale_fill_manual(values=c('grey', myred, myblue)) + 
                    theme(legend.position="none") + # remove legend (that comes from dummy categories)
-                   geom_text(aes(label=c('91%', '6.3%', '2.3%'), angle = 270), vjust=c(1.2,-0.8,-0.8), color="black", size=8) +
+                   geom_text(aes(label=c('91%', '6.3%', '2.3%')), vjust = c(1.5,-0.25,-0.25), hjust=0.3, color="black", size=8) +
                   theme(axis.title.x=element_blank(),
                   axis.title.y=element_blank(),
                   axis.text.x = element_text(size=14),
@@ -46,27 +49,27 @@ ggplot(data, aes(x = type, y = percentage, fill = c('a','b','c'))) +
                   strip.text.x = element_text(size = 18, color = "black"))
 ```
 
-O apilando los dos tipos de pobreza, como lo intenta el gráfico circular de la encuesta: **stacked**
+Lo que no es fácil en este gráfico es como comparar el segundo grupo, *No pobres* vs. *Pobres* (salvo si somos tan poco creativos como el Ministerio y sumamos los números de las dos barras inferiores añadiendo una llave). Por suerte, nuevamente, hay soluciones. Por ejemplo, apilar barras si se trata de categorías que se subsuman: 
 
-
-```{r, echo = FALSE, warning = FALSE}
+```{r, echo = FALSE, warning = FALSE, fig.width = 4, fig.heigth = 5}
 data <- data.frame("percentage" = c(0.914, 0.063, 0.0, 0.023), type = c("No pobres", "Pobres", "No pobres", "Pobres"), lvl = c("Ceros", "No extrema", "Ceros", "Extrema"))
-ggplot(data, aes(x = factor(type, levels = c("Pobres", "No pobres")) , y = percentage, fill = factor(lvl, levels = c('Ceros',"Extrema", "No extrema"), labels = c(1, 'Extrema', 'No extrema')))) +
+ggplot(data, aes(x = factor(type, levels = c("Pobres", "No pobres")) , y = percentage, fill = factor(lvl, levels = c('Ceros',"Extrema", "No extrema"), labels = c(1, 'Extremos', 'No extremos')))) +
              geom_bar(stat = "identity", alpha = myalpha) +
-             coord_flip() +
-                       scale_fill_manual(values=c('grey', myred, myblue), breaks = c('Extrema','No extrema')) + 
+                       scale_fill_manual(values=c('grey', myred, myblue), breaks = c('Extremos','No extremos')) + 
                      labs(fill='') +
-                     geom_text(aes(label=c('91%', '2.3%', NA,'6.3%')), color="black", size=8, angle=270, vjust=c(-0.6, -0.8 ,NA, 0.2), hjust = c(0.25,0.8,0.0,-0.15)) +
-                  theme(legend.position=c(0.75,0.2)) + # remove legend (that comes #from dummy categories) +
+                     geom_text(aes(label=c('91%', '2.3%', NA,'6.3%')), color="black", size=6, vjust = c(1.5,-0.65,0.0,0.35), hjust = c(0.3,1,0.0,-0.15)) +
+                  theme(legend.position=c(0.25,0.85)) + # remove legend (that comes #from dummy categories) +
                   scale_x_discrete(labels = c("NA" = "No pobres", "Pobres" = "Pobres")) +
                   scale_y_continuous(limits = c(0,1), breaks = c(0,0.25,0.5,0.75,1)) + 
                   theme(axis.title.x=element_blank(),
                   axis.title.y=element_blank(),
-                  axis.text.x = element_text(size=20),
-                  axis.text.y = element_text(size=20),
+                  axis.text.x = element_text(size=18),
+                  axis.text.y = element_text(size=18),
                   strip.text.x = element_text(size = 18, color = "black"),
-                  legend.text=element_text(size=20))
+                  legend.text=element_text(size=15))
 ```
+
+Repito que, en este caso, el problema no es nada grave.^[Hay detalles metodológicos mucho más importantes. Por ejemplo, la manera en la que se calculó el *8,6%* de pobreza total mencionado en el gráfico, como discute [un reciente artículo de la Fundación SOL](http://www.fundacionsol.cl/2018/09/las-trampas-del-famoso-alquiler-imputado/).] Pero es algo que siempre hay que tomar en cuenta. Si estás por hacer un gráfico circular, considera si la información no sería mejor representada por otro tipo de gráfico que sea más fácil de procesar.
 
 ---
 # Indice temático y links
