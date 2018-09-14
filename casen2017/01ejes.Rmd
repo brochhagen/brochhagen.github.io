@@ -117,10 +117,10 @@ ggplot(gini, aes(x = year, y = value, group = 1)) +
 ## [Introducción](../casen2017-intro.html)
 ## Visualización 
 * Ejes que engañan
-* [Gráficos circulares](./casen2017/02pie-charts.html)
-* [Tablas que agrupan lo in-agrupable](./casen2017/03tablas)
+* [Gráficos circulares](./02pie-charts.html)
+* [Tablas que agrupan lo in-agrupable](./03tablas)
 
 ## Análisis y metodología estadística
 * [Estimados de puntos y perdida de información](./casen2017/04point-estimates.html)
-* [Hipótesis nula (casi) no interpretable](./casen2017/05nht.html)
-* [El Coeficiente de Gini](./casen2017/06gini.html)
+* [Hipótesis nula (casi) no interpretable](./05nht.html)
+* [El Coeficiente de Gini](./06gini.html)

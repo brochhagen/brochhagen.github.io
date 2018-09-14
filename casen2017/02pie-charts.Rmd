@@ -18,17 +18,19 @@ library("ggplot2"); theme_set(theme_light())
 library("knitr")
 library("png")
 ```
-En el contexto de la presentación este problema es muy menor. Pero es tan fácil de corregir que tendrá que ser mencionado hasta que deje de ser cometido. Gráficos circulares no son (casi nunca) efectivos medios de comunicación visual. Miremos, por ejemplo, el que se nos presenta en el folio *6*:
+En el contexto de la presentación este problema es muy menor. Por otro lado, es tan fácil de corregir que vale la pena mencionarlo: Gráficos circulares no son (casi nunca) efectivos medios de comunicación visual. Un ejemplo de la presentación:
 
 ```{r, fig-fullwidth, fig.width = 10, fig.height = 2, out.width = 800, fig.fullwidth = TRUE, warning=FALSE, message=FALSE, cache=TRUE, echo = FALSE}
 include_graphics("./data/03circulos.png")
 ```
 
-Ignorando la cantidad de información presentada en la leyenda, la pregunta es si esta representación circular nos ayuda a entender los datos presentados. Se nos presentan dos grupos a comparar. El primero compara tres categorias: *No pobres* con *Pobres extremos* con *Pobres no extremos*. Este grupo es el que muestra el circulo y sus áreas delimitadas. El segundo es de un nivel hierarquico más alto. Compara *No pobres* con *Pobres*. Como no se encontró una manera de meter esta información en el círculo, se añadieron llaves que aglutinan los dos tipos de pobreza, sumando *8,6%*, en un momento de poca inspiración.
+Ignorando la leyenda, la pregunta es si esta representación nos ayuda a entender los datos presentados. Se presentan dos aspectos a comparar. El primero compara tres categorias: *No pobres* vs. *Pobres extremos* vs. *Pobres no extremos*. Este grupo es el que muestra el circulo y sus áreas delimitadas. Además de las críticas generales que se pueden hacer a gráficos circulares, mencionadas abajo, aquí no hay un gran problema. Está más o menos claro que la categoría de *Pobres extremos* es unas tres veces más pequeña que la de *Pobres no extremos*. Es difícil ver como se relaciona la proporción de esta última categoría con la de *No pobres*, pero mínimamente se ve que hay una diferencia grande. Según la encuesta, hay muchos más *No pobres*.
 
-En su esencia, un gráfico circular codifica información por (i) areas y (ii) ángulos. Algo de lo que se tiene evidencia por lo menos desde los años *80*^[Cleveland & McGill (1984): *Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods*. Journal of the American Statistical Association.] y que lleva años siendo repetido por expertos en visualización^[Por ejemplo, [Edward Tufte](https://www.edwardtufte.com/tufte/books_vdqi) y [Stephen Few](https://www.perceptualedge.com/articles/visual_business_intelligence/save_the_pies_for_dessert.pdf). Para opiniones sobre cuando gráficos circulares si pueden ser una buena opción veáse también artículos de [Ann K. Emery](http://annkemery.com/pie-chart-guidelines/) y [Randy Olson](https://www.oreilly.com/ideas/in-defense-of-the-pie-chart).] es que los humanos somos malos comparando áreas y ángulos.
+El segundo aspecto a comparar es de un nivel hierarquico más alto. Compara *No pobres* con *Pobres*. Como no se encontró una manera de meter esta información en el círculo, se añadieron llaves que suman los porcentajes de los dos tipos de pobreza, para un total un *8,6%*. Aquí es donde más falla el gráfico. No es fácil relacionar estas proporciones sin guiarnos por los números. En otras palabras, el gráfico no ayuda. Una tabla hubiera sido igual de informativa; y más ordenada.
 
-¿Hay solución? Sí. Somos mucho mejores comparando diferencias representadas por líneas y posiciones. Por eso (casi siempre) es mejor remplazar gráficos circulares por gráficos de barras. Por ejemplo, aquí está la misma información del círculo de arriba en forma de un gráfico de barras:
+En su esencia, un gráfico circular codifica información por areas y ángulos. Juntando esta información, el circulo muestra como se relacionan las proporciones de diferentes categorías que componen el círculo. Algo de lo que se tiene evidencia por lo menos desde los años *80*^[Cleveland & McGill (1984): *Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods*. Journal of the American Statistical Association.] -- siendo también repetido por expertos en visualización^[Por ejemplo, [Edward Tufte](https://www.edwardtufte.com/tufte/books_vdqi) y [Stephen Few](https://www.perceptualedge.com/articles/visual_business_intelligence/save_the_pies_for_dessert.pdf). Para opiniones sobre cuando gráficos circulares si pueden ser una buena opción veáse también artículos de [Ann K. Emery](http://annkemery.com/pie-chart-guidelines/) y [Randy Olson](https://www.oreilly.com/ideas/in-defense-of-the-pie-chart).] hace mucho -- es que los humanos somos malos comparando áreas y ángulos. En otras palabras, graficos circulares son difíciles de comprender por la manera en la que codifican información. 
+
+¿Hay soluciónes? Sí. Somos mucho mejores comparando diferencias representadas por líneas y posiciones. Por eso (casi siempre) es mejor remplazar gráficos circulares por gráficos de barras. Por ejemplo, aquí está la misma información del círculo de arriba en forma de un gráfico de barras:
 
 ```{r, echo = FALSE}
 data <- data.frame("percentage" = c(0.914, 0.063, 0.023), type = factor(c("No pobres", "Pobres no extremos", "Pobres extremos"), levels = rev(c("Pobres extremos", "Pobres no extremos","No pobres"))))
@@ -49,7 +51,7 @@ ggplot(data, aes(x = type, y = percentage, fill = c('a','b','c'))) +
                   strip.text.x = element_text(size = 18, color = "black"))
 ```
 
-Lo que no es fácil en este gráfico es como comparar el segundo grupo, *No pobres* vs. *Pobres* (salvo si somos tan poco creativos como el Ministerio y sumamos los números de las dos barras inferiores añadiendo una llave). Por suerte, nuevamente, hay soluciones. Por ejemplo, apilar barras si se trata de categorías que se subsuman: 
+Admito que, en este caso, la mejora en comparabilidad no es demasiado aparente. Además todavía no es fácil comparar visualemente a los integrantes del segundo grupo: *No pobres* vs. *Pobres* (salvo si somos tan poco creativos como el Ministerio y sumamos los números de las dos barras inferiores añadiendo una llave). Nuevamente hay soluciones. Por ejemplo, apilar barras si se trata de categorías que se subsuman. Como es el caso con *Pobres extremos* y los *No extremos*, que juntos componen el grupo de *Pobres*.
 
 ```{r, echo = FALSE, warning = FALSE, fig.width = 4, fig.heigth = 5}
 data <- data.frame("percentage" = c(0.914, 0.063, 0.0, 0.023), type = c("No pobres", "Pobres", "No pobres", "Pobres"), lvl = c("Ceros", "No extrema", "Ceros", "Extrema"))
@@ -69,17 +71,17 @@ ggplot(data, aes(x = factor(type, levels = c("Pobres", "No pobres")) , y = perce
                   legend.text=element_text(size=15))
 ```
 
-Repito que, en este caso, el problema no es nada grave.^[Hay detalles metodológicos mucho más importantes. Por ejemplo, la manera en la que se calculó el *8,6%* de pobreza total mencionado en el gráfico, como discute [un reciente artículo de la Fundación SOL](http://www.fundacionsol.cl/2018/09/las-trampas-del-famoso-alquiler-imputado/).] Pero es algo que siempre hay que tomar en cuenta. Si estás por hacer un gráfico circular, considera si la información no sería mejor representada por otro tipo de gráfico que sea más fácil de procesar.
+Repito que, en este caso, el problema no es grave.^[Hay detalles metodológicos mucho más importantes. Por ejemplo, la manera en la que se calculó el *8,6%* de pobreza total mencionado en el gráfico, como discute [un reciente artículo de la Fundación SOL](http://www.fundacionsol.cl/2018/09/las-trampas-del-famoso-alquiler-imputado/).] Pero es algo que siempre hay que tomar en cuenta. Si se está por hacer un gráfico circular, se debería considerar si la información no sería mejor representada por otro tipo de gráfico que sea más fácil de procesar. Si hay que añadir una leyenda, porcentajes, y números totales se debería considerar el uso de una tabla. 
 
 ---
 # Indice temático y links
 ## [Introducción](../casen2017-intro.html)
 ## Visualización 
-* [Ejes que engañan](./casen2017/01ejes.html)
+* [Ejes que engañan](./01ejes.html)
 * Gráficos circulares
-* [Tablas que agrupan lo in-agrupable](./casen2017/03tablas)
+* [Tablas que agrupan lo incomparable](./03tablas.html)
 
 ## Análisis y metodología estadística
-* [Estimados de puntos y perdida de información](./casen2017/04point-estimates.html)
-* [Hipótesis nula (casi) no interpretable](./casen2017/05nht.html)
-* [El coeficiente Gini](./casen2017/06gini.html)
+* [Estimados de puntos y perdida de información](./04point-estimates.html)
+* [Hipótesis nula (casi) no interpretable](./05nht.html)
+* [El coeficiente Gini](./06gini.html)
