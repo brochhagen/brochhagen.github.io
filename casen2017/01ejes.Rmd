@@ -26,7 +26,7 @@ Una de las decisiones más llamativas, y de las que más se habló en los medios
 
 El primer problema es que los ejes de varios gráficos de barras están ajustados para sugerir, visualmente, el mismo incremento en todos los indices. El efecto se magnifica al poner gráficos con ejes muy diferentes uno al lado del otro. Un ejemplo de la presentación:
 
-```{r, fig-fullwidth, fig.width = 10, fig.height = 2, out.width = 800, fig.fullwidth = TRUE, warning=FALSE, message=FALSE, cache=TRUE, echo = FALSE}
+```{r, fig-fullwidth, fig.align="center", fig.width = 10, fig.height = 2, out.width = 700, fig.fullwidth = TRUE, warning=FALSE, message=FALSE, cache=TRUE, echo = FALSE}
 include_graphics("./data/01ejes.png")
 ```
 
@@ -55,7 +55,7 @@ Una buena visualización informa sobre los datos y su análisis. Diferencias rep
 ## Algunas, de muchas, soluciones prácticas
 1. Usar el mismo eje para datos del mismo tipo. Así queda claro que, por ejemplo, la diferencia entre el año *2015* y el año *2017* es menor en el *Indice 10/40* que en el *Indice 20/20*.
 
-```{r, echo = FALSE, fig.width = 6, fig.heigth = 4, out.width = 700, full.width=TRUE,  warning=FALSE, message=FALSE, cache=TRUE}
+```{r, echo = FALSE, fig.width = 4, fig.heigth = 2, out.width = 300, full.width=TRUE,  warning=FALSE, message=FALSE, cache=TRUE, fig.align="center"}
 
 distribucion <- data.frame("idx" = factor(c("Indice 20/20","Indice 20/20", 'Indice 10/40', 'Indice 10/40'), levels = c("Indice 20/20", "Indice 10/40")),
                            "year" = c("2015","2017","2015","2017"),
@@ -80,7 +80,7 @@ ggplot(distribucion, aes(x = year, y = value, fill = c('r','b', 'r','b'))) +
 
 2. Apilar los indices y usar un único eje para mantener comparabilidad. Así vemos  si cambios son grandes o pequeños dentro de un solo índice como también como se compara con los otros índices. La desventaja es que si las diferencias son pequeñas en algunos indices pueden llegar a ser dificiles de ver. Este es el caso para el *Indice 10/40*. De nuevo: Depende de lo que quiera transmitirse. Quizás lo relevante es que el cambio es casi impercetible. 
 
-```{r, echo = FALSE, fig.width = 6, fig.heigth = 4, out.width = 700, full.width=TRUE,  warning=FALSE, message=FALSE, cache=TRUE}
+```{r, echo = FALSE, fig.width = 5.5, fig.heigth = 2, out.width = 350, full.width=TRUE,  fig.align="center", warning=FALSE, message=FALSE, cache=TRUE}
 library("dplyr")
 distribucion["diffvalue"] <- c(10.7,1.2,2.4,0.1)
 ggplot(distribucion, aes(x = idx, y = diffvalue, fill = factor(year, levels = c("2017", "2015")))) +
@@ -98,7 +98,7 @@ ggplot(distribucion, aes(x = idx, y = diffvalue, fill = factor(year, levels = c(
 
 3. Modificaciones de ejes no tienen por qué ser negativas. Muchas veces pueden utilizarse para comunicar mejor lo aprendido del análisis. Si queremos expresar que no hay una diferencia significativa, por ejemplo, podemos elegir el rango numérico del eje-*y* para que la linea que une los dos años refleje que el cambio es poco o irrelevante. Por ejemplo así:
 
-```{r, echo = FALSE, fig.width = 6, fig.heigth = 4, out.width = 500, full.width=TRUE,  warning=FALSE, message=FALSE, cache=TRUE}
+```{r, echo = FALSE, fig.width = 4, fig.heigth = 2, out.width = 300, full.width=TRUE, fig.align="center", warning=FALSE, message=FALSE, cache=TRUE}
 
 gini <- data.frame("year" = c("2015", "2017"), "value" = c(0.495, 0.502))
 ggplot(gini, aes(x = year, y = value, group = 1)) +
@@ -112,6 +112,7 @@ ggplot(gini, aes(x = year, y = value, group = 1)) +
                   axis.text.y = element_text(size=14), 
                   plot.title = element_text(size=22, face="bold.italic", hjust = 0.5))
 ```
+
 ---
 # Indice temático y links
 ## [Introducción](../casen2017-intro.html)
