@@ -1,0 +1,31 @@
+---
+title: "Análisis y metodología estadística I"
+subtitle: "Estimados de puntos y perdida de información"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout: default
+author: "Thomas Brochhagen"
+date: "Última actualización: `r Sys.Date()`" 
+---
+```{r setup, include=FALSE}
+library(tufte)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+```
+
+
+
+
+---
+# Indice temático y links
+## [Introducción](../main.html)
+## Visualización 
+* [Ejes que engañan](.//01ejes.html)
+* [Gráficos circulares](./02pie-charts.html)
+* [Tablas que agrupan lo in-agrupable](./03tablas)
+
+## Análisis y metodología estadística
+* Estimados de puntos y perdida de información
+* [Hipótesis nula (casi) no interpretable](./05nht.html)
+* [El coeficiente Gini](./06gini.html)
