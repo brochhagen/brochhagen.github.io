@@ -1,0 +1,70 @@
+---
+title: "Perspectivas demográficas"
+output:
+  html_document:
+    css: ../../css/main.css
+author: "Thomas Brochhagen"
+date: "Última actualización: `r Sys.Date()`"
+---
+```{r, setup, include = FALSE}
+pdf.options(encoding='ISOLatin2')
+library(magrittr)
+library(plotly)
+```
+
+La manera de la que hablamos de datos demográficos puede tener un gran impacto en nuestra percepción -- tanto de nosotros mismos como del país en el que vivimos. Un ejemplo notorio es como hablamos de cambios  de pobreza en el país. Saber si hay más, menos, o la misma cantidad de pobres que en años anteriores es muchas veces visto como una respuesta a la pregunta si estamos mejor, peor, o igual que antes. Por ejemplo, a base de sus ingresos en el $2017$,  la [encuesta CASEN 2017](http://observatorio.ministeriodesarrollosocial.gob.cl/) cifra a $8,6\%$ de la población como pobre. Lo que contrasta con el año $2015$, donde se cifra a $11,7\%$ de pobres. 
+
+¿Qué nos dicen estos números? No mucho. No tiene por qué significar que hay menos pobres. Ni mucho menos que el país está mejor. Para apreciar por qué vale la pena ir lento, empezando por apreciar lo que representa una cifra como "$8,6\%$ de pobreza." 
+
+<center>
+  ![](./data/cl-size.gif)
+</center>
+
+
+
+```{r, echo = FALSE, fig.width=6, fig.height=4, fig.align = 'center', warning=FALSE, message=FALSE}
+library(haven)
+library(dplyr)
+library(ggplot2)
+library(readr)
+#df <- read_dta("./data/casen2017.dta") #datos encuesta CASEN 2017
+#df_ingresos_per_capita <- tibble(df$ypchtrabajo) #Ingreso del trabajo per cápita del hogar corregido
+#write_csv(df_ingresos_per_capita, './data/df_ingresos_per_capita.csv')
+df_ingresos_per_capita <- read_csv("./data/df_ingresos_per_capita.csv")
+colnames(df_ingresos_per_capita) <- 'values'
+library("scales")
+pl <- ggplot() + 
+  geom_jitter(data = df_ingresos_per_capita, aes(x = 1, y = values, alpha = 0.6), show.legend=FALSE) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(breaks=NULL) +
+  labs(x = 'Hogares encuestados', y = 'Ingreso per capita')
+pl
+## From main report, page 15: Todas las diferencias estadísticamente significativas han sido calculadas a un nivel de confianza del 95%, utilizando test de diferencia de medias o de proporciones según sea el caso. 
+## Using plotly directly (instead of getting from ggplot to plotly) may be a lot faster
+## This is only useful if we manage to 
+```
+
+```{r, echo = FALSE, fig.width=6, fig.height=4, fig.align='center', warning=FALSE, message=FALSE}
+pl <- df_ingresos_per_capita %>%
+  ggplot(aes(x = values)) +
+        geom_histogram() %>%
+  toWebGL()
+ggplotly(pl)
+hdi_upper <- 0.98
+```
+
+Usando un intervalo que abarca a todos los hogares menos al `r 1 - hdi_upper`% más alto, los datos empiezan a tener mejor forma. 
+
+```{r, fig.align='center', fig.width=6, fig.height=4, echo = FALSE, warning = FALSE, message= FALSE}
+library(HDInterval)
+
+hdi_capita <- hdi(df_ingresos_per_capita$values,credMass = hdi_upper)
+hdi_vect <- df_ingresos_per_capita %>%
+            filter(values >= hdi_capita[1] &
+                   values <= hdi_capita[2])
+pl <- hdi_vect %>%
+  ggplot(aes(x = values)) +
+    geom_histogram(binwidth=10000) %>%
+    toWebGL()
+ggplotly(pl)
+```

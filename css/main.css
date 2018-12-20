@@ -47,3 +47,85 @@ ul.posts li {
 nav>ul>li {
 	font-size: 1.3em;
 }
+
+
+
+/*
+
+Style for the demografics bit. Needs to be split into separate style-file after the deed
+*/
+
+.ab_center {
+display: block;
+margin-left: auto;
+margin-right: auto;
+width: 35%;
+}
+
+.bubble
+{
+position: relative;
+width: 220px;
+height: 80px;
+padding: 10px;
+background: #B5FFFF;
+-webkit-border-radius: 8px;
+-moz-border-radius: 8px;
+border-radius: 8px;
+border: #000 solid 2px;
+animation: opacityOn 1s normal forwards;
+animation-delay: 10s;
+}
+
+.bubble:after
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 28px 11px 0;
+border-color: #B5FFFF transparent;
+display: block;
+width: 0;
+z-index: 1;
+margin-left: -11px;
+bottom: -28px;
+left: 75%;
+}
+
+.bubble:before
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 29px 12px 0;
+border-color: #000 transparent;
+display: block;
+width: 0;
+z-index: 0;
+margin-left: -12px;
+bottom: -31px;
+left: 75%;
+}
+
+
+
+@keyframes opacityOn {
+    0% {
+        opacity: 0;
+    }
+ /*
+    25% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 0;
+    }
+*/
+    100% {
+        opacity: 1;
+    }
+}
