@@ -118,12 +118,46 @@ h6 {
     max-width: 1024px;
   }
 }
+
+p.icon-cara:before {
+	content: "a";
+	position: absolute;
+	content: url("./graphics/carabineros.svg");
+	left: 0px;
+}
+
+p.icon-vamos:before {
+	content: "a";
+	position: absolute;
+	content: url("./graphics/chilevamos-sm.png");
+	left: 0px;
+}
+
+p.icon-mapuche:before {
+	content: "a";
+	position: absolute;
+	content: url("./graphics/mapuche-sm.png");
+	left: 0px;
+	top: 5px;
+}
+
+
+p[class^='icon'] {
+	padding-left: 100px; /*adjust */
+	position: relative;
+ }
+
+ p {
+ 	margin: 5px 80px 15px -200px;
+
+ }
+
 /*==========  Stem  ==========*/
 .stem-wrapper {
   position: fixed;
   top: 0px;
   bottom: 0px;
-  left: 50%;
+  left: 123px ; /* 50% */
 }
 .stem-wrapper.color-yellow .stem-background {
   background: #E9E566;
@@ -137,7 +171,7 @@ h6 {
 .stem-wrapper .stem,
 .stem-wrapper .stem-background {
   position: absolute;
-  top: 0px;
+  top: 60px;
   left: -30px;
   width: 60px;
 }
@@ -153,7 +187,7 @@ h6 {
 .stem-padding,
 .single-stem-icon {
   width: 60px;
-  height: 60px;
+  height: 0px; /*60px */
   margin: 0px auto;
   background: transparent url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/22043/stem-mask.png) repeat-y top center;
 }
@@ -197,18 +231,15 @@ h6 {
   -webkit-transform: none;
   transform: none;
 }
-.post-wrapper .post:nth-child(even) {
+
+.post-wrapper .post {
   float: right;
 }
-.post-wrapper .post:nth-child(odd) {
-  float: left;
+
+.post-wrapper .post .stem-overlay {
+  left: -791px; /* -110 at 50%; these are the icons on top */
 }
-.post-wrapper .post:nth-child(even) .stem-overlay {
-  left: -110px;
-}
-.post-wrapper .post:nth-child(odd) .stem-overlay {
-  right: -110px;
-}
+
 .post-wrapper .post.music-icon .stem-overlay .icon {
   background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/22043/music-icon.png);
 }
@@ -260,7 +291,7 @@ h6 {
 .post-wrapper .post .post-content .post-title {
   font-size: 32px;
   line-height: 42px;
-  margin: 0px 0px 15px 0px;
+ margin: 5px 80px 15px -200px; /*title margin */
 }
 /*==========  Media queries  ==========*/
 @media only screen and (max-width: 1080px) {
@@ -281,7 +312,7 @@ h6 {
   .post-wrapper .post:nth-child(even),
   .post-wrapper .post:nth-child(odd) {
     width: auto;
-    margin-left: 110px;
+    margin-left: 80px;
     float: none;
   }
   .post-wrapper .post .stem-overlay,
@@ -323,4 +354,6 @@ h6 {
 .clearfix:after {
   clear: both;
 }
+
+
 
