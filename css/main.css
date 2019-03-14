@@ -17,6 +17,13 @@ a {
     text-decoration: none;
     color: #990000;
 }
+
+a.smaller {
+    text-decoration: none;
+    color: #990000;
+    font-size: 1em;
+}
+
 a:hover {
     text-decoration: none;
 }
@@ -30,17 +37,10 @@ p {
     color: #333;
 }
 
-p.small {
-    font-size: 1em;
-    padding: 0;
-    margin: 0;
-    color: #333;
-}
-
 p.shifted {
     padding: 0;
     margin-top: 0;
-    margin-left:20px;
+    margin-left:15px;
 }
 footer {
     border-top: 1px solid #d5d5d5;
