@@ -30,10 +30,14 @@ p {
     color: #333;
 }
 
-p.s {
-    font-size: 1em;
+p.small {
+    font-size: 0.5em;
     line-height: 1.4em;
     color: #333;
+}
+
+p.shifted {
+    margin-left:30px;
 }
 footer {
     border-top: 1px solid #d5d5d5;
