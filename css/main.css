@@ -32,12 +32,13 @@ p {
 
 p.small {
     font-size: 1em;
-    line-height: 1.4em;
+    line-height: 1em;
     color: #333;
 }
 
 p.shifted {
     margin-left:30px;
+    line-height: 1em;
 }
 footer {
     border-top: 1px solid #d5d5d5;
