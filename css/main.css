@@ -52,13 +52,13 @@ nav>ul>li {
 
 figure {
     display: flex;
-    align-items: center;
+    align-items: start;
     margin-left: 25px;
     margin-right: 50px;
 }
 
 figcaption {
-    font-size: 0.9em;
+    font-size: 1em;
     line-height: 1.4em;
     color: #333;
 }
