@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Population- vs. individual-level differences in dialogal reduction</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Thomas Brochhagen" />
+    <link href="TAB-indiv-vs-pop_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="TAB-indiv-vs-pop_files/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Population- vs. individual-level differences in dialogal reduction
+### Thomas Brochhagen
+### TAB, 21/01/2021
+
+---
+
+
+
+
+
+# Background
+
+.large[
+* Zipf's Law of Abbreviation: frequent forms are shorter
+
+* Inverse relationship between *use* and *linguistic reduction*
+
+* Kanwal et al. (2017): study what drives this relationship &lt;br&gt;by controlling for communicative pressures
+]
+---
+
+# Background 
+
+.large[
+* Zipf's Law of Abbreviation: frequent forms are shorter &lt;br&gt;**at the level of languages**
+
+* Inverse relationship between *use* and *linguistic reduction*
+&lt;br&gt; **across different strata**
+
+* Kanwal et al. (2017): study what drives this relationship by &lt;br&gt;controlling for communicative pressures **at the level of dyads**
+]
+
+---
+# This work
+Re-analysis of Kanwal et al. (2017) to
+  * be explicit about speakers' choice functions
+  
+  * analyse how population-level, dyadic-level and individual-level relate to each other
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+.footnote[
+***
+[Brief at the risk of being misunderstood: Consolidating population- and individual-level tendencies](http://brochhagen.github.io/brochhagen.github.io/content/ms/accepted-manuscript-cobb.pdf). Forthcoming. *Computational Brain &amp; Behavior*.
+]
+
+---
+# Today's talk
+Re-analysis of Kanwal et al. (2017) to
+  * ~~be explicit about speakers' choice functions~~
+  
+  * analyse how population-level, dyadic-level and individual-level relate to each other
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+.footnote[
+***
+[Brief at the risk of being misunderstood: Consolidating population- and individual-level tendencies](http://brochhagen.github.io/brochhagen.github.io/content/ms/accepted-manuscript-cobb.pdf). Forthcoming. *Computational Brain &amp; Behavior*.
+]
+
+
+---
+
+class: inverse, center
+
+# Experimental setup
+Kanwal et al. (2017) condition 4
+
+---
+
+## Training
+&lt;img src="./artificial-language-cropped.jpg" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Testing
+
+* Pair subjects and let them play for 62 trials&lt;br&gt;32 sender trials, 32 receiver trials (alternating)
+
+* Same object frequencies as in training
+
+* Message transmission time is proportional to message length&lt;br&gt; `\(\rightarrow\)` Sending ambiguous *zop* takes `\(\frac{3}{7}\)` of the time of alternatives 
+
+* "The fastest &amp; most accurate pairs win a prize"&lt;br&gt; `\(\rightarrow\)` Pressure to use short form if you believe your interlocutor will get it
+
+---
+
+# Kanwal et al's analysis
+
+* Logistic regression with short name as binary response
+
+* Object frequency, trial number, and their interaction as fixed effects
+
+* By-participant intercepts and slopes as random effects for object frequency and trial number
+
+`\(\rightarrow\)` Positive interaction between trial number and the short name for the frequent object
+---
+
+class: inverse, center
+
+# Model
+
+---
+## Model intuitions
+
+* RSA-style choice functions
+&lt;br&gt;&lt;br&gt;"If I believe you expect one object over the other (by a large enough margin) I will use the ambiguous form to convey that object. Otherwise, I'll play it safe."&lt;br&gt;&lt;br&gt;
+
+
+* Agents update beliefs over time, based on success/failure using an ambiguous form&lt;br&gt;&lt;br&gt;"You interpreted my use of an ambiguous form in a certain way before, thus, I believe you expected this object (and therefore I will be more likely to signal this object with this expression later)"
+
+---
+## Relevant parameters to estimate from the data
+
+.left-column[
+&lt;br&gt;
+`\(\lambda\)`
+
+`\(pr \sim P\)` 
+]
+
+.right-column[
+usual soft-maximization parameter `\(\lambda \geq 0\)`
+
+not-so-usual non-common prior
+]
+
+---
+
+## Latent beliefs over expectations
+
+&lt;img src="./uncertainty-sketch-cropped.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center
+
+# Results
+
+---
+
+## &gt;&gt; Fastforward
+
+* ... fits to models of varying complexity 
+* ... diagnostics
+* ... PSIS-LOO cross validation
+* ... model comparisons
+* ... alternative data splits
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+**Best model**: multi-level model with a population-level estimate for both `\(\lambda\)` and `\(P\)` (as a Beta distribution with two population-level shape parameters)
+
+---
+
+## Population-level estimates
+
+&lt;img src="./pop-parameters.png" width="110%" style="display: block; margin: auto;" /&gt;
+
+---
+## Individual-level estimates
+
+&lt;img src="./indiv-parameters.png" width="110%" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center
+
+# Take-aways
+
+
+---
+
+1. Where possible and called for
+  * model variation at multiple levels
+  
+  * make relationship between levels explicit 
+
+2. Population-level trends can often hide individual-level variation, but the former ultimately draw from the latter.
+
+--
+
+3. Many individual-level patterns go against theoretical predictions (Zipf's Law of Abbreviation, Horn's division of pragmatic labor, Parikh's disambiguation model, ...). The reasons for this are manifold.
+
+--
+
+4. How dyadic-conventions find their way into the population is still a major and fascinating open question
+
+--
+
+5. Whether the association of the ambiguous form with the (in)frequent meaning is semantic or pragmatic in nature is (less fascinating?) open question
+
+---
+
+class: inverse, center
+
+
+# Questions, comments, complaints?
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
