@@ -89,12 +89,5 @@ td {
 
 table{
     border-spacing: 4px;
-}
-
-table td:first-child {
-   border-left: 0;
-}
-
-table tr:first-child td {
-   border-top: 0;
+    margin-left: 10px;
 }
