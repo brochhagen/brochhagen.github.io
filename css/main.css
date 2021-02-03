@@ -88,8 +88,7 @@ td {
 }
 
 table{
-    border-spacing: 5px;
-    border-collapse: collapse;
+    border-spacing: 2px;
 }
 
 table td:first-child {
