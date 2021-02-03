@@ -89,6 +89,7 @@ td {
 
 table{
     border-spacing: 5px;
+    border-collapse: collapse;
 }
 
 table td:first-child {
