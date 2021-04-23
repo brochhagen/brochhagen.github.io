@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					<input id="insertEntities" type="checkbox" /><label for="insertEntities">&nbsp;Insert entities</label>
 				</span>
 				<input type="button" id="clearButton" onclick="clearField()" value="Clear" />
+				<input type='button' id='copyButton' onclick="myCopyFunction()" value='Copy' /> 
 				<span id="instructions">Click on a symbol above to have it inputted below. Enter base characters before diacritics.</span>
 				<span id="symbolsUsedLabel">Previously used:</span>
 				<span id="symbolsUsed"></span>
@@ -44,3 +45,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		</form>
 	</body>
 </html>
+
+<script>
+function myCopyFunction() {
+  /* Get the text field */
+  var copyText = document.getElementById("inputField");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  alert("Copied the text: " + copyText.value);
+} 
+</script>
