@@ -7,6 +7,7 @@ output:
     nature:
       highlightLines: true
       highlightStyle: github
+      titleSlideClass: ['center','middle','title-slide']
 ---
 
 ```{r preamble, echo=FALSE, message=FALSE, warning=FALSE}
@@ -94,7 +95,7 @@ Brochhagen (2021): [Brief at the risk of being misunderstood: Consolidating popu
 
 ---
 
-class: inverse, center
+class: center
 
 # Experimental setup
 Kanwal et al. (2017) condition 4
@@ -160,7 +161,7 @@ Hawkins et al (2017): [Convention-formation in iterated reference games]()
 
 ---
 
-class: inverse, center
+class: center
 
 # Speaker model
 
@@ -177,7 +178,6 @@ We return to model identifiability between Brochhagen (2017) and Hawkins et al. 
 * RSA-style choice functions (*soft-max*; *Luce's rule*; *rationality parameter*)
 <br><br>"If I believe you expect one object over the other (by a large enough margin) I will use the ambiguous but preferred form to convey that object. Otherwise, I'll play it safe."<br><br>
 
---
 
 * Players can change beliefs over time, based on past success/failure using an ambiguous form<br><br>"You interpreted my use of an ambiguous form in a certain way before. Consequently, I believe you expected this object (and therefore I will be more likely to signal this object with this expression later)"
 
@@ -218,9 +218,6 @@ knitr::include_graphics('./uncertainty-sketch-cropped.jpg')
 \sigma(m \mid r;P) &\propto \text{exp}(\lambda((\int P(\theta)\rho(r \mid m; \theta)d\theta)-c(m))) 
 \end{align}
 <br>
-
---
-
 and
 \begin{align}
 P_{t+1}(pr \mid w(r);m) \propto (\sum_{r' \in w(r)}\rho(r' \mid m;pr)P_t(pr)),
@@ -249,7 +246,7 @@ beliefs over (non-common) prior
 
 ---
 
-class: inverse, center
+class: center
 
 # Models
 
@@ -272,7 +269,7 @@ cat(tabl) # output the table in a format good for HTML/PDF/docx conversion
 
 ---
 
-class: inverse, center
+class: center
 
 # Results
 
@@ -323,21 +320,9 @@ knitr::include_graphics('./indiv-parameters.png')
 ## Other relationships
 
 * Individuals' expected rationality, $E[\lambda_i]$, correlates with number of successes ( $r \approx 0.84$ )<br><br>
-
---
-
 * Uncertainty about partner's expectations decrease over time<br> ( $r \approx -0.55$ between trial number and width of $P_i's \;\; 0.89\%$ HPDI)<br><br>
-
---
-
 * Individual's beliefs diverge from population but grow closer to their partner's over time<br> ( $r \approx 0.56$ and $r \approx -0.23$, measured as Kullback-Leibler divergence)<br><br>
-
---
-
 * Subject's own beliefs stabilize over time<br>( $r \approx -0.22$ between trial number and KL divergence)<br><br>
-
---
-
 * Neither divergence from population belief nor width of the $P_i$'s HPDI are related to individuals' rates of success ( $r \approx 0.004$ and $r \approx 0.02$)
 ---
 
@@ -368,7 +353,7 @@ RMSE of best model reduces to $0.28$ or $0.24$ when excluding $4$ or $8$ worst-f
 ---
 
 
-class: inverse, center
+class: center
 
 # Taking stock
 
@@ -417,7 +402,7 @@ class: inverse, center
 
 ---
 
-class: inverse, center
+class: center
 
 
 # Thank you
