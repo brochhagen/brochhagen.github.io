@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+This is a modified version of Weston Ruter's original project, by Thomas Brochhagen: 
+
+International Phonetic Alphabet Chart in Unicode and XHTML/CSS
+Copyright (C) 2004-2009 Weston Ruter <http://weston.ruter.net/projects/ipa-chart/view/>
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will core useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<title>IPA Chart Keyboard Input</title>
+		<meta name="author" content="Weston Ruter" />
+		<meta name="robots" content="noindex,noarchive" />
+		<link rel='stylesheet' type='text/css' href='input.css?4' />
+		<script type="text/javascript" src="input.js?4"></script>
+		<!-- detect if one of the fonts is installed; if not, include  -->
+	</head>
+	<body onload="fallbackInit()">
+		<form action="javascript:" onsubmit="return false">
+			<div id="toolbar">
+				<span id="insertEntitiesBox" title="Checking this box converts inputted Unicode characters into ASCII HTML entities">
+					<input id="insertEntities" type="checkbox" /><label for="insertEntities">&nbsp;Insert entities</label>
+				</span>
+				<input type="button" id="clearButton" onclick="clearField()" value="Clear" />
+				<input type='button' id='copyButton' onclick="myCopyFunction()" value='Copy' /> 
+				<span id="instructions">Click on a symbol above to have it inputted below. Enter base characters before diacritics.</span>
+				<span id="symbolsUsedLabel">Previously used:</span>
+				<span id="symbolsUsed"></span>
+			</div>
+			<div><textarea id="inputField" rows="5" cols="40"></textarea></div>
+		</form>
+	</body>
+</html>
+
+<script>
+function myCopyFunction() {
+  /* Get the text field */
+  var copyText = document.getElementById("inputField");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  alert("Copied the text: " + copyText.value);
+} 
+</script>
