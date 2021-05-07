@@ -135,7 +135,63 @@ div#phonology thead th {
 	text-align:center;
 }
 
+/* Phonological Rule Symbols Table *******************************/
+#phonoRuleSymbols {
+	margin-bottom:1em;
+}
+#phonoRuleSymbols h2 {
+	margin-top:5px;
+}
+#phonoRuleSymbols table{
+	width:75%;
+}
+}
+#phonoRuleSymbols table, 
+#phonoRuleSymbols td, 
+#phonoRuleSymbols th {
+	border:solid 1px #777;
+	vertical-align:middle;
+}
+/* NOTE: only Gecko supports this, so not used
+#phonoRuleSymbols table  {
+	caption-side:bottom;
+	border-style:solid;
+}
+*/
+/* replacement for caption */
+#phonoRuleSymbols p {
+	margin-top:.25em;
+	text-align:center;
+}
 
+
+#phonoRuleSymbols th {
+	font-size:12pt;
+	padding:2px;
+	text-align:left;
+}
+
+#phonoRuleSymbols th.place {
+	width:8%;
+}
+#phonoRuleSymbols th.manner {
+	text-align:left;
+	padding:0px 3px 0px 3px;
+	width:8%; /* for MSIE 6 */
+}
+#phonoRuleSymbols td  {
+	font-size:14pt;
+	text-align:center;
+	padding:0px;
+}
+#phonoRuleSymbols .impossible1  {
+	background-color:#E8E8E8;
+	color:Black;
+}
+#phonoRuleSymbols span.impossible1  {
+	border-left:solid 1px #777;
+	width:48%;
+}
 
 /* Pulmonic Consonant Table *******************************/
 #pulmonicConsonants  {
