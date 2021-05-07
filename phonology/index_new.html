@@ -1,26 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!--
-MIT License
+This is a modified version of Weston Ruter's original project, by Thomas Brochhagen:
 
-Copyright (c) 2004-2006 Weston Ruter
+International Phonetic Alphabet Chart in Unicode and XHTML/CSS
+Copyright (C) 2004-2009 Weston Ruter <http://weston.ruter.net/projects/ipa-chart/view/>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This program is distributed in the hope that it will core useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
@@ -32,121 +29,112 @@ SOFTWARE.
       source edition of the IPA chart in Unicode.">
     <meta name="keywords" content="linguistics, phonetics, phonology,
       xhtml, css, international phonetic alphabet, ipa, chart">
-    <link rel="stylesheet" type="text/css"
-href="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/all.css?5">
+    <link rel="stylesheet" type="text/css" href="all.css?5">
     <!--[if lt IE 7]>
 		<style type="text/css">#keyboardLink { position:absolute; } </style>
 		<![endif]-->
-    <script type="text/javascript" src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/chart.js"></script>
+    <script type="text/javascript" src="chart.js"></script>
   </head>
   <body>
     <div id="chart">
       <h1 id="title">The International Phonetic Alphabet <span
           id="alphabetRevision">(revised to 2005)</span></h1>
-      <div><a target="_top"
-href="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/keyboard"
-          id="keyboardLink">IPA Chart Keyboard</a></div>
+      <div><a target="_top" href="./keyboard/" id="keyboardLink">IPA
+          Chart Keyboard</a></div>
       <p id="chartIntro"> This IPA chart is composed of Unicode
         characters and is written in valid XHTML/CSS; it is open source
         software released under the GPL. <span id="keyboardRefHead">To
           easily copy/enter/input/insert/type the IPA
           characters/symbols/letters/glyphs and diacritics, found in
-          this chart, use the <a
-href="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/keyboard"
-            target="_top">IPA Unicode “Keyboard”</a>, which is built off
-          of this document.</span> </p>
-      <p>If you are a screen reader user, you may want to use <a
-href="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/accessiblechart.html">
-          a more accessible version of the chart</a> </p>
+          this chart, use the <a href="keyboard/" target="_top">IPA
+            Unicode “Keyboard”</a>, which is built off of this document.</span>
+      </p>
       <!--[if !IE]><!--> <button id="loadFontBtn" type="button"
         onclick="loadFontStylesheet(); return false;" title="If don't
         have a font installed that can display all of the symbols in the
         IPA, click this button to load and immediately apply a font that
         does. Please be patient... it takes a moment to download.">Missing
         some symbols? Apply Doulos SIL font</button>
-      <!--<![endif]-->
-      <div id="phonology">
-        <h2>Symbols used in phonology rules</h2>
-        <table width="587" height="182">
-          <colgroup span="2"> </colgroup> <colgroup span="2"> </colgroup>
-          <colgroup span="2"> </colgroup> <thead> <tr>
-              <th colspan="2">Símbols</th>
-              <th colspan="4">Consonants</th>
-              <th colspan="3">Vocals</th>
+      <!--<![endif]--> <br>
+      <div id="phonoRuleSymbols">
+        <h2>Symbols used in phonological rules</h2>
+        <table cellspacing="2" cellpadding="2" border="1">
+          <colgroup span="2"> </colgroup><colgroup span="2"> </colgroup><colgroup
+            span="2"> </colgroup><thead> <tr>
+              <th colspan="2">Rule notation</th>
+              <th colspan="2">Consonant features</th>
+              <th colspan="2">Vowel features</th>
             </tr>
           </thead> <tbody>
             <tr>
-              <td title="">→</td>
-              <th>becomes/esdevé</th>
-              <td title="">&nbsp;</td>
-              <th>&nbsp;</th>
-              <td title=""><br>
-              </td>
-              <th><br>
-              </th>
-              <td title="">&nbsp;</td>
-              <th>&nbsp;</th>
+              <td title="Sound">/x/</td>
+							<th class='impossible1'>Phoneme</th>
+              <td> +stp</td>
+							<th class='impossible1'>Stop/oclusiu</th>
+              <td title="top"> +fro</td>
+							<th>Front/anterior</th>
+            <tr>
+              <td title="Elswhere">→</td>
+							<th class='impossible1'>Realized as</th>
+              <td>+obst</td>
+							<th class='impossible1'>Obstruent </th>
+              <td title="top"> +mid </td>
+							<th>Mid/central</th>
+            <tr>
+              <td title="Arrow">[x]</td>
+              <th class='impossible1'>Allophone</span></th>
+              <td title="U+0253: LATIN SMALL LETTER B WITH HOOK">+fri</td>
+              <th class='impossible1'>Fricatiu </th>
+              <!--<td title="U+2019: RIGHT SINGLE QUOTATION MARK">’</td>-->
+              <td title="U+02BC: MODIFIER LETTER APOSTROPHE">ʼ</td>
+              <!-- thanks Dan McCloy: http://students.washington.edu/drmccloy/ -->
+              <th class='impossible1'>Examples:</th>
             </tr>
             <tr>
-              <td title="">&nbsp;/&nbsp;</td>
-              <th>en</th>
-              <td title="">[+voiced]</td>
-              <th>sonor</th>
-              <td>&nbsp;<!--’--></td>
-              <th><br>
-              </th>
-              <td title="">&nbsp;</td>
-              <th>&nbsp;</th>
+              <td title="en el context de ...">/</td>
+              <th class='impossible1'> In context / en el context de </th>
+              <td title="U+0257: LATIN SMALL LETTER D WITH HOOK">+afr</td>
+              <th class='impossible1'>Affricat</th>
+              <td>pʼ<!--’--></td>
+              <th class='impossible1'>Bilabial</th>
             </tr>
             <tr>
-              <td title="">&nbsp;___&nbsp;<br>
-              </td>
-              <th>context</th>
-              <td title="">[-voiced]</td>
-              <th>sord</th>
-              <td>&nbsp;<!--’--></td>
-              <th><br>
-              </th>
-              <td title="">&nbsp;</td>
-              <th>&nbsp;</th>
+              <td title="lloc que ocupa el so">___</td>
+              <th class='impossible1'> Position of allophone</th>
+              <td title="U+0284: LATIN SMALL LETTER DOTLESS J WITH
+                STROKE AND HOOK">+apr</td>
+              <th class='impossible1'>Approximant</th>
+              <td>tʼ<!--’--></td>
+              <th class='impossible1'>Dental/alveolar</th>
             </tr>
             <tr>
-              <td title="">∅</td>
-              <th>zero / res</th>
-              <td title="">[+voc]</td>
-              <th>Vocàlic</th>
-              <td>&nbsp;<!--’--></td>
-              <th><br>
-              </th>
-              <td title="">&nbsp;</td>
-              <th>&nbsp;</th>
+              <td title="Zero">∅</td>
+              <th class='impossible1'> Zero / res </th>
+              <td title="U+0260: LATIN SMALL LETTER G WITH HOOK">+son</td>
+              <th class='impossible1'>Sonorant</th>
+              <td>kʼ<!--’--></td>
+              <th class='impossible1'>Velar</th>
             </tr>
             <tr>
-              <td title="">&nbsp;#&nbsp;</td>
-              <th>Final/principi paraula</th>
-              <td title="">[+obst]</td>
-              <th>Obstruent</th>
-              <td>&nbsp;<!--’--></td>
-              <th><br>
-              </th>
-              <td title="">&nbsp;</td>
-              <th>&nbsp;</th>
+              <td title="Word boundary">#</td>
+              <th class='impossible1'> Word boundary / principi o final de paraula</th>
+              <td title="U+029B: LATIN LETTER SMALL CAPITAL G WITH HOOK">+nas</td>
+              <th class='impossible1'>Nasal</th>
+              <td>sʼ<!--’--></td>
+              <th class='impossible1'>Alveolar fricative</th>
             </tr>
             <tr>
-              <td title="elsewhere">elswhere</td>
-              <th>Resta de contextos</th>
-              <td title=>[+son]</td>
-              <th>Sonorant</th>
-              <td>&nbsp;<!--’--></td>
-              <th><br>
-              </th>
-              <td title="">&nbsp;</td>
-              <th>&nbsp;</th>
+              <td title="Elswhere">Elsewhere</td>
+							<th class='impossible1'>Elsewhere / resta de contextos</th>
+              <td>+voi</td>
+							<th class='impossible1'>Voiced </th>
+              <td title="top"> </td>
+							<th>Elsewhere</th>
             </tr>
           </tbody>
         </table>
       </div>
-
+      <br>
       <div id="pulmonicConsonants">
         <h2>Consonants (Pulmonic)</h2>
         <table>
@@ -463,8 +451,7 @@ href="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/accessiblechar
       <div id="vowels">
         <h2>Vowels</h2>
         <div id="vowelQuadrilateral"> <img id="vowelBackground"
-src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/vowelBackground.png"
-            alt="Vowel Quadrilateral">
+            src="vowelBackground.png" alt="Vowel Quadrilateral">
           <!--<embed src="vowelQuadrilateral.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />-->
           <div id="vowelLabels"> <span style="right:76%; top:0">Front</span>
             <span style="right:40.5%; top:0">Central</span> <span
@@ -607,34 +594,30 @@ src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/vowelBackground
         <table>
           <colgroup><col width="0*"> <col> <col width="0*"> </colgroup><tbody>
             <tr>
-              <td title="U+02C8: MODIFIER LETTER VERTICAL LINE"
-                class="symbol">ˈ</td>
+              <td title="U+02C8: MODIFIER LETTER VERTICAL LINE" class="symbol">ˈ</td>
               <th colspan="2">Primary stress</th>
             </tr>
             <tr>
-              <td title="U+02CC: MODIFIER LETTER LOW VERTICAL LINE"
-                class="symbol">ˌ</td>
+              <td title="U+02CC: MODIFIER LETTER LOW VERTICAL LINE" class="symbol">ˌ</td>
               <th colspan="2">Secondary stress</th>
             </tr>
             <tr>
               <td colspan="3" id="stressExample">ˌfoʊnəˈtɪʃən</td>
             </tr>
             <tr>
-              <td title="U+02D0: MODIFIER LETTER TRIANGULAR COLON"
-                class="symbol">ː</td>
+              <td title="U+02D0: MODIFIER LETTER TRIANGULAR COLON" class="symbol">ː</td>
               <th>Long</th>
               <td class="example">eː</td>
             </tr>
             <tr>
-              <td title="U+02D1: MODIFIER LETTER HALF TRIANGULAR COLON"
-                class="symbol">ˑ</td>
+              <td title="U+02D1: MODIFIER LETTER HALF TRIANGULAR COLON" class="symbol">ˑ</td>
               <th>Half-long</th>
               <td class="example">eˑ</td>
             </tr>
             <tr>
               <td title="U+0306: COMBINING BREVE" class="symbol">◌̆</td>
               <th>Extra short</th>
-              <td class="example">ĕ</td>
+              <td class="example">ĕ</td>
             </tr>
             <tr>
               <td title="U+007C: VERTICAL LINE" class="symbol">|</td>
@@ -712,27 +695,25 @@ src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/vowelBackground
               <td title="U+0339: COMBINING RIGHT HALF RING BELOW">◌̹</td>
               <th>More rounded</th>
               <td class="leftExample">ɔ̹</td>
-              <td class="rightExample"><br>
-              </td>
+              <td class="rightExample"><br></td>
               <td title="U+02B7: MODIFIER LETTER SMALL W">ʷ</td>
               <th>Labalized</th>
               <td class="leftExample">tʷ</td>
               <td class="rightExample">dʷ</td>
               <td title="U+0303: COMBINING TILDE">◌̃</td>
               <th colspan="2">Nasalized</th>
-              <td class="rightExample">ẽ</td>
+              <td class="rightExample">ẽ</td>
             </tr>
             <tr>
               <td title="U+031C: COMBINING LEFT HALF RING BELOW">◌̜</td>
               <th>Less rounded</th>
               <td class="leftExample">ɔ̜</td>
-              <td class="rightExample"><br>
-              </td>
+              <td class="rightExample"><br></td>
               <td title="U+02B2: MODIFIER LETTER SMALL J">ʲ</td>
               <th>Palatalized</th>
               <td class="leftExample">tʲ</td>
-              <td class="rightExample">ʃʲ</td>
-              <td title="U+207F: SUPERSCRIPT LATIN SMALL LETTER N">sʲ</td>
+              <td class="rightExample">dʲ</td>
+              <td title="U+207F: SUPERSCRIPT LATIN SMALL LETTER N">ⁿ</td>
               <th colspan="2">Nasal release</th>
               <td class="rightExample">dⁿ</td>
             </tr>
@@ -740,8 +721,7 @@ src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/vowelBackground
               <td title="U+031F: COMBINING PLUS SIGN BELOW">◌̟</td>
               <th>Advanced</th>
               <td class="leftExample">u̟</td>
-              <td class="rightExample"><br>
-              </td>
+              <td class="rightExample"><br></td>
               <td title="U+02E0: MODIFIER LETTER SMALL GAMMA">ˠ</td>
               <th>Velarized</th>
               <td class="leftExample">tˠ</td>
@@ -754,10 +734,8 @@ src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/vowelBackground
               <td title="U+0320: COMBINING MINUS SIGN BELOW">◌̠</td>
               <th>Retracted</th>
               <td class="leftExample">e̠</td>
-              <td class="rightExample"><br>
-              </td>
-              <td title="U+02E4: MODIFIER LETTER SMALL REVERSED GLOTTAL
-                STOP">ˤ</td>
+              <td class="rightExample"><br></td>
+              <td title="U+02E4: MODIFIER LETTER SMALL REVERSED GLOTTAL STOP">ˤ</td>
               <th>Pharyngealized</th>
               <td class="leftExample">tˤ</td>
               <td class="rightExample">dˤ</td>
@@ -768,20 +746,17 @@ src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/vowelBackground
             <tr>
               <td title="U+0308: COMBINING DIAERESIS">◌̈</td>
               <th>Centralized</th>
-              <td class="leftExample">ë</td>
-              <td class="rightExample"><br>
-              </td>
+              <td class="leftExample">ë</td>
+              <td class="rightExample"><br></td>
               <td title="U+0334: COMBINING TILDE OVERLAY">◌̴<!--~--></td>
               <th colspan="2">Velarized or pharyngealized</th>
-              <td title="U+026B: LATIN SMALL LETTER L WITH MIDDLE TILDE"
-                class="wideCell" colspan="5">ɫ</td>
+              <td title="U+026B: LATIN SMALL LETTER L WITH MIDDLE TILDE" class="wideCell" colspan="5">ɫ</td>
               <!--<th colspan="4"></th>--> </tr>
             <tr>
               <td title="U+033D: COMBINING X ABOVE">◌̽</td>
               <th>Mid-centralized</th>
               <td class="leftExample">e̽</td>
-              <td class="rightExample"><br>
-              </td>
+              <td class="rightExample"><br></td>
               <td title="U+031D: COMBINING UP TACK BELOW">◌̝</td>
               <th>Raised</th>
               <td class="leftExample">e̝</td>
@@ -792,8 +767,7 @@ src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/vowelBackground
               <td title="U+0329: COMBINING VERTICAL LINE BELOW">◌̩</td>
               <th>Syllabic</th>
               <td class="leftExample">n̩</td>
-              <td class="rightExample"><br>
-              </td>
+              <td class="rightExample"><br></td>
               <td title="U+031E: COMBINING DOWN TACK BELOW">◌̞</td>
               <th>Lowered</th>
               <td class="leftExample">e̞</td>
@@ -804,8 +778,7 @@ src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/vowelBackground
               <td title="U+032F: COMBINING INVERTED BREVE BELOW">◌̯</td>
               <th>Non-syllabic</th>
               <td class="leftExample">e̯</td>
-              <td class="rightExample"><br>
-              </td>
+              <td class="rightExample"><br></td>
               <td title="U+0318: COMBINING LEFT TACK BELOW">◌̘</td>
               <th colspan="2">Advanced Tongue Root</th>
               <td class="wideCell" colspan="5">e̘</td>
@@ -813,9 +786,7 @@ src="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/vowelBackground
             <tr>
               <td title="U+02DE: MODIFIER LETTER RHOTIC HOOK">˞</td>
               <th>Rhoticity</th>
-              <!--<td class="leftExample">ə˞</td>--> <td
-                class="leftExample" title="U+025A: LATIN SMALL LETTER
-                SCHWA WITH HOOK">ɚ</td>
+              <!--<td class="leftExample">ə˞</td>--> <td class="leftExample" title="U+025A: LATIN SMALL LETTER SCHWA WITH HOOK">ɚ</td>
               <td class="rightExample">a˞</td>
               <td title="U+0319: COMBINING RIGHT TACK BELOW">◌̙</td>
               <th colspan="2">Retracted Tongue Root</th>
@@ -857,19 +828,19 @@ Update this chart to correspond to: http://upload.wikimedia.org/wikipedia/en/1/1
               <th class="or">or</th>
               <td title="U+02E5: MODIFIER LETTER EXTRA-HIGH TONE BAR">˥</td>
               <th>Extra high</th>
-              <td title="U+030C: COMBINING CARON">ě</td>
+              <td title="U+030C: COMBINING CARON">ě</td>
               <th class="or">or</th>
               <td title="U+02E9 MODIFIER LETTER EXTRA-LOW TONE BAR,
                 U+02E5 MODIFIER LETTER EXTRA-HIGH TONE BAR">˩˥</td>
               <th>Rising</th>
             </tr>
             <tr>
-              <td title="U+0301: COMBINING ACUTE ACCENT">é</td>
+              <td title="U+0301: COMBINING ACUTE ACCENT">é</td>
               <th class="or"><br>
               </th>
               <td title="U+02E6 MODIFIER LETTER HIGH TONE BAR">˦</td>
               <th>High</th>
-              <td title="U+0302: COMBINING CIRCUMFLEX ACCENT">ê</td>
+              <td title="U+0302: COMBINING CIRCUMFLEX ACCENT">ê</td>
               <th class="or"><br>
               </th>
               <td title="U+02E5 MODIFIER LETTER EXTRA-HIGH TONE BAR,
@@ -877,7 +848,7 @@ Update this chart to correspond to: http://upload.wikimedia.org/wikipedia/en/1/1
               <th>Falling</th>
             </tr>
             <tr>
-              <td title="U+0304: COMBINING MACRON">ē</td>
+              <td title="U+0304: COMBINING MACRON">ē</td>
               <th class="or"><br>
               </th>
               <td title="U+02E7: MODIFIER LETTER MID TONE BAR">˧</td>
@@ -890,7 +861,7 @@ Update this chart to correspond to: http://upload.wikimedia.org/wikipedia/en/1/1
               <th>High rising</th>
             </tr>
             <tr>
-              <td title="U+0300: COMBINING GRAVE ACCENT">è</td>
+              <td title="U+0300: COMBINING GRAVE ACCENT">è</td>
               <th class="or"><br>
               </th>
               <td title="U+02E8: MODIFIER LETTER LOW TONE BAR">˨</td>
@@ -903,7 +874,7 @@ Update this chart to correspond to: http://upload.wikimedia.org/wikipedia/en/1/1
               <th>Low rising</th>
             </tr>
             <tr>
-              <td title="U+030F: COMBINING DOUBLE GRAVE ACCENT">ȅ</td>
+              <td title="U+030F: COMBINING DOUBLE GRAVE ACCENT">ȅ</td>
               <th class="or"><br>
               </th>
               <td title="U+02E9: MODIFIER LETTER EXTRA-LOW TONE BAR">˩</td>
@@ -948,26 +919,23 @@ Update this chart to correspond to: http://upload.wikimedia.org/wikipedia/en/1/1
         <!--A mimimum screen resolution of 1024&times;768 is also required. -->
         <span id="keyboardRefFoot">To easily copy and type the IPA
           symbols and characters found in this chart, use the <a
-href="file:///LaCie1TB/HD-21-02-2021/EDUCATION/TEACHING/Brochagen/keyboard">IPA
-            Unicode “Keyboard”</a>, which is built off of this document.</span>
-      </p>
-      <p> To see recent changes, visit the <a
+            href="keyboard/">IPA Unicode “Keyboard”</a>, which is built
+          off of this document.</span> </p>
+      <p> This is a modified version of Weston Ruter's original project,
+        by <a href="https://brochhagen.github.io" target="_blank">Thomas
+          Brochhagen</a> <br>
+        To see the original project, visit the <a
           href="https://github.com/westonruter/ipa-chart/" target="_top">GitHub
           repo</a>. If you have corrections or suggestions, please see
         the <a href="https://github.com/westonruter/ipa-chart/issues"
-          target="_top">issues</a>. Please feel free to fork the repo to
-        implement the changes yourself and then issue a pull request
-        back to me. </p>
+          target="_top">issues</a>. </p>
       <div id="footerBoilerplate">
-        <address> <a target="_top" rel="author"
-            href="http://westonruter.github.com/">Weston Ruter</a><br>
-          2009-10-20 </address>
         <div id="copyright">The
           <!--<a href="http://www.arts.gla.ac.uk/IPA/ipa.html">-->International
 
           Phonetic Association<!--</a>--> is the copyright owner of the
-          International Phonetic Alphabet and the IPA chart. The code is
-          copyright © 2004-2009, Weston Ruter.</div>
+          International Phonetic Alphabet and the IPA chart. The
+          original code is copyright © 2004-2009, Weston Ruter.</div>
       </div>
     </div>
   </body>
