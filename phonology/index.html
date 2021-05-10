@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!--
-This is a modified version of Weston Ruter's original project, by Thomas Brochhagen:
-
+<p> This is a modified version of <a href="https://brochhagen.github.io" target="_blank">Thomas
+    Brochhagen's</a> modified version of Weston Ruter's original project. <br>
 International Phonetic Alphabet Chart in Unicode and XHTML/CSS
 Copyright (C) 2004-2009 Weston Ruter <http://weston.ruter.net/projects/ipa-chart/view/>
 
@@ -55,99 +55,92 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         IPA, click this button to load and immediately apply a font that
         does. Please be patient... it takes a moment to download.">Missing
         some symbols? Apply Doulos SIL font</button>
-      <!--<![endif]--> 
-
-      <div id="phonology">
-        <h2>Symbols used in phonological rules</h2>
+        <!-- <IMG SRC="rule.gif"> -->
+      <!--<![endif]--> <br>
+      <div id="phonoRuleSymbols">
+        <h2>Regles fonològiques</h2>
+        <h6>Si necessites marcar l'absència d'un tret, clica sobre el tret i substitueix el signe '+' pel signe '-'</h6>
         <table cellspacing="2" cellpadding="2" border="1">
           <colgroup span="2"> </colgroup><colgroup span="2"> </colgroup><colgroup
             span="2"> </colgroup><thead> <tr>
-              <th colspan="2">Rule notation</th>
-              <th colspan="2">Consonant features</th>
-              <th colspan="2">Vowel features</th>
+              <th class='titol' colspan="2">Notació de les regles</th>
+              <th class='titol'  colspan="2">Trets consonàntics</th>
+              <th class='titol'  colspan="2">Trets vocàlics</th>
             </tr>
           </thead> <tbody>
             <tr>
-              <td title="Sound">/x/</td>
-							<th class='impossible1'>Phoneme</th>
-              <td> +stp</td>
-							<th class='impossible1'>Stop/oclusiu</th>
-              <td title="top"> +fro</td>
+              <td class='impossible1'>/x/</td>
+							<th >Fonema</th>
+              <td class='impossible1'> +st</td>
+							<th >Stop/oclusiu</th>
+              <td class='special1'>V</td>
+							<th>Vocal</th>
+              <tr>
+              <td class='impossible1'>→</td>
+							<th >Realized as / passa a </th>
+              <td class='impossible1'>+ob</td>
+							<th >Obstruent </th>
+              <td class='impossible1'> +frt</td>
 							<th>Front/anterior</th>
-            <tr>
-              <td title="Elswhere">→</td>
-							<th class='impossible1'>Realized as</th>
-              <td>+obst</td>
-							<th class='impossible1'>Obstruent </th>
-              <td title="top"> +mid </td>
+              <tr>
+              <td class='impossible1'>[x]</td>
+              <th >Al·lòfon</span></th>
+              <td class='impossible1'>+fr</td>
+              <th >Fricatiu </th>
+              <td class='impossible1'> +md </td>
 							<th>Mid/central</th>
-            <tr>
-              <td title="Arrow">[x]</td>
-              <th class='impossible1'>Allophone</span></th>
-              <td title="U+0253: LATIN SMALL LETTER B WITH HOOK">+fri</td>
-              <th class='impossible1'>Fricatiu </th>
-              <!--<td title="U+2019: RIGHT SINGLE QUOTATION MARK">’</td>-->
-              <td title="U+02BC: MODIFIER LETTER APOSTROPHE">ʼ</td>
-              <!-- thanks Dan McCloy: http://students.washington.edu/drmccloy/ -->
-              <th class='impossible1'>Examples:</th>
             </tr>
             <tr>
-              <td title="en el context de ...">/</td>
-              <th class='impossible1'> In context / en el context de </th>
-              <td title="U+0257: LATIN SMALL LETTER D WITH HOOK">+afr</td>
-              <th class='impossible1'>Affricat</th>
-              <td>pʼ<!--’--></td>
-              <th class='impossible1'>Bilabial</th>
+              <td class='impossible1'>/</td>
+              <th > In context / en el context de </th>
+              <td class='impossible1'>+af</td>
+              <th >Africat</th>
+              <td class='impossible1'>+bck</td>
+              <th >Back/posterior</th>
             </tr>
             <tr>
-              <td title="lloc que ocupa el so">___</td>
-              <th class='impossible1'> Position of allophone</th>
-              <td title="U+0284: LATIN SMALL LETTER DOTLESS J WITH
-                STROKE AND HOOK">+apr</td>
-              <th class='impossible1'>Approximant</th>
-              <td>tʼ<!--’--></td>
-              <th class='impossible1'>Dental/alveolar</th>
+              <td class='impossible1'>___</td>
+              <th > posició al·lòfon</th>
+              <td class='impossible1'>+ap</td>
+              <th >Aproximant</th>
+              <td class='impossible1'>+cl</td>
+              <th >Close/tancada</th>
             </tr>
             <tr>
-              <td title="Zero">∅</td>
-              <th class='impossible1'> Zero / res </th>
-              <td title="U+0260: LATIN SMALL LETTER G WITH HOOK">+son</td>
-              <th class='impossible1'>Sonorant</th>
-              <td>kʼ<!--’--></td>
-              <th class='impossible1'>Velar</th>
+              <td class='impossible1'>∅</td>
+              <th > Zero / res </th>
+              <td class='impossible1'>+so</td>
+              <th >Sonorant</th>
+              <td class='impossible1'>+clm</td>
+              <th >Close-mid/Semitancada</th>
             </tr>
             <tr>
-              <td title="Word boundary">#</td>
-              <th class='impossible1'> Word boundary / principi o final de paraula</th>
-              <td title="U+029B: LATIN LETTER SMALL CAPITAL G WITH HOOK">+nas</td>
-              <th class='impossible1'>Nasal</th>
-              <td>sʼ<!--’--></td>
-              <th class='impossible1'>Alveolar fricative</th>
+              <td class='impossible1'>#</td>
+              <th > Word boundary / principi o final de paraula</th>
+              <td class='impossible1'>+ns</td>
+              <th >Nasal</th>
+              <td class='impossible1'>+opm</td>
+              <th >Open-mid/semioberta</th>
             </tr>
             <tr>
-              <td title="Elswhere">Elsewhere</td>
-							<th class='impossible1'>Elsewhere / resta de contextos</th>
-              <td>+voi</td>
-							<th class='impossible1'>Voiced </th>
-              <td title="top"> </td>
-							<th>Elsewhere</th>
+              <td class='smaller'>Elsewhere</td>
+							<th >Elsewhere / resta de contextos</th>
+              <td class='impossible1'>+vo</td>
+							<th >Voiced </th>
+              <td class='impossible1'>+op</td>
+              <th >Open/oberta</th>
             </tr>
           </tbody>
         </table>
       </div>
-
-
-
+      <br>
       <div id="pulmonicConsonants">
         <h2>Consonants (Pulmonic)</h2>
         <table>
           <!--<caption>Where symbols appear in pairs, the one to the right
 			represents a voiced consonant. Shaded areas denote articulations
 			judged impossible.</caption>--> <colgroup width="0*"> </colgroup><colgroup>
-          </colgroup><colgroup> </colgroup><colgroup> </colgroup><colgroup>
-          </colgroup><colgroup> </colgroup><colgroup> </colgroup><colgroup>
-          </colgroup><colgroup> </colgroup><colgroup> </colgroup><colgroup>
-          </colgroup><colgroup> </colgroup><thead> <tr>
+          <thead> <tr>
               <th><br>
               </th>
               <th class="place">Bilabial</th>
@@ -923,10 +916,8 @@ Update this chart to correspond to: http://upload.wikimedia.org/wikipedia/en/1/1
         <span id="keyboardRefFoot">To easily copy and type the IPA
           symbols and characters found in this chart, use the <a
             href="keyboard/">IPA Unicode “Keyboard”</a>, which is built
-          off of this document.</span> </p>
-      <p> This is a modified version of Weston Ruter's original project,
-        by <a href="https://brochhagen.github.io" target="_blank">Thomas
-          Brochhagen</a> <br>
+          off of this document.</span> <p> This is a modified version of <a href="https://brochhagen.github.io" target="_blank">Thomas
+          Brochhagen's</a> modified version of Weston Ruter's original project. <br><br>
         To see the original project, visit the <a
           href="https://github.com/westonruter/ipa-chart/" target="_top">GitHub
           repo</a>. If you have corrections or suggestions, please see
