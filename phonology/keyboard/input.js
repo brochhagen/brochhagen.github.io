@@ -246,7 +246,7 @@ function init(){
 		}
 	}
 	//phonology
-	addHandlers(ipawin.document.getElementById('phonology').getElementsByTagName('td'));
+	addHandlers(ipawin.document.getElementById('phonoRuleSymbols').getElementsByTagName('td'));
 
 	//pulmonicConsonants
 	addHandlers(ipawin.document.getElementById('pulmonicConsonants').getElementsByTagName('span'), 'pulmonicConsonants');
