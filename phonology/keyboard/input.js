@@ -245,7 +245,7 @@ function init(){
 			}
 		}
 	}
-	//phonology
+	//phonoRuleSymbols
 	addHandlers(ipawin.document.getElementById('phonoRuleSymbols').getElementsByTagName('td'));
 
 	//pulmonicConsonants
@@ -254,17 +254,21 @@ function init(){
 	//nonPulmonicConsonants
 	addHandlers(ipawin.document.getElementById('nonPulmonicConsonants').getElementsByTagName('td'));
 
+
 	//vowelSymbols
 	addHandlers(ipawin.document.getElementById('vowelSymbols').getElementsByTagName('span'));
 
 	//otherSymbols
 	addHandlers(ipawin.document.getElementById('otherSymbols').getElementsByTagName('td'));
-
-	//suprasegmentals
-	addHandlers(ipawin.document.getElementById('suprasegmentals').getElementsByTagName('td'));
+    
+    //affricates
+	addHandlers(ipawin.document.getElementById('affricates').getElementsByTagName('td'));
+    
+//	//suprasegmentals
+//	addHandlers(ipawin.document.getElementById('suprasegmentals').getElementsByTagName('td'));
 
 	//diacritics
-	addHandlers(ipawin.document.getElementById('diacritics').getElementsByTagName('td'), 'diacritics');
+	addHandlers(ipawin.document.getElementById('diacritics').getElementsByTagName('td'));
 
 	//tonesAndWordAccents
 	addHandlers(ipawin.document.getElementById('tonesAndWordAccents').getElementsByTagName('td'), 'tonesAndWordAccents');
