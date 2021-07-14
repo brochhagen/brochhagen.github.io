@@ -7,62 +7,151 @@ output:
     nature:
       highlightLines: true
       highlightStyle: github
----
 
+---
 ```{r preamble, echo=FALSE, message=FALSE, warning=FALSE}
 library(dplyr)
 library(ggplot2)
 library(readr)
 
 ```
-
-
-## Children exhibit a tendency to associative novel words with novel referents (ME)
-
+class: center
 <br>
-```{r, out.width="70%", fig.align="center", echo=FALSE, }
-knitr::include_graphics('./pass-me-the-dax.png')
+### Children tend to associate novel words with novel objects
+(some caveats apply)
+<br><br><br><br>
+```{r, out.width="50%", fig.align="center", echo=FALSE, }
+knitr::include_graphics('./pass-me-the-dax2.png')
 ```
-
-<br><br><br>
-.footnote[
-***
-* Lewis,  M.,  Cristiano,  V.,  Lake,  B. M.,  Kwan,  T., & Frank, M.  C.(2019). The role of developmental changeand linguistic experience in the mutual exclusivity effect.
-* Halberda,  J.   (2003).   The development of a word-learningstrategy.Cognition, 87
-* Markman, E. M., & Wachtel, G. F.  (1988).  Children’s use of mutual exclusivity to constrain the meanings of words. Cognitive Psychology
-* ...
-]
 
 ---
-
-## (Some) neural network models do not
+class: center
 <br>
-```{r, out.width="70%", fig.align="center", echo=FALSE, }
-knitr::include_graphics('./pass-me-the-dax.png')
+### Neural network models do not
+(some caveats apply)
+<br><br><br><br>
+```{r, out.width="50%", fig.align="center", echo=FALSE, }
+knitr::include_graphics('./pass-me-the-dax3.png')
 ```
 
-.footnote[
-***
-* Gandhi,  K.,  &  Lake,  B.  M.(2019). Mutual  exclusivity  as  a  challenge  for  neural  networks.
-]
 ---
 
 # Today's talk
-* What we mean when we say mutual exclusivity
 
-* At least two roads to ME for neural networks
+* *Mutual exclusivity* as an umbrella term
 
-* Shortcomings and ways forward
+* At least two roads to mutual exclusivity for neural networks
+
+* Shortcomings
+
+* Ways forward
+
+---
+<br><br><br><br>
+.pull-left[
+<img src="https://xsway.github.io/assets/img/profile.png" width=300 height=300>
+]
+
+.pull-right[
+<img src="https://gboleda.github.io/pic4web.jpg" width=300 height=300>
+]
+
+***
+.footnote[
+* Gulordava et al. (2020): Deep daxes: [Mutual exclusivity arises through both learning biases and pragmatic strategies in neural networks](https://cognitivesciencesociety.org/cogsci20/papers/0479/0479.pdf). Proceedings of CogSci<br><br>
+* Work in progress
+]
+
+---
+### What researchers mean by *mutual exclusivity* differs
+<br>
+1. ME as a pragmatic referent selection strategy<br><br>If other objects have known labels then the speaker should have used this label if they were intended<br><br> $\rightsquigarrow$ unfamiliar object is intended<br><br><br><br>
+
+2. ME as a vocabulary acquisition bias<br><br>
+Already established word-meaning associations inhibit the linkage of new words to these meanings<br><br> $\rightarrow$ new word means unfamiliar object
+
+---
+### What we mean by *mutual exclusivity*
+<br>
+Umbrella term that refers to an observed tendency, remaining agnostic about causes 
+---
+### Motivations of our first study
+  1. Disentangle potential causes for ME and understand possible interactions<br><br>
+  *Issue:* Referent selection presupposes learning. Inversely,  latent learning biases cannot simply be reado off from how children select referents<br><br><br>
+
+  2. NNs allow us to address (1) in a transparent way; and NNs had recently been claimed not to exhibit ME-like tendencies<br><br><br>
+  
+  3. What can we learn about natural language from NNs?
+  
+---
+### Overview study 1
+
+* Train and evaluate NNs on both symbolic and visual datasets
+
+* Study joint effect of three different "learning biases" $\times$ two referent selection strategies
+
+---
+### Component 1: Word learning
+
+* Cross-situational setup
+
+* Input: $\{\langle w,o\rangle \mid w \in W, o \in S\}$ <br><br>
+
+* $\\[0.5cm] \mathbf{w} = E(w)\\[0.5cm] \mathbf{o} = V(o)\\[0.5cm] sim(w,o) = cos(\mathbf{w,o})$<br><br>
 
 ---
 
-# team picture!
+### 1. Max-margin over objects (anti-ambiguity)
 
+\begin{equation*}
+  L_o = \sum_i \max(0, 1 - cos(\mathbf{w}, \mathbf{o})  + cos(\mathbf{w}, \mathbf{o_i})),
+\end{equation*}
+where object $o_i$ is a negative example, sampled randomly.<br><br><br>
+```{r, out.width="50%", fig.align="center", echo=FALSE, }
+magick::image_read_pdf("./maxmargin_schema3.pdf",
+                       pages = 1)
+```
+
+
+---
+
+### 2. Max-margin over words (anti-synonymy)
+
+\begin{equation*}
+      L_w = \sum_i \max(0, 1 - cos(\mathbf{w}, \mathbf{o})  + cos(\mathbf{w_i}, \mathbf{o})),
+\end{equation*}
+ where word $w_i$ is a negative example, sampled randomly.
+
+<br><br>
+****
+<br<br><br>
+### 3. Joint loss (one-to-one)
+
+\begin{equation*}
+  L = L_w + L_o.
+\end{equation*}
+
+---
+### Component 2: Referent selection
+<br>
+### 1. Similarity maximizer
+
+### 2. Bayesian inference
+
+---
+### Data sets
+  * Symbolic: Frank et al. 2009's transcriptions of a subset of CHILDES<br><br>
+  $W$ = {piggie} <br> $S$ = \{PIG, COW\}<br><br>
+  
+  * Visual: Flickr30K Entities<br><br>
+  ```{r, out.width="50%", fig.align="center", echo=FALSE, }
+knitr::include_graphics('./output.png')
+```
 
 ---
 
 class: inverse, center
 
 
-# Time for outstanding questions or comments?
+# Outstanding questions or comments?
 
