@@ -37,8 +37,6 @@ class: center
 
 # Today's talk
 
-* *Mutual exclusivity* as an umbrella term
-
 * At least two roads to mutual exclusivity for neural networks
 
 * Shortcomings
@@ -62,9 +60,12 @@ class: center
 ]
 
 ---
-### What researchers mean by *mutual exclusivity* differs
+### What studies mean by *mutual exclusivity* varies
 &lt;br&gt;
-1. ME as a pragmatic referent selection strategy&lt;br&gt;&lt;br&gt;If other objects have known labels then the speaker should have used this label if they were intended&lt;br&gt;&lt;br&gt; `\(\rightsquigarrow\)` unfamiliar object is intended&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+1. ME as a pragmatic referent selection strategy&lt;br&gt;&lt;br&gt;If other objects have known labels then the speaker should have used these labels if they were intended&lt;br&gt;&lt;br&gt; `\(\rightsquigarrow\)` unfamiliar object is intended&lt;br&gt;&lt;br&gt;
+
+--
+ &lt;br&gt;
 
 2. ME as a vocabulary acquisition bias&lt;br&gt;&lt;br&gt;
 Already established word-meaning associations inhibit the linkage of new words to these meanings&lt;br&gt;&lt;br&gt; `\(\rightarrow\)` new word means unfamiliar object
@@ -72,41 +73,46 @@ Already established word-meaning associations inhibit the linkage of new words t
 ---
 ### What we mean by *mutual exclusivity*
 &lt;br&gt;
-Umbrella term that refers to an observed tendency, remaining agnostic about causes 
+Umbrella term that refers to an observed tendency,&lt;br&gt; remaining agnostic about causes 
 ---
 ### Motivations of our first study
   1. Disentangle potential causes for ME and understand possible interactions&lt;br&gt;&lt;br&gt;
-  *Issue:* Referent selection presupposes learning. Inversely,  latent learning biases cannot simply be reado off from how children select referents&lt;br&gt;&lt;br&gt;&lt;br&gt;
+  *Issue:* Referent selection presupposes learning. Inversely,  latent learning biases cannot simply be read off from how referents are selected&lt;br&gt;&lt;br&gt;&lt;br&gt;
+--
 
-  2. NNs allow us to address (1) in a transparent way; and NNs had recently been claimed not to exhibit ME-like tendencies&lt;br&gt;&lt;br&gt;&lt;br&gt;
+  2. NNs allow us to address (1) in a transparent and scalable way;&lt;br&gt;and they had recently been claimed not to exhibit ME-like tendencies&lt;br&gt;&lt;br&gt;&lt;br&gt;
+--
   
   3. What can we learn about natural language from NNs?
   
 ---
 ### Overview study 1
 
-* Train and evaluate NNs on both symbolic and visual datasets
+* Train and evaluate NNs on both symbolic and visual data&lt;br&gt;&lt;br&gt;
 
-* Study joint effect of three different "learning biases" `\(\times\)` two referent selection strategies
+* Study joint effect of learning biases and referent selection strategies&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+&lt;img src="me_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 
 ---
-### Component 1: Word learning
 
-* Cross-situational setup
+class: inverse, center
 
-* Input: `\(\{\langle w,o\rangle \mid w \in W, o \in S\}\)` &lt;br&gt;&lt;br&gt;
+# Models
 
-* `\(\\[0.5cm] \mathbf{w} = E(w)\\[0.5cm] \mathbf{o} = V(o)\\[0.5cm] sim(w,o) = cos(\mathbf{w,o})\)`&lt;br&gt;&lt;br&gt;
+---
+### First Component: Word learning
+
+&lt;img src="me_files/figure-html/unnamed-chunk-4-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ### 1. Max-margin over objects (anti-ambiguity)
 
 `\begin{equation*}
-  L_o = \sum_i \max(0, 1 - cos(\mathbf{w}, \mathbf{o})  + cos(\mathbf{w}, \mathbf{o_i})),
+  L_o = \sum_i \max(0, 1 - cos(\mathbf{w}, \mathbf{o})  + cos(\mathbf{w}, \mathbf{o_i}))
 \end{equation*}`
-where object `\(o_i\)` is a negative example, sampled randomly.&lt;br&gt;&lt;br&gt;&lt;br&gt;
-&lt;img src="me_files/figure-html/unnamed-chunk-3-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="me_files/figure-html/unnamed-chunk-5-1.png" width="75%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -114,12 +120,13 @@ where object `\(o_i\)` is a negative example, sampled randomly.&lt;br&gt;&lt;br&
 ### 2. Max-margin over words (anti-synonymy)
 
 `\begin{equation*}
-      L_w = \sum_i \max(0, 1 - cos(\mathbf{w}, \mathbf{o})  + cos(\mathbf{w_i}, \mathbf{o})),
+      L_w = \sum_i \max(0, 1 - cos(\mathbf{w}, \mathbf{o})  + cos(\mathbf{w_i}, \mathbf{o}))
 \end{equation*}`
- where word `\(w_i\)` is a negative example, sampled randomly.
 
 &lt;br&gt;&lt;br&gt;
-****
+
+--
+
 &lt;br&lt;br&gt;&lt;br&gt;
 ### 3. Joint loss (one-to-one)
 
@@ -128,26 +135,128 @@ where object `\(o_i\)` is a negative example, sampled randomly.&lt;br&gt;&lt;br&
 \end{equation*}`
 
 ---
-### Component 2: Referent selection
+## Second component: Referent selection
 &lt;br&gt;
 ### 1. Similarity maximizer
+Pick object most similar to word&lt;br&gt;&lt;br&gt;
 
-### 2. Bayesian inference
+--
 
+### 2. Pragmatic reasoner
+Pick object most similar to word, factoring in what other words could have been uttered for each object
 ---
-### Data sets
-  * Symbolic: Frank et al. 2009's transcriptions of a subset of CHILDES&lt;br&gt;&lt;br&gt;
-  `\(W\)` = {piggie} &lt;br&gt; `\(S\)` = \{PIG, COW\}&lt;br&gt;&lt;br&gt;
-  
-  * Visual: Flickr30K Entities&lt;br&gt;&lt;br&gt;
-  &lt;img src="./output.png" width="50%" style="display: block; margin: auto;" /&gt;
+## Second component: Referent selection
+
+
+&lt;img src="me_files/figure-html/unnamed-chunk-6-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
 
 class: inverse, center
 
+# Experiments
 
-# Outstanding questions or comments?
+---
+
+### Symbolic data set: CHILDES transcriptions from Frank et al. (2009)
+  `\(W\)` = {get, the, piggie} &lt;br&gt; `\(S\)` = \{PIG, COW\}&lt;br&gt;&lt;br&gt;
+  
+---
+### Symbolic results (novel word task)
+&lt;img src="./symbolic-allw.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+### Visual data set: Flickr30K Entitites
+&lt;img src="./output.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+### Visual data set (novel word task)
+&lt;img src="./flickrplot.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse
+
+### Conclusions study 1
+
+* ME can be achieved with scalable models with continuous representations and conventional learning algorithms
+
+* Competition over words needs to be induced but it doesn't matter whether in training or referent selection
+
+* This mirrors the observation that true synonyms are rare in natural language (if they exist at all)
+
+****
+
+* Discrimination of words/objects is one prerequisite
+
+* [The representation of novel words is another]()
+
+---
+### Motivations for our second study
+
+  * Do away with negative sampling of novel items&lt;br&gt;&lt;br&gt; What is an appropriate representation of novelty?&lt;br&gt;&lt;br&gt;
+  
+  * More thorough experimentation
+  
+    * Not only dogs as novel objects
+    
+    * Varied and realistic novel words
+    
+    * More controlled symbolic setup
+
+---
+### Proposal: Go sub word-level
+
+--
+
+What we expect:
+
+* No need to specify set of words in advance 
+
+* Novelty as a by-product of unexpected sequences of characters
+
+* Differences in behavior when prompted with (i) known words, (ii) novel pseudo-words, and (iii) novel implausible words
+
+* Worse performance than word-level models
+
+---
+### Proposal: Go sub word-level
+
+What we got so far:
+
+* No need to specify set of words in advance `\(\checkmark\)`
+
+* Novelty as a by-product of unexpected sequences of characters `\(\checkmark\)`
+
+* Differences in behavior when prompted with (i) known words, (ii) novel pseudo-words, and (iii) novel implausible words `\(\checkmark\)`(?)
+
+* Worse performance than word-level models `\(\checkmark\)`
+
+---
+class: inverse
+
+### General conclusions
+
+* ME can be achieved with scalable models with continuous representations and conventional learning algorithms
+
+* Competition over words needs to be induced but it doesn't matter whether in training or referent selection
+
+* This mirrors the observation that true synonyms are rare in natural language (if they exist at all)
+
+* Discrimination of words/objects is one prerequisite
+
+***
+
+* More appropriate representations of novelty can be acquired if we go sub word-level
+
+* Going back and forth between different kinds of agents can be very useful to clarify concepts and put them to the test
+
+---
+
+
+class: inverse, center
+
+
+# Thanks!
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
