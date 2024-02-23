@@ -1,0 +1,345 @@
+---
+title: "Colexification data and phylogenetic trees"
+subtitle: "Overview of coverage"
+date: today
+author: "Thomas Brochhagen"
+format: html
+code-fold: true
+bibliography: ../bibliography.bib
+---
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(tidyr)
+```
+### Terminology
+
+* Language = Glottocode (@glottolog)
+* Meaning = Concepticon ID (@concepticon)
+* An observation = 4-tuple of <`meaning1`, `meaning2`, `colexification.status`, `language`>. For example, <FINGER, TOE, 1, Spanish> or <FINGER, TOE, 0, English>
+
+
+### LexiBank 
+The LexiBank [@lexibank] data was pre-processed to:
+
+* Include only meanings that are lexicalized in at least 50 languages
+* Include only languages that lexicalize at least 100 meanings
+
+A *positive case* of colexification is given when two pairs of meanings in a language are associated with the same form (e.g., FINGER and TOE as *dedo* in Spanish). A *negative case* is given when two pairs of meanings are expressed by distinct forms (e.g., FINGER and TOE in German as *Zeh* and *Finger*).
+
+There are a lot of negative cases in Lexibank (about 8GB worth of CSV). However, for the present purposes, we are only retaining negative cases if we have at least one case in the dataset in which these two meanings do colexify.^[This decision needs to be discussed.] The motivation for this is twofold. First, this is done to not have meaning pairs that have a $0$ across all rows for `colexification.status`. Second, to make the data less unwieldy.
+
+```{r, message=FALSE, warning=FALSE}
+df_colex <- read_csv('../data/lexibank/lexibank-colex-unif.csv')
+pos <- sum(df_colex$colex)
+neg <- nrow(df_colex) - sum(df_colex$colex)
+```
+
+This gives a dataset with `r nrow(df_colex)` observations, made up of 48397 positive cases of colexification and 6070585 negative cases. The data spans over `r length(unique(df_colex$Glottocode))` unique languages, and `r length(unique(c(df_colex$Concepticon_ID.xo, df_colex$Concepticon_ID.yo)))` unique meanings.
+
+Here's a sample of most and least frequently colexified meanings (the floor is 1 and not 0 because we did not retain meaning pairs that do not colexify in any language):
+```{r, warning=FALSE, message=FALSE}
+colex_freqs <- df_colex %>% filter(colex == 1) %>% group_by(Concepticon_Gloss.xo,Concepticon_Gloss.yo) %>% summarize(freq = n()) %>% arrange(desc(freq))
+
+rbind(colex_freqs %>% head(n = 10), colex_freqs %>% tail(n = 10))
+```
+
+And here's a visual overview of the linguistic coverage we have for meaning pairs (irrespective of their colexification status):
+```{r}
+df <- df_colex %>%
+        select(Glottocode, Concepticon_Gloss.xo, Concepticon_Gloss.yo) %>%
+        unique() %>%
+        mutate(cpair = paste0(Concepticon_Gloss.xo, '-', Concepticon_Gloss.yo)) %>%
+        group_by(cpair) %>%
+        summarize(freq = n()) %>%
+        mutate(rnk = rank(freq, ties.method='last'))
+#d <- df
+#d$cpair <- factor(d$cpair, levels=d$rnk)
+
+df %>% ggplot(aes(x = reorder(rnk, -rnk), y = freq)) +
+        geom_bar(stat = 'identity') +
+        theme_minimal(base_size = 25) +
+        xlab('Meaning pairs') +
+        ylab('# of glottocodes') +
+        theme(axis.ticks.x=element_blank(),
+              axis.text.x = element_blank()) +
+        ylim(0,2000)
+```
+
+And a sample of the most/least covered meaning pairs:
+```{r}
+rbind(df %>% select(-rnk) %>% arrange(desc(freq)) %>% head(n = 10),
+      df %>% select(-rnk) %>% arrange(desc(freq)) %>% tail(n = 10)
+)
+```
+
+Here are the quantiles for number of languages covering a given meaning pair:
+
+```{r}
+quantile(df$freq)
+```
+
+# Phylogenetic trees
+
+
+```{r, warning=FALSE, message=FALSE}
+df_geo  <- read_csv('../data/glottolog/languages_and_dialects_geo.csv') %>%
+        select(glottocode, macroarea, latitude, longitude)
+
+df_trees <- read_csv('../data/glottocodes_in_trees.csv') %>%
+                left_join(df_geo)
+df_goriginal <- df_trees %>% filter(source == 'glottolog.original')
+df_gexponential <- df_trees %>% filter(source == 'glottolog.exponential')
+df_gultrametric <- df_trees %>% filter(source == 'glottolog.ultrametric')
+df_zhang <- df_trees %>% filter(source == 'zhang')
+df_jaeger <- df_trees %>% filter(source == 'gerhard')
+df_mcmc <- df_trees %>% filter(source == 'mcmc')
+df_betal22 <- df_trees %>% filter(source == 'betal22')
+
+#setdiff(df_goriginal$glottocode, df_gexponential$glottocode)
+#setdiff(df_goriginal$glottocode, df_gultrametric$glottocode)
+#setdiff(df_goriginal$glottocode, df_betal22$glottocode)
+```
+
+
+The phylogenetic trees come in 7 different *kinds*, depending on the source/method by which they were constructed: `r unique(df_trees$source)`.^[If I recall correctly, MCMC is also a grouping composed of different (non-global) trees] For the purposes of quantifying coverage, the three glottolog variants can be treated as one as they are the same in this respect.
+
+Counting glottocodes at the tips of trees, we have:
+
+* Glottolog: `r length(unique(df_goriginal$glottocode))` languages
+* Zhang: `r length(unique(df_zhang$glottocode))` languages
+* MCMC: `r length(unique(df_mcmc$glottocode))` languages
+* Jäger: `r length(unique(df_jaeger$glottocode))` languages
+* Betal22: `r length(unique(df_betal22$glottocode))` languages
+
+
+# Colexification and trees
+
+Overview of phylogenetic coverage of colexification data for each of the five "tree kinds". 
+
+## Glottolog trees
+
+Visual impression of coverage of Glottolog tree of the glottocodes involved in the colexification data:
+
+```{r, warning=FALSE, message=FALSE}
+df_colex_glottocodes <-
+        df_colex %>% select(Glottocode) %>% unique() %>%
+        mutate(Covered = ifelse(Glottocode %in% unique(df_goriginal$glottocode), 'Yes', 'No'),
+        cov = ifelse(Glottocode %in% unique(df_goriginal$glottocode), 1, 0)) %>%
+        rename(glottocode = Glottocode) %>%
+        left_join(select(df_geo, latitude, longitude, glottocode))
+
+covered_glottocodes <- df_colex_glottocodes %>% filter(cov == 1) %>% select(glottocode) %>% unique() %>% pull()
+
+df_colex_cov <- df_colex %>% filter(Glottocode %in% covered_glottocodes)
+
+
+mp <- map_data('world')
+ggplot() +
+        geom_polygon(data = mp, aes(x = long, y = lat, group=group)) +
+        geom_point(data = drop_na(df_colex_glottocodes), aes(x = longitude, y = latitude, col = Covered)) +
+        theme_minimal(base_size = 13) +
+        theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        legend.position = c(0.9,0.1),
+        legend.background = element_rect(fill='grey',
+                                         size=0.25)
+        )
+```
+
+In all these maps, `r nrow(df_colex_glottocodes) - nrow(drop_na(df_colex_glottocodes))` languages are not depicted because I didn't have lat/long information for them^[Based on the `languages_and_dialects_geo.csv`-file in Glottolog: [https://glottolog.org/meta/downloads](https://glottolog.org/meta/downloads)]. 
+
+Retaining only glottologs with geographic information (as depicted), the trees cover `r sum(drop_na(df_colex_glottocodes) %>% pull(cov))` out of `r nrow(drop_na(df_colex_glottocodes))` glottocodes. 
+
+Including glottocodes without geographic information, the trees cover `r sum(df_colex_glottocodes$cov)` out of `r nrow(df_colex_glottocodes)`. This corresponds to 14740 positive cases of colexification; and 2027460 negative cases.
+
+## Zhang trees
+
+Visual impression of coverage of Zhang tree of the glottocodes involved in the colexification data:
+
+```{r, warning=FALSE, message=FALSE}
+df_colex_glottocodes <-
+        df_colex %>% select(Glottocode) %>% unique() %>%
+        mutate(Covered = ifelse(Glottocode %in% unique(df_zhang$glottocode), 'Yes', 'No'),
+        cov = ifelse(Glottocode %in% unique(df_zhang$glottocode), 1, 0)) %>%
+        rename(glottocode = Glottocode) %>%
+        left_join(select(df_geo, latitude, longitude, glottocode))
+
+covered_glottocodes <- df_colex_glottocodes %>% filter(cov == 1) %>% select(glottocode) %>% unique() %>% pull()
+
+df_colex_cov <- df_colex %>% filter(Glottocode %in% covered_glottocodes)
+
+
+mp <- map_data('world')
+ggplot() +
+        geom_polygon(data = mp, aes(x = long, y = lat, group=group)) +
+        geom_point(data = drop_na(df_colex_glottocodes), aes(x = longitude, y = latitude, col = Covered)) +
+        theme_minimal(base_size = 13) +
+        theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        legend.position = c(0.9,0.1),
+        legend.background = element_rect(fill='grey',
+                                         size=0.25)
+        )
+```
+
+Retaining only glottologs with geographic information (as depicted), the trees cover `r sum(drop_na(df_colex_glottocodes) %>% pull(cov))` out of `r nrow(drop_na(df_colex_glottocodes))` glottocodes. 
+
+Including glottocodes without geographic information, the trees cover `r sum(df_colex_glottocodes$cov)` out of `r nrow(df_colex_glottocodes)`. This corresponds to 2801 positive cases of colexification; and 230345 negative cases.
+
+
+## MCMC trees
+
+Visual impression of coverage of MCMC tree of the glottocodes involved in the colexification data:
+
+```{r, warning=FALSE, message=FALSE}
+df_colex_glottocodes <-
+        df_colex %>% select(Glottocode) %>% unique() %>%
+        mutate(Covered = ifelse(Glottocode %in% unique(df_mcmc$glottocode), 'Yes', 'No'),
+        cov = ifelse(Glottocode %in% unique(df_mcmc$glottocode), 1, 0)) %>%
+        rename(glottocode = Glottocode) %>%
+        left_join(select(df_geo, latitude, longitude, glottocode))
+
+covered_glottocodes <- df_colex_glottocodes %>% filter(cov == 1) %>% select(glottocode) %>% unique() %>% pull()
+
+df_colex_cov <- df_colex %>% filter(Glottocode %in% covered_glottocodes)
+
+
+mp <- map_data('world')
+ggplot() +
+        geom_polygon(data = mp, aes(x = long, y = lat, group=group)) +
+        geom_point(data = drop_na(df_colex_glottocodes), aes(x = longitude, y = latitude, col = Covered)) +
+        theme_minimal(base_size = 13) +
+        theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        legend.position = c(0.9,0.1),
+        legend.background = element_rect(fill='grey',
+                                         size=0.25)
+        )
+```
+
+Retaining only glottologs with geographic information (as depicted), the trees cover `r sum(drop_na(df_colex_glottocodes) %>% pull(cov))` out of `r nrow(drop_na(df_colex_glottocodes))` glottocodes. 
+
+Including glottocodes without geographic information, the trees cover `r sum(df_colex_glottocodes$cov)` out of `r nrow(df_colex_glottocodes)`. This corresponds to 9014 positive cases of colexification; and 1332298 negative cases.
+
+
+## Jäger trees
+
+Visual impression of coverage of Jäger tree of the glottocodes involved in the colexification data:
+
+```{r, warning=FALSE, message=FALSE}
+df_colex_glottocodes <-
+        df_colex %>% select(Glottocode) %>% unique() %>%
+        mutate(Covered = ifelse(Glottocode %in% unique(df_jaeger$glottocode), 'Yes', 'No'),
+        cov = ifelse(Glottocode %in% unique(df_jaeger$glottocode), 1, 0)) %>%
+        rename(glottocode = Glottocode) %>%
+        left_join(select(df_geo, latitude, longitude, glottocode))
+
+covered_glottocodes <- df_colex_glottocodes %>% filter(cov == 1) %>% select(glottocode) %>% unique() %>% pull()
+
+df_colex_cov <- df_colex %>% filter(Glottocode %in% covered_glottocodes)
+
+
+mp <- map_data('world')
+ggplot() +
+        geom_polygon(data = mp, aes(x = long, y = lat, group=group)) +
+        geom_point(data = drop_na(df_colex_glottocodes), aes(x = longitude, y = latitude, col = Covered)) +
+        theme_minimal(base_size = 13) +
+        theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        legend.position = c(0.9,0.1),
+        legend.background = element_rect(fill='grey',
+                                         size=0.25)
+        )
+```
+
+Retaining only glottologs with geographic information (as depicted), the trees cover `r sum(drop_na(df_colex_glottocodes) %>% pull(cov))` out of `r nrow(drop_na(df_colex_glottocodes))` glottocodes. 
+
+Including glottocodes without geographic information, the trees cover `r sum(df_colex_glottocodes$cov)` out of `r nrow(df_colex_glottocodes)`. This corresponds to 36839 positive cases of colexification; and 4722788 negative cases.
+
+
+
+
+## Betal22 trees
+
+Visual impression of coverage of Betal22 tree of the glottocodes involved in the colexification data:
+
+```{r, warning=FALSE, message=FALSE}
+df_colex_glottocodes <-
+        df_colex %>% select(Glottocode) %>% unique() %>%
+        mutate(Covered = ifelse(Glottocode %in% unique(df_betal22$glottocode), 'Yes', 'No'),
+        cov = ifelse(Glottocode %in% unique(df_betal22$glottocode), 1, 0)) %>%
+        rename(glottocode = Glottocode) %>%
+        left_join(select(df_geo, latitude, longitude, glottocode))
+
+covered_glottocodes <- df_colex_glottocodes %>% filter(cov == 1) %>% select(glottocode) %>% unique() %>% pull()
+
+df_colex_cov <- df_colex %>% filter(Glottocode %in% covered_glottocodes)
+
+
+mp <- map_data('world')
+ggplot() +
+        geom_polygon(data = mp, aes(x = long, y = lat, group=group)) +
+        geom_point(data = drop_na(df_colex_glottocodes), aes(x = longitude, y = latitude, col = Covered)) +
+        theme_minimal(base_size = 13) +
+        theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        legend.position = c(0.9,0.1),
+        legend.background = element_rect(fill='grey',
+                                         size=0.25)
+        )
+```
+
+Retaining only glottologs with geographic information (as depicted), the trees cover `r sum(drop_na(df_colex_glottocodes) %>% pull(cov))` out of `r nrow(drop_na(df_colex_glottocodes))` glottocodes. 
+
+Including glottocodes without geographic information, the trees cover `r sum(df_colex_glottocodes$cov)` out of `r nrow(df_colex_glottocodes)`. This corresponds to 40738 positive cases of colexification; and 5185670 negative cases.
+
+## Summary coverage
+
+```{r, warning=FALSE, message=FALSE}
+df_tree <- df_trees %>% filter(source != 'glottolog.exponential') %>%
+                        filter(source != 'glottolog.ultrametric') %>%
+                        select(source, glottocode) %>%
+                        unique() %>%
+                        group_by(glottocode) %>%
+                        summarize(n = n())
+df_colex_tree <- df_colex %>% select(Glottocode) %>%
+                rename(glottocode = Glottocode) %>%
+                unique() %>%
+                left_join(df_tree) %>%
+                mutate(n = ifelse(is.na(n), 0, n))
+
+df_colex_tree %>% ggplot(aes(x = n)) +
+        geom_bar() +
+        theme_minimal(base_size = 15) +
+        xlab('# of tree kinds') +
+        ylab('# of glottocodes from colex data') +
+        xlim(-0.5,5)
+```
+
+
+# Comments
+
+* We may want to set a threshold for the minimal number of languages per **meaning pair** for a meaning pair to be included. We probably cannot learn anything useful from a meaning pair for which we only have lexicalization information in a handful of languages.
