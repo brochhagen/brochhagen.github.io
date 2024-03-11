@@ -1,0 +1,221 @@
+---
+title: "Colexification data and phylogenetic trees"
+subtitle: "First look at D, s2, and alpha for selected pairs"
+date: today
+author: "Thomas Brochhagen"
+format: html
+code-fold: true
+bibliography: ../bibliography.bib
+---
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(tidyr)
+```
+
+
+
+```{r}
+summarize_tbl_physig <- function(psig_colex){
+        tmp_no_mcmc <- psig_colex[ !(psig_colex$tree %in% c("MCMC (summary)", "MCMC (posterior)")), ];
+        tmp_no_mcmc$tree <- ifelse(tmp_no_mcmc$tree == "Glottolog (original)", "Original", ifelse(tmp_no_mcmc$tree == "Glottolog (exponential)", "Exponential", ifelse(tmp_no_mcmc$tree == "Glottolog (ultrametric)", "Ultrametric", tmp_no_mcmc$tree)));
+        tmp_no_mcmc$error[ is.na(tmp_no_mcmc$error) ] <- "-";
+        tmp_no_mcmc$D <- sprintf("%s%.2f%s", ifelse(tmp_no_mcmc$D.p0 < 0.05,"**",""), tmp_no_mcmc$D, ifelse(tmp_no_mcmc$D.p0 < 0.05,"**",""));
+        tmp_no_mcmc$D.p0 <- sprintf("%s%.2g%s%s", ifelse(tmp_no_mcmc$D.p0 < 0.05,"**",""), tmp_no_mcmc$D.p0, ifelse(tmp_no_mcmc$D.p0 < 0.01, "^⭑⭑^", ifelse(tmp_no_mcmc$D.p0 < 0.05, "^⭑^", "")), ifelse(tmp_no_mcmc$D.p0 < 0.05,"**",""));
+        tmp_no_mcmc$D.p1 <- sprintf("%.2g%s", tmp_no_mcmc$D.p1, ifelse(tmp_no_mcmc$D.p1 < 0.01, "^⭑⭑^", ifelse(tmp_no_mcmc$D.p1 < 0.05, "^⭑^","")));
+        tmp_no_mcmc$PGLMM.s2 <- sprintf("%s%.2f%s", ifelse(tmp_no_mcmc$PGLMM.s2.p0 < 0.05, "**", ""), tmp_no_mcmc$PGLMM.s2, ifelse(tmp_no_mcmc$PGLMM.s2.p0 < 0.05, "**", ""));
+        tmp_no_mcmc$PGLMM.s2.p0 <- sprintf("%s%.2g%s%s", ifelse(tmp_no_mcmc$PGLMM.s2.p0 < 0.05, "**", ""), tmp_no_mcmc$PGLMM.s2.p0, ifelse(tmp_no_mcmc$PGLMM.s2.p0 < 0.01, "^⭑⭑^", ifelse(tmp_no_mcmc$PGLMM.s2.p0 < 0.05, "^⭑^", "")), ifelse(tmp_no_mcmc$PGLMM.s2.p0 < 0.05, "**", ""));
+        tmp_no_mcmc$IG10.alpha <- sprintf("%.2f", tmp_no_mcmc$IG10.alpha);
+        tmp_no_mcmc$IG10.alphaWarn <- ifelse( tmp_no_mcmc$IG10.alphaWarn == 0, "-", "at limit");
+        tmp_no_mcmc$D[ tmp_no_mcmc$D == "NANANA" ] <- "-";
+        tmp_no_mcmc$D.p0[ tmp_no_mcmc$D.p0 == "NANANANA" ] <- "-";
+        tmp_no_mcmc$D.p1[ tmp_no_mcmc$D.p1 == "NANA" ] <- "-";
+        tmp_no_mcmc$PGLMM.s2[ tmp_no_mcmc$PGLMM.s2 == "NANANA" ] <- "-";
+        tmp_no_mcmc$PGLMM.s2.p0[ tmp_no_mcmc$PGLMM.s2.p0 == "NANANANA" ] <- "-";
+        tmp_no_mcmc$IG10.alpha[ tmp_no_mcmc$IG10.alpha == "NA" ] <- "-";
+        tmp_no_mcmc$IG10.alphaWarn[ is.na(tmp_no_mcmc$IG10.alphaWarn) ] <- "";
+        tmp_no_mcmc$family[ tmp_no_mcmc$family == "World" ] <- "***World***";
+        return(knitr::kable(tmp_no_mcmc, 
+                row.names=FALSE, 
+                col.names=c("Family", "Tree", "Errors?", "*D*", "*p*(*D*=0)", "*p*(*D*=1)", "*s2*", "*p*(*s2*=0)", "*α*", "*α* warning?"),
+                align="r",
+                caption='Various estimates of the phylogenetic signal when using the **Glottolog trees** with original ("Original") branch length (i.e., all branches have length 1.0), using an exponential ("Exponential") branch length and a ultrametric ("Ultrametric") one, as well as the **@jaeger:2018 trees** (where available), and the **@zhang+etal:2019 for Sino-Tibetan**.'))
+}
+```
+
+```{r}
+draw_coverage_map <- function(df, c1, c2){
+        df_sub_colex <- df %>% 
+                        filter(Concepticon_ID.xo == c1,
+                        Concepticon_ID.yo == c2)
+
+
+        mp <- map_data('world')
+        ggplot() +
+                geom_polygon(data = mp, aes(x = long, y = lat, group=group)) +
+                geom_point(data = drop_na(df_sub_colex), aes(x = longitude, y = latitude, col = colex)) +
+                theme_minimal(base_size = 13) +
+                theme(axis.title.x=element_blank(),
+                axis.text.x=element_blank(),
+                axis.ticks.x=element_blank(),
+                axis.title.y=element_blank(),
+                axis.text.y=element_blank(),
+                axis.ticks.y=element_blank(),
+                legend.position = c(0.9,0.1),
+                legend.background = element_rect(fill='grey',
+                                                size=0.25)
+                )
+}
+```
+
+```{r, warning=FALSE, message=FALSE}
+df_geo  <- read_csv('../data/glottolog/languages_and_dialects_geo.csv') %>%
+        select(glottocode, macroarea, latitude, longitude) %>%
+        rename(Glottocode = glottocode)
+
+df_colex <- read_csv('../data/lexibank/lexibank-colex-unif.csv') %>%
+                left_join(df_geo) %>%
+                mutate(colex = ifelse(colex == 0, 'Absent', 'Present'))
+```
+
+### Preamble
+
+We have 19168 unique meaning pairs that, in principle, one could estimate the phylogenetic signal for. We probably will want to set a threshold for the minimal number of languages that a meaning pair has to appear in s.t. it is included in the analysis^[For a rough impression: for such a threshold set at at least 100, we have 13075 meaning pairs; at least 500 yields 3794; at least 1000 yields 1528; 1500 yields 369; and so on.], and possibly another for the minimal number of times it is colexified because otherwise there's nothing to estimate (see "group (iii)" below). 
+
+For now --to design the entire analysis pipeline and for first impressions-- I selected six meaning pairs from three "groups":
+
+(i) Two of the meaning pairs that colexify most often across languages:
+*  (i.i) *upper arm* and *lower arm*: $300$ languages/observations with $179$ cases of colexification
+* (i.ii) *leg* and *foot*: $298$ observations with $161$ cases of colexification
+(ii) Two pairs that are often discussed in the literature in terms of areal colexification effects:
+* (ii.i) *fire* and *tree*: $1417$ languages/observations with only $18$ positive cases. As noted by @gast+koptam:2018 this is "is a well-known colexification pattern [...] well-attested in the Sahul area comprising the languages of Australia, New Guinea and surrounding islands.
+* (ii.ii) *ear* and *leaf*: $1660$ languages/observations with $8$ positive cases. 
+(iii) Two pairs for which we have the most lexical coverage, irrespective of how often they colexify:
+* (iii.i) *nose* and *eye*: $1850$ languages/observations with $1$ positive cases.
+* (iii.ii) *ear* and *eye*: $1848$ languages/observations with $2$ positive cases.
+
+For the cases in (iii) I obviously didn't have any expectations since it is impossible to say anything sensible about them in terms of phylogenetic signals. I included them for completeness' sake but  only to highlight that going by frequency of lexicalization information alone means that we will end up with many cases like these.
+
+For the cases in (ii) I was uncertain. If this is a bona-fide areal effect then we would expect there to not be much of a phylogenetic signal. However, it can obviously happen that areal effects coincide with phylogenetic effects, with more related languages being spoken in more proximity to one another.
+
+The cases in (i) are probably the most interesting candidates for phylogenetic scrutiny since we have more positive cases of colexification than in groups (ii) and (iii).  
+
+$D$, $s^2$ and $\alpha$ were calculated for all six pairs. The regressions are all intercept-only.
+
+
+### (i.i) upper and lower arms
+
+The high frequency of colexification of upper and lower arm is the kind of the case for which people criticise Lexibank/CLICS -- should this even be counted as "two distinct meanings"?-- but it's an good testbed for these methods because, a priori, one may not except a (strong, if any) phylogenetic signal. 
+
+#### Map
+
+It makes sense to first look at the distribution of the data on a map. To get a feeling for the coverage we have on whether these two meanings colexify (absent = no colexification; present = colexified).
+
+```{r}
+draw_coverage_map(df_colex, 431, 446)
+```
+
+This map already hints at the fact that we will not get much family-level diversity from this colexification pair. 
+
+
+#### Phylogenetic signal
+
+```{r}
+load('../cached_results/signals/physig-431-446.RData') #upper - lower arm
+summarize_tbl_physig(physig_colex)
+```
+
+As suggested by the map above, this pair showcases a challenge that we will face: data on a lexical contrast is either not collected (no one appears to have bothered to ask Austroasiatic or Indo-Euopean speakers if they have different words for upper- and lower-arms); or it is constant, so we get an estimate only for a (likely typologically biased) subsample.
+
+There's not all that much that can be said about this pair based on  $D$, $s^2$ and $\alpha$. 
+
+### (i.ii) legs and feet
+
+
+#### Map
+```{r}
+draw_coverage_map(df_colex, 1297, 1301)
+```
+
+A priori, this meaning pair looks a little more informative than the previous one. There is more data across more families.
+
+#### Phylogenetic signal
+```{r}
+load('../cached_results/signals/physig-1297-1301.RData') #fire-tree
+summarize_tbl_physig(physig_colex)
+```
+
+And, indeed, there is more information to go by for this pair. It's a mixed picture but there's some evidence pointing toward clumpiness. 
+
+### (ii.i) Fire and wood
+
+#### Map
+```{r}
+draw_coverage_map(df_colex, 221, 906)
+```
+
+The main to note is that the pattern is very localized (as expected from the literature), so we will get a constant colexification status for most families.
+
+
+```{r}
+load('../cached_results/signals/physig-221-906.RData') #fire-tree
+summarize_tbl_physig(physig_colex)
+```
+
+And, indeed, there is little to be said about this pattern either. The only family that gives us some variation in colexification is Pama-Nyungan
+
+### (ii.ii) Ears and leaves
+
+#### Map
+```{r}
+draw_coverage_map(df_colex, 628, 1247)
+```
+
+This case looks very similar to (ii.i)
+
+#### Phylogenetic signal
+```{r}
+load('../cached_results/signals/physig-628-1247.RData') #fire-tree
+summarize_tbl_physig(physig_colex)
+```
+
+## Group (iii) remark
+
+These should not be taken seriously because there's barely any positive case of colexification. I ran them because it's cheap; and to get a feeling for the estimates one would get when analyzing this kind of extremely skewed data
+
+### (iii.i) Noses and eyes
+
+#### Map
+```{r}
+draw_coverage_map(df_colex, 1221, 1248)
+```
+
+#### Phylogenetic signal
+```{r}
+load('../cached_results/signals/physig-1221-1248.RData') #fire-tree
+summarize_tbl_physig(physig_colex)
+```
+
+### (iii.ii) Ears and eyes
+
+#### Map
+```{r}
+draw_coverage_map(df_colex, 1247, 1248)
+```
+
+#### Phylogenetic signal
+```{r}
+load('../cached_results/signals/physig-1247-1248.RData') #fire-tree
+summarize_tbl_physig(physig_colex)
+```
+
+
+
+# Some concluding thoughts
+
+* For cases of comparably rare colexifications (fire and wood; ear and leaf) the problem of by-family measures is that they are blind to the uniqueness of a (lack of) pattern in the global context. Then again, maybe it is also telling that --within the families that host them-- they do not appear to be all that clumpy. This may be taken to suggest that this is, indeed, not so much a phylogenetic but an areal effect, as suggested by the literature; 
+* We need to discuss how to deal with "group (iii)"-kind of cases where colexification is rare;
+* I am not really trained in frequentist methods but the issue of multiple tests does rear its head. 
+
