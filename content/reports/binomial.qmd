@@ -1,0 +1,143 @@
+---
+title: "Priors and proportions"
+author: "Thomas Brochhagen"
+format: html
+---
+
+
+# Modelling proportions/rates with a logistic regression
+
+`brms` has an argument called `trials()` that you can add to a binomial model to specify how many trials generated a response. In fact, it seems like now it is recommended to add it even if (as in the standard case) each row in your data frame corresponds to a single trial, you just add `trials(1)` to your model.
+
+Let's make up some data to demonstrate. My experiment has 200 observations for each of two verb types. You will see that ICV1 elicited 160 uses of pronouns whereas ICV2 elicited less, with only 120 uses of pronouns. I obviously made this up because I'm sure this is not what you'd get in an actual experiment.
+
+```{r}
+pro_use_icv1 <- c(rep(1,160),
+                 rep(0, 40)
+                 )
+
+pro_use_icv2 <- c(rep(1,120),
+                  rep(0, 80)
+                  )
+
+label <- c(rep('icv1',200), rep('icv2', 200))
+pro   <- c(pro_use_icv1, pro_use_icv2)
+
+df_full <- data.frame(pro, label)
+```
+
+So this is how our data looks like, for 400 rows:
+```{r}
+print(head(df_full))
+```
+
+We can now model this with a logistic regression, using our fancy new notation of `trials(1)`:
+```{r, warning=FALSE, message=FALSE, output=FALSE}
+library(brms)
+m1 <- brm(data    = df_full,
+           formula = pro | trials(1) ~ label,
+           family  = binomial)
+```
+
+
+```{r}
+print(summary(m1))
+```
+
+We can also check that this is the same (up to numeric misshaps) as a model without the `trials(1)` syntax:
+
+```{r, output=FALSE, warning=FALSE, message=FALSE}
+m2 <- brm(data    = df_full,
+           formula = pro ~ label,
+           family  = binomial)
+```
+
+
+```{r}
+print(summary(m2))
+```
+
+Now we can do the same thing but with rates, but now using `trials()` for the actual summarized numbers. 
+
+Let's create a new data frame that summarizes the data with only 2 rows instead of 400:
+
+```{r, output=FALSE, warning=FALSE, message=FALSE}
+
+pro.rate <- c(mean(pro_use_icv1), mean(pro_use_icv2)) 
+pro.n_subjects <- c(length(pro_use_icv1), length(pro_use_icv2))
+pro   <- pro.rate * pro.n_subjects
+label <- c('icv1', 'icv2')
+
+df_summary <- data.frame(pro.rate, pro.n_subjects, label, pro)
+```
+
+The data frame now looks like this:
+
+```{r}
+print(head(df_summary))
+```
+
+And the model looks like this:
+```{r, output=FALSE}
+m3 <-  brm(data    = df_summary,
+           formula = pro | trials(pro.n_subjects) ~ label,
+           family  = binomial)
+
+```
+
+```{r}
+print(summary(m3))
+```
+
+It's the same again!
+
+## Concluding remarks
+Does this make a difference? Clearly not. That's good news. I suppose using `trials()` instead of creating the fake full data frame looks a little more fancy but it's exactly the same :)
+
+
+# Priors
+Since we're on the topic. Let's also set the priors manually. Honestly, brms does a good job at deciding weakly informative priors but I suppose if we set them manually it shows that we thought about this. Two useful discussion threads on this are:
+
+* [https://bookdown.org/ajkurz/DBDA_recoded/hierarchical-models.html](https://bookdown.org/ajkurz/DBDA_recoded/hierarchical-models.html)
+* [https://discourse.mc-stan.org/t/default-priors-for-logistic-regression-coefficients-in-brms/13742
+](https://discourse.mc-stan.org/t/default-priors-for-logistic-regression-coefficients-in-brms/13742
+)
+
+The long story short is that `Normal(1.5)` on main effects/intercept and `Normal(0, 1)` on random effects seems reasonable. Let's try it out!
+
+For model `m3` we had:
+
+```{r}
+print(prior_summary(m3))
+```
+
+We can change this to the weakly informative prior mentioned above:
+
+```{r, output=FALSE}
+priors <- c(prior(normal(0, 1.5), class = Intercept),
+            prior(normal(0,1.5), class = "b", coef = labelicv2)
+            )
+
+
+m4 <-  brm(data    = df_summary,
+           formula = pro | trials(pro.n_subjects) ~ label,
+           prior   = priors,
+           family  = binomial)
+```
+
+Let's check the prior, just to see if we did all things correctly:
+
+```{r}
+print(prior_summary(m4))
+```
+
+And look at the model fit:
+
+```{r}
+print(summary(m4))
+```
+
+So nothing really changed, but we used the recommended setting to get the estimate. 
+
+For more information about setting priors see: [https://paul-buerkner.github.io/brms/reference/set_prior.html](https://paul-buerkner.github.io/brms/reference/set_prior.html). For instance, for a random effect it would be: `prior(normal(0,1), class = sd)`; you can also pass it the `coef = ` argument to specify the name of the particular effect.
+
