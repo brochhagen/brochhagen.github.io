@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>On the interaction of form discriminability and meaning conflation across languages</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="pcolex_files/libs/clipboard/clipboard.min.js"></script>
+<script src="pcolex_files/libs/quarto-html/quarto.js"></script>
+<script src="pcolex_files/libs/quarto-html/popper.min.js"></script>
+<script src="pcolex_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="pcolex_files/libs/quarto-html/anchor.min.js"></script>
+<link href="pcolex_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="pcolex_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="pcolex_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="pcolex_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="pcolex_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">On the interaction of form discriminability and meaning conflation across languages</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="dv">1</span><span class="sc">+</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+<p>This study is about universal tendencies in the way meanings are assigned to forms. We focus on partial and total colexification. Total colexification is when multiple meanings are assigned to the same form: The Spanish <em>dedo</em> colexifies the meanings FINGER and TOE; the English <em>go</em> colexifies WALK and DRIVE whereas German has two different words for this; and so on. Partial colexification is when there is partial (but not total) overlap in form for multiple meanings: the English word <em>straight</em> colexifies the meanings RECTILINEAR and HONEST but there is only partial colexification with SIMPLE/EASY TO UNDERSTAND which is expressed by <em>straightforward</em> since <em>straight</em> and <em>straightforward</em> only partially overlap.</p>
+<p>There is some converging evidence that there is cross-linguistic regularity in total colexification. No one has carefully looked at partial colexification yet (see <span class="citation" data-cites="list:2022">[@list:2022]</span> for a first take). Minimally, we want to know if it’s the same or different from total colexification; and if they are different, why that may be.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+High-level summary of project aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Are partial and full colexifications different?</p>
+<p>Some possibilities:</p>
+<ol type="1">
+<li>More contextual similarity of meanings <span class="math inline">\(\Rightarrow\)</span> more partial colexification and less total colexification</li>
+<li>More semantic similarity of meanings <span class="math inline">\(\Rightarrow\)</span> more colexification of either kind</li>
+<li>There is no difference between partial/total colexification once we factor in morphological devices available to languages (contra <span class="citation" data-cites="list:2022">@list:2022</span>)</li>
+</ol>
+<p>Past research <span class="citation" data-cites="xu+etal:2020">[@xu+etal:2020, @brochhagen+boleda:2022]</span> has looked at Hypothesis 2 for total colexification. The reasoning is that it is more efficient for languages to express similar meanings with the same word (easier for storage, retrieval and for learning). No one has looked at partial colexification, however.</p>
+<p>Hypothesis 1 is new. Brochhagen &amp; Boleda 2022 looked a little into this for total colexification but the methods were really crude. The idea is that it is not useful to express very similar meanings with exactly the same word for because they would get confused in context. For Brochhagen &amp; Boleda 2022 this just meant that you would find less total colexifications for very similar meanings. For this study there is another option: partially colexify! You re-use some of the material but you make enough of a form-based distinction to keep the meanings separate.</p>
+</div>
+</div>
+<div class="success">
+<p><strong>Impact</strong> * We learn how meaning is organized across languages by taking into account that morphology (partial colex.) plays a role * We study a force that possibly shapes the lexicon (discriminability) that has not been studied so far</p>
+</div>
+<section id="analysis-0-identify-total-and-partial-colexifications" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-0-identify-total-and-partial-colexifications">Analysis 0: Identify total and partial colexifications</h2>
+<p>Data: <a href="https://lexibank.clld.org/">LexiBank</a> or CLICS4 (if release on time)</p>
+<p>For a given language <span class="math inline">\(l\)</span> (e.g., Spanish), we compute the string similarity of all the forms <span class="math inline">\(i\)</span>,<span class="math inline">\(j\)</span> in <span class="math inline">\(l\)</span> as follows:</p>
+<p><span class="math display">\[sim(i,j) = 1 - \frac{\text{distance}(i,j)}{max(\{\text{length}(i), \text{length}(j)\})},\]</span> where <span class="math inline">\(\text{distance}(i, j)\)</span> is the Levenshtein distance between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>.</p>
+<ol type="1">
+<li><p>For two phonetic/word forms <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, if they are associated with two different Glottocodes <span class="math inline">\(w\)</span> and <span class="math inline">\(z\)</span> and <span class="math inline">\(sim(i,j) = 1\)</span> then <span class="math inline">\(w\)</span> and <span class="math inline">\(z\)</span> likely colexify in <span class="math inline">\(l\)</span></p></li>
+<li><p>For two phonetic/word forms <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, if they are associated with two different Glottocodes <span class="math inline">\(w\)</span> and <span class="math inline">\(z\)</span> and <span class="math inline">\(0 &lt; sim(i,j) &lt; 1\)</span> then it may be that <span class="math inline">\(w\)</span> and <span class="math inline">\(z\)</span> partially colexify in <span class="math inline">\(l\)</span>.</p></li>
+</ol>
+<p>To avoid too many false positives, we implement the two following heuristics:</p>
+<p>For partial colexifications: * <span class="math inline">\(sim(i, j)\)</span> is greater than the median similarity of forms in <span class="math inline">\(l\)</span>. That is, the similarity between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> must be higher than that of half of the forms of <span class="math inline">\(l\)</span>. The reasoning behind this threshold is that this filters out some spurious similarities when <span class="math inline">\(sim(i,j)\)</span> is low. Since the threshold is relative to the language, this threshold is also sensitive to particular morphosyntactic) features of the language that may lead to it having more/less similar forms than other languages.</p>
+<p>For partial and full colexifications: * Accept as partial and or/full colexifications if <span class="math inline">\(w\)</span> and <span class="math inline">\(z\)</span> are likely partial colexifications or total colexifications in at least three other languages, as done in paper by <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=de&amp;user=JsMdM8oAAAAJ&amp;citation_for_view=JsMdM8oAAAAJ:MXK_kJrjxJIC">Huygaa</a> and also <a href="https://arxiv.org/pdf/2305.12818.pdf">Liu, with a slightly different filtering mechanism</a> (their <span class="math inline">\(\lambda\)</span>-parameter in 3.3). I think Mattis’ earlier work also used something like this? In other words, we leverage the information from all languages to arrive at (most likely) partial/full colexifications.</p>
+</section>
+<section id="analysis-1-distributional-differences-between-partial-and-total-colexifications" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-1-distributional-differences-between-partial-and-total-colexifications">Analysis 1: Distributional differences between partial and total colexifications</h2>
+<p>This first analysis doesn’t look at the <strong>why</strong> there is a difference between partial and total colexification. It just tries to see if there is one. To do so, we construct colexification networks/matrices for both total and partial colexifications and see if they are structurally different.</p>
+<section id="step-1-construct-networksmatrices" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-construct-networksmatrices">Step 1: Construct networks/matrices</h3>
+<ul>
+<li>Nodes are concepticon IDs</li>
+<li>Weights are # of total/partial colexifications</li>
+</ul>
+<p>Comparison in terms of: * Pairwise likelihood to colexify of meanings in the two networks (e.g., using a random-walk based measure of similarity based on the network/matrix) * Use the PCA-like method from: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3732089/ * Do a lot of typology-based (maybe morphoeme/word-ratio-like measure to try to capture something similar to how analytic/synthetic the language is?) and geographic-region robustness checks</p>
+<div class="warning">
+<p>Partial networks are directed when based on affix colexifications. Networks for full colexification not. We can either ignore directionality or we need to come up with a different way to compare them</p>
+</div>
+<div class="warning">
+<p><strong>TO DO</strong> Ask Huygaa and/or Carmen about controls for morphological productivity for both this analysis and follow-up ones</p>
+</div>
+<div class="info">
+<p><strong>Questions from this analysis answered</strong> * Are partial and full colexifications different from the point of view of their typological pervasiveness (purely in terms of what meanings tend to partially vs.&nbsp;totall colexify more often)</p>
+</div>
+</section>
+</section>
+<section id="understanding-differences-in-terms-of-contextual-similarity" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-differences-in-terms-of-contextual-similarity">2. Understanding differences in terms of contextual similarity</h2>
+<p>Use two (or more) multilingual LLMS (T5, BLOOM, …) to determine (language-specific) confusability of meanings by comparing the expectations of the LLM for the contexts that these words appear in. Intuitively, if the (LLM’s expectations of the masked word in the) contexts are similar, the meanings are more confuable. We do this by comparing many different contexts in which words appear in. Set by step: * Select a language that we have a LLM and a corpus for; * Go through all of the language’s word/phonetic forms <span class="math inline">\(w\)</span> associated with a ConcepticonID; * Sample <span class="math inline">\(n\)</span> contexts (sentences) <span class="math inline">\(c\)</span> for each <span class="math inline">\(w\)</span>; * For each sentence <span class="math inline">\(c\)</span>: (e.g.&nbsp;“Yesterday, I stubbed my toe.” for w=“toe”) * query LLM for likelihood over tokens in that context (e.g., “Yesterday, I stubbed my w” and get likelihood for “w = toe”; “w = finger”; for all w) * For each pair of contexts of two different words, compute Jeffrey’s divergence between them (sum of KL in both directions). This gives a measure of similarity of the two contexts in terms of LM expectations * Repeat process for <span class="math inline">\(n\)</span> contexts (decide number based on elbow-plot or similar that tracks how median Jeffrey’s divergence stops changing) * Transform into a “word1, word2, median.JD”-DF s.t. median.JD is the median JD between “contexts in which word1 appears in and contexts in which word2 appears in”. * For each ConcepticonID pair, retrieve the median.JD it has in a language: “ID_xo, ID_yo, median.JD.EN, median.JD.ES, …” * Hierarchical model: <code>colex_or_not ~ (surprisal | language)</code> // or <code>full_or_partial ~</code> or a multinomial</p>
+<div class="warning">
+<ul>
+<li>An important question is whether median JD across contexts is not the same as cosine similarity between words. I do not think so. Not a formal proof, but roughly, <span class="math inline">\(p(\cdot \mid w_i)\)</span> is the information from a static word embedding <span class="math inline">\(w_i\)</span> which summarizes the paradigmatic information about <span class="math inline">\(w\)</span> learned by a language model about the contexts it appears in. JD is capturing the similarity between <span class="math inline">\(p(\cdot \mid c_{w})\)</span> and <span class="math inline">\(p(\cdot \mid c_{w'})\)</span>. We have that <span class="math inline">\(p(c | w) = \frac{p(w | c) p(c)}{p(w)}\)</span> but only the numerator is what we approximate with the median JD. In other words, this measure does not consider as a factor the frequency of a word (outside of a context) which does play a role for the learnt static embeddings but shouldn’t matter for a notion of <strong>in context</strong> confusability. Nonetheless, the two measures should be compared.</li>
+<li>Save intermediate file of word-word.contextN results where N is the sentence ID. One for each word.context so that when the values are aggregated, they can be aggregated in different ways</li>
+<li>Do language-specific JD values or their aggregates (median.JD.EN) need to be normalized?</li>
+</ul>
+</div>
+<p>Compare this measure when using different meta-languages to query for JDs / use them as a robustness check.</p>
+</section>
+<section id="to-dos" class="level2">
+<h2 class="anchored" data-anchor-id="to-dos">TO DOs</h2>
+<section id="analysis-0" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-0">Analysis 0</h3>
+<ul>
+<li>Get Lexibank and implement the total/partial colex identification loop</li>
+</ul>
+</section>
+<section id="analysis-1" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-1">Analysis 1</h3>
+<ul>
+<li>Talk to morphologists about analytic vs.&nbsp;synthetic features to control for</li>
+<li>Repurpose De Deyne network analysis for random-walk on the matrices derived from A0</li>
+<li>Implement the PCA-based measures as well</li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

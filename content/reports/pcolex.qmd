@@ -1,0 +1,114 @@
+---
+title: "On the interaction of form discriminability and meaning conflation across languages"
+format: html
+---
+
+
+This study is about universal tendencies in the way meanings are assigned to forms. We focus on partial and total colexification. Total colexification is when multiple meanings are assigned to the same form: The Spanish *dedo* colexifies the meanings FINGER and TOE; the English *go* colexifies WALK and DRIVE whereas German has two different words for this; and so on. Partial colexification is when there is partial (but not total) overlap in form for multiple meanings: the English word *straight* colexifies the meanings RECTILINEAR and HONEST but there is only partial colexification with SIMPLE/EASY TO UNDERSTAND which is expressed by *straightforward* since *straight* and *straightforward* only partially overlap.
+
+There is some converging evidence that there is cross-linguistic regularity in total colexification. No one has carefully looked at partial colexification yet (see [@list:2022] for a first take). Minimally, we want to know if it's the same or different from total colexification; and if they are different, why that may be. 
+
+
+::: {.callout-note}
+# High-level summary of project aims
+Are partial and full colexifications different?
+
+Some possibilities: 
+
+1. More contextual similarity of meanings $\Rightarrow$ more partial colexification and less total colexification
+2. More semantic similarity of meanings $\Rightarrow$ more colexification of either kind
+3. There is no difference between partial/total colexification once we factor in morphological devices available to languages (contra @list:2022)
+
+Past research [@xu+etal:2020, @brochhagen+boleda:2022] has looked at Hypothesis 2 for total colexification. The reasoning is that it is more efficient for languages to express similar meanings with the same word (easier for storage, retrieval and for learning). No  one has looked at partial colexification, however.
+
+Hypothesis 1 is new. Brochhagen & Boleda 2022 looked a little into this for total colexification but the methods were really crude. The idea is that it is not useful to express very similar meanings with exactly the same word for because they would get confused in context. For Brochhagen & Boleda 2022 this just meant that you would find less total colexifications for very similar meanings. For this study there is another option: partially colexify! You re-use some of the material but you make enough of a form-based distinction to keep the meanings separate.
+:::
+
+:::    success
+**Impact**
+* We learn how meaning is organized across languages by taking into account that morphology (partial colex.) plays a role
+* We study a force that possibly shapes the lexicon (discriminability) that has not been studied so far
+:::
+
+## Analysis 0: Identify total and partial colexifications
+
+Data: [LexiBank](https://lexibank.clld.org/) or CLICS4 (if release on time)
+
+For a given language $l$ (e.g., Spanish), we compute the string similarity of all the forms $i$,$j$ in $l$ as follows:
+
+$$sim(i,j) = 1 - \frac{\text{distance}(i,j)}{max(\{\text{length}(i), \text{length}(j)\})},$$
+where $\text{distance}(i, j)$ is the Levenshtein distance between $i$ and $j$.
+
+1. For two phonetic/word forms $i$ and $j$, if they are associated with two different Glottocodes $w$ and $z$ and $sim(i,j) = 1$ then $w$ and $z$ likely colexify in $l$
+
+2. For two phonetic/word forms $i$ and $j$, if they are associated with two different Glottocodes $w$ and $z$ and $0 < sim(i,j) < 1$ then it may be that $w$ and $z$ partially colexify in $l$. 
+
+To avoid too many false positives, we implement the two following heuristics:
+
+For partial colexifications:
+  * $sim(i, j)$ is greater than the median similarity of forms in $l$. That is, the similarity between $i$ and $j$ must be higher than that of half of the forms of $l$. The reasoning behind this threshold is that this filters out some spurious similarities when $sim(i,j)$ is low. Since the threshold is relative to the language, this threshold is also sensitive to particular morphosyntactic) features of the language that may lead to it having more/less similar forms than other languages.
+  
+For partial and full colexifications:
+  * Accept as partial and or/full colexifications if $w$ and $z$ are likely partial colexifications or total colexifications in at least three other languages, as done in paper by [Huygaa](https://scholar.google.com/citations?view_op=view_citation&hl=de&user=JsMdM8oAAAAJ&citation_for_view=JsMdM8oAAAAJ:MXK_kJrjxJIC) and also [Liu, with a slightly different filtering mechanism](https://arxiv.org/pdf/2305.12818.pdf) (their $\lambda$-parameter in 3.3). I think Mattis' earlier work also used something like this? In other words, we leverage the information from all languages to arrive at (most likely) partial/full colexifications.  
+
+
+## Analysis 1: Distributional differences between partial and total colexifications
+
+This first analysis doesn't look at the **why** there is a difference between partial and total colexification. It just tries to see if there is one. To do so, we construct colexification networks/matrices for both total and partial colexifications and see if they are structurally different.
+
+### Step 1: Construct networks/matrices
+  * Nodes are concepticon IDs
+  * Weights are # of total/partial colexifications
+
+Comparison in terms of:
+  * Pairwise likelihood to colexify of meanings in the two networks (e.g., using a random-walk based measure of similarity based on the network/matrix)
+  * Use the PCA-like method from: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3732089/
+  * Do a lot of typology-based (maybe morphoeme/word-ratio-like measure to try to capture something similar to how analytic/synthetic the language is?) and geographic-region robustness checks
+
+
+:::warning
+Partial networks are directed when based on affix colexifications. Networks for full colexification not. We can either ignore directionality or we need to come up with a different way to compare them
+::: 
+
+:::warning
+**TO DO**
+Ask Huygaa and/or Carmen about controls for morphological productivity for both this analysis and follow-up ones
+:::
+
+:::     info
+**Questions from this analysis answered**
+* Are partial and full colexifications different from the point of view of their typological pervasiveness (purely in terms of what meanings tend to partially vs. totall colexify more often)
+:::
+
+## 2. Understanding differences in terms of contextual similarity
+
+Use two (or more) multilingual LLMS (T5, BLOOM, ...) to determine (language-specific) confusability of meanings by comparing the expectations of the LLM for the contexts that these words appear in. Intuitively, if the (LLM's expectations of the masked word in the) contexts are similar, the meanings are more confuable. We do this by comparing many different contexts in which words appear in.  Set by step:
+  * Select a language that we have a LLM and a corpus for;
+  * Go through all of the language's word/phonetic forms $w$ associated with a ConcepticonID;
+  * Sample $n$ contexts (sentences) $c$ for each $w$;
+  * For each sentence $c$: (e.g. "Yesterday, I stubbed my toe." for w="toe")
+      * query LLM for likelihood over tokens in that context (e.g., "Yesterday, I stubbed my w" and get likelihood for "w = toe"; "w = finger"; for all w)
+      * For each pair of contexts of two different words, compute Jeffrey's divergence between them (sum of KL in both directions). This gives a measure of similarity of the two contexts in terms of LM expectations
+      * Repeat process for $n$ contexts (decide number based on elbow-plot or similar that tracks how median Jeffrey's divergence stops changing)
+      * Transform into a "word1, word2, median.JD"-DF s.t. median.JD is the median JD between "contexts in which word1 appears in and contexts in which word2 appears in".
+  * For each ConcepticonID pair, retrieve the median.JD it has in a language: "ID_xo, ID_yo, median.JD.EN, median.JD.ES, ..."
+  * Hierarchical model: `colex_or_not ~ (surprisal | language)` // or `full_or_partial ~ ` or a multinomial
+   
+:::warning
+  * An important question is whether median JD across contexts is not the same as cosine similarity between words. I do not think so. Not a formal proof, but roughly, $p(\cdot \mid w_i)$ is the information from a static word embedding $w_i$ which summarizes the paradigmatic information about $w$ learned by a language model about the contexts it appears in. JD is capturing the similarity between $p(\cdot \mid c_{w})$ and $p(\cdot \mid c_{w'})$. We have that $p(c | w) = \frac{p(w | c) p(c)}{p(w)}$ but only the numerator is what we approximate with the median JD. In other words, this measure does not consider as a factor the frequency of a word (outside of a context) which does play a role for the learnt static embeddings but shouldn't matter for a notion of **in context** confusability. Nonetheless, the two measures should be compared.
+  * Save intermediate file of word-word.contextN results where N is the sentence ID. One for each word.context so that when the values are aggregated, they can be aggregated in different ways
+  * Do language-specific JD values or their aggregates (median.JD.EN) need to be normalized?
+:::
+
+
+Compare this measure when using different meta-languages to query for JDs / use them as a robustness check.
+
+## TO DOs
+### Analysis 0
+
+* Get Lexibank and implement the total/partial colex identification loop
+
+### Analysis 1
+* Talk to morphologists about analytic vs. synthetic features to control for
+* Repurpose De Deyne network analysis for random-walk on the matrices derived from A0
+* Implement the PCA-based measures as well
