@@ -1,0 +1,474 @@
+---
+title: " Dynamics in the evolution of meaning:<br> from individuals to languages"
+subtitle: "MUTANDIS"
+author: "Thomas Brochhagen<br><br>"
+format: 
+    revealjs:
+        slide-number: true
+        auto-stretch: false
+        incremental: true 
+include-in-header: 
+  - text: |
+      <style>
+      #title-slide .title {
+        font-size: 1.2em;
+      }
+      #title-slide .subtitle {
+        font-size: 1.8em;
+        color: #b22222;
+      }
+      #title-slide .quarto-title-authors{
+        background-image: url(gif-evo-erc.gif);
+        background-repeat: no-repeat;
+        background-position: 20% 100%;
+        background-size: 350px;
+        }
+        .center-xy {
+          background-image: url(gif-evo-erc.gif);
+        background-repeat: no-repeat;
+        background-position: 10% 100%;
+        background-size: 350px;
+          margin: 0;
+          position: absolute;
+          top: 25%;
+          left: 12%;
+          -ms-transform: translateY(-50%), translateX(-50%);
+          transform: translateY(-50%), translateX(-50%);
+
+        }
+      </style>
+---
+
+<br><br><br>
+
+### How is meaning organized?
+<br><br>
+
+### [$\Rightarrow$ What processes underly its structure?]{style='color:indianred;'}
+
+::: {.notes}
+This project studies how meaning is organized, tackling the fundamental question of what processes lead to its structure
+:::
+
+---
+
+![](fig-intro1.png){.r-stretch fig-align="center"}
+
+<div style="line-height:150%;">
+&nbsp;
+</div>
+
+::: {.notes}
+From the number of words that a language has… to the meanings it distinguishes with these words, we know that there is a lot of variation in the way meaning is expressed across the world. 
+:::
+
+::: footer
+&nbsp;
+:::
+
+---
+
+![](fig-intro2.png){.r-stretch fig-align="center"}
+
+<div style="line-height:150%;">
+&nbsp;
+</div>
+
+::: footer
+Kemp & Regier 2012, Zaslavsky et al. 2018, [Brochhagen & Boleda 2022]{style='color:indianred;'}, Chen et al. 2023, ...
+:::
+
+
+
+---
+
+![](fig-intro3.png){.r-stretch fig-align="center"}
+
+<div style="line-height:150%;">
+&nbsp;
+</div>
+
+::: footer
+Kemp & Regier 2012, Zaslavsky et al. 2018, [Brochhagen & Boleda 2022]{style='color:indianred;'}, Chen et al. 2023, ...
+:::
+
+---
+
+![](fig-intro4.png){.r-stretch fig-align="center"}
+
+<div style="line-height:150%;">
+&nbsp;
+</div>
+
+::: footer
+&nbsp;
+:::
+
+---
+
+### [MUTANDIS]{style='color:indianred;'}
+#### understanding semantic organization from the ground up
+<br><br>
+
+:::{.nonincremental}
+Develop a dynamic account of the organization of meaning: from individuals to languages<br><br>
+:::
+
+
+---
+
+
+![](wps1.png){fig-align=center width=95%}
+
+---
+
+
+![](wps2.png){fig-align=center width=95%}
+
+---
+
+
+![](wps3.png){fig-align=center width=95%}
+
+---
+
+
+### Meaning conflation as signature of lexical organization
+
+::: {layout="[[-1], [1], [-1]]"}
+![](colex1.png)
+:::
+
+::: footer
+François 2008, Jackson et al. 2019, Xu et al. 2020, Karjus et al. 2021,<br> [Brochhagen & Boleda 2022]{style='color:indianred;'}, [Brochhagen et al 2023]{style='color:indianred;'}, ...
+:::
+
+
+---
+
+### Meaning conflation as signature of lexical organization
+
+
+::: {layout="[[-1], [1], [-1]]"}
+![](colex2.png)
+:::
+
+
+::: footer
+
+List 2023, Norcliff & Majid 2024, Tjuka 2024
+:::
+
+
+---
+
+### &nbsp;<br><br>
+
+
+<br><br>
+
+![](need-context-cropped-1.png){fig-align=center width=95%}
+
+---
+
+
+### Role of need and context in organizing meaning
+
+<br>
+![](need-context-cropped-3.png){fig-align=center width=95%}
+
+---
+
+### Why study the organization of meaning (now)?
+
+<style>
+.container{
+    display: flex;
+}
+.col{
+    flex: 1;
+}
+</style>
+
+<div class="container">
+
+<div class="col">
+
+::: {.nonincremental}
+* Isolated proposals
+* Data availability
+:::
+
+</div>
+
+<div class="col">
+<br>
+<b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The present</b>
+</div>
+
+</div>
+
+<br>
+
+<div class="container">
+
+<div class="col">
+
+::: {.nonincremental}
+&nbsp;
+&nbsp;
+:::
+
+</div>
+
+<div class="col">
+<br>
+<br>
+<b> &nbsp;</b>
+</div>
+
+</div>
+
+---
+
+### Why study the organization of meaning (now)?
+
+<style>
+.container{
+    display: flex;
+}
+.col{
+    flex: 1;
+}
+</style>
+
+<div class="container">
+
+<div class="col">
+
+::: {.nonincremental}
+* Isolated proposals
+* Data availability
+:::
+
+</div>
+
+<div class="col">
+<br>
+<b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The present</b>
+</div>
+
+</div>
+
+<br>
+<div class="container">
+
+<div class="col">
+
+::: {.nonincremental}
+* Unified process-based explanation
+* Embracing variation; debiasing typology
+* Methodological advancements 
+:::
+
+</div>
+
+<div class="col">
+<br>
+<br><br>
+<b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[MUTANDIS]{style='color:indianred;'}</b>
+</div>
+
+</div>
+
+---
+
+###  Key outcomes
+
+:::{.nonincremental}
+* Understanding of organization of meaning from a dynamic perspective<br><br>
+
+* Understanding of effects of need and context on semantic organization<br><br>
+
+:::
+
+
+---
+
+
+::: {.center-xy}
+### Dynamics in the evolution of meaning:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from individuals to languages 
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&ensp; &emsp;&ensp; &emsp;&ensp;[MUTANDIS]{style='color:#b22222;'}
+<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&ensp; &emsp;&ensp; &emsp;&ensp; [Thomas Brochhagen]{style='color:#4a5057;'}
+
+<br><br>
+:::
+
+## References I/II {visibility="uncounted" .smaller}
+
+::: {.nonincremental}
+* Brochhagen, T., & Boleda, G. (2022). When do languages use the same word for different meanings? The Goldilocks principle in colexification. Cognition
+
+* Brochhagen, T., Boleda, G., Gualdoni, E., & Xu, Y. (2023). From language development to language evolution: A unified view of human lexical creativity. Science
+
+* Chen, S., Futrell, R., & Mahowald, K. (2023). An information-theoretic approach to the typology of spatial demonstratives. Cognition
+
+* Norcliffe, E. & Majid, A (2024). Verbs of perception: A quantitative typological study. Language
+
+* Jackson, J. C., Watts, J., Henry, T. R., List, J.-M., Forkel, R., Mucha, P. J., Greenhill, S. J., Gray, R. D., & Lindquist, K. A. (2019). Emotion semantics show both cultural variation and universal structure. Science
+
+* Karjus, A., Blythe, R. A., Kirby, S., Wang, T., & Smith, K. (2021). Conceptual Similarity and Communicative Need Shape Colexification: An Experimental Study. Cognitive Science
+:::
+
+
+## References II/II {visibility="uncounted" .smaller}
+
+::: {.nonincremental}
+* Kemp, C., & Regier, T. (2012). Kinship Categories Across Languages Reflect General Communicative Principles. Science
+
+* List, J.-M. (2023). Inference of partial colexifications from multilingual wordlists. Frontiers in Psychology
+
+* Tjuka, A. (2024). Language Variation in Word Meanings: Cross-Linguistic Patterns and Causes of Colexifications. Doctoral thesis. Friedrich-Schiller-Universität Jena
+
+* Zaslavsky, N., Kemp, C., Regier, T., & Tishby, N. (2018). Efficient compression in color naming and its evolution. PNAS
+::: 
+
+
+
+## Additional Slide 02 {visibility="uncounted"}
+
+Some more additional stuff
+
+
+## Semantics differ across languages<br> but there is also regularity {visibility="uncounted"}
+
+
+![](colex.png){.r-stretch fig-align="center"}
+
+::: {.notes} 
+Lexica differ in the way they carve out reality
+Yet reality is carved out in semblant ways 
+:::
+
+## Semantic regularity as constraint satisfaction {visibility="uncounted"}
+
+![](static-plot-cropped1.png){fig-align=center width=50%}
+
+::: footer
+Kemp & Regier 2012, Zaslavsky et al. 2018, [Brochhagen & Boleda 2022]{style='color:indianred;'}, Chen et al. 2023, ...
+:::
+
+---
+
+### Semantic regularity as constraint satisfaction {visibility="uncounted"}
+
+![](static-plot-cropped2.png#center){fig-align=center width=50%}
+
+
+::: footer
+Kemp & Regier 2012, Zaslavsky et al. 2018, [Brochhagen & Boleda 2022]{style='color:indianred;'}, Chen et al. 2023, ...
+:::
+
+## Semantic regularity as constraint satisfaction {visibility="uncounted"}
+
+![](static-plot-cropped3.png){fig-align=center width=50%}
+
+::: footer
+Kemp & Regier 2012, Zaslavsky et al. 2018, [Brochhagen & Boleda 2022]{style='color:indianred;'}, Chen et al. 2023, ...
+:::
+
+---
+
+### Unexplained gaps {visibility="uncounted"}
+
+
+![](static-plot-cropped4.png){fig-align=center width=50%}
+
+
+## Unexplained trajectories {visibility="uncounted"}
+
+
+![](static-plot-cropped5.png){fig-align=center width=50%}
+
+
+## Unexplored landscapes {visibility="uncounted"}
+
+![](convex-landscape-cropped1.png){fig-align=center width=65%}
+
+
+## Unexplored landscapes {visibility="uncounted"}
+
+![](convex-landscape-cropped2.png){fig-align=center width=65%}
+
+---
+
+### Role of need and context in organizing meaning
+
+<br>
+![](need-context-cropped-2.png){fig-align=center width=95%}
+
+---
+
+### Role of need and context in organizing meaning
+
+<br>
+![](need-context-cropped-3.png){fig-align=center width=95%}
+
+---
+
+### Role of need and context in organizing meaning
+
+:::{.nonincremental}
+
+* Undestudied from a cross-linguistic perspective
+
+* So far, not studied jointly<br><br>
+:::
+
+---
+
+### Role of need and context in organizing meaning
+
+:::{.nonincremental}
+* Undestudied from a cross-linguistic perspective
+
+* So far, not studied jointly<br><br>
+
+
+
+[$\Rightarrow$ **Key to a holistic and less biased understanding of effect of cultural variation in the universal organization of meaning**]{style='color:indianred;'}
+:::
+
+
+---
+
+###  Key outcomes
+
+:::{.nonincremental}
+* Understanding of organization of meaning from a dynamic perspective<br><br>
+
+* Understanding of effects of need and context on semantic organization
+
+* Determine pre-conditions for similar organizations in non-human communication, animal and artificial
+:::
+
+
+
+## Why me {visibility="uncounted"}
+
+**Expertise**
+
+::: {.nonincremental}
+* Meaning conflation: cross-linguistic, formal, experimental
+* Linking individual- to population-level
+* High quality and impact research, including *Science*
+:::
+
+**Recognition & Leadership**
+
+::: {.nonincremental}
+* 15 invited lectures across 6 countries
+* Area chair for EACL & ESSLLI
+* Over 10 successful theses supervised across 4 countries
+:::

@@ -1,0 +1,52 @@
+<script>
+  function move_titleSlide() {
+      var titleSlide = document.querySelector('section#title-slide');
+      var titleSlideClone = titleSlide.cloneNode(true);
+      titleSlideClone.id = 'title-slide-cloned';
+      var placeholder = document.querySelector('section.placeholder-for-titleSlide');
+      var visibility = placeholder.getAttribute('data-visibility');
+      if (visibility !== null) {
+        titleSlideClone.setAttribute('data-visibility', visibility);
+      }
+      placeholder.replaceWith(titleSlideClone);
+      Reveal.sync();
+  }
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    move_titleSlide();
+  });
+</script>
+<script>
+    function move_titleSlide() {
+        var titleSlide = document.querySelector('section#title-slide');
+        var titleSlideClone = titleSlide.cloneNode(true);
+        titleSlideClone.id = 'title-slide-cloned';
+        var placeholder = document.querySelector('section.placeholder-for-titleSlide');
+        var visibility = placeholder.getAttribute('data-visibility');
+        if (visibility !== null) {
+          titleSlideClone.setAttribute('data-visibility', visibility);
+        }
+        placeholder.replaceWith(titleSlideClone);
+        Reveal.sync();
+    }
+  
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      move_titleSlide();
+    });
+  </script>
+  
+  <style>
+      #title-slide .title {
+        font-size: 20em;
+      }
+      #title-slide .subtitle {
+        font-size: 1.8em;
+        color: #b22222;
+      }
+      #title-slide .quarto-title-authors{
+        background-image: url(gif-evo-erc.gif);
+        background-repeat: no-repeat;
+        background-position: 20% 100%;
+        background-size: 350px;
+        }
+      </style>
