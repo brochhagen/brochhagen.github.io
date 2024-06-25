@@ -1,13 +1,4 @@
----
-title: "Planting forests"
-author: "Thomas Brochhagen & Xixian Liao"
-date: today
-format:
-  html:
-    code-fold: true
----
-
-```{r, message=FALSE, warning=FALSE}
+## ----message=FALSE, warning=FALSE---------------------------------------------
 library(brms)
 library(ggplot2)
 library(dplyr)
@@ -19,23 +10,9 @@ library(glue)
 
 #loading CSVs and models to visualize
 source('to_thomas.R')
-```
 
 
-This addresses the comment from the Associate Editor that it would be useful to add more forest plots for the more complex models. Xixian and Thomas reasoned that it would make sense to collapse the estimated effects by the `article/study`-level that we also used for the simpler plot, since it is an intuitive level at which to present the results, and also makes them visually comparable across models. Let's phrase it in this way to the editor: (i) we did this; (ii) we did it in this way to make it visually comparable across models even if their details differ.
-
-
-# Model 1 (the one we already had a forest plot for)
-
-**Data preparation**
-
-Changes: 
-
-  * Corrected calculation of mean effect and CIs. We were taking the mean of the exponentiation of individual samples for the estimate of each article/study. We now take the exponentiation of their mean. See also [https://math.stackexchange.com/questions/3569009/mean-of-the-exponential-does-not-equal-exponential-of-the-mean-but-why](https://math.stackexchange.com/questions/3569009/mean-of-the-exponential-does-not-equal-exponential-of-the-mean-but-why)
-
-This fixed numerical disagreements between the plots and `exp(fixed(model))`
-
-```{r, message=FALSE, warning=FALSE}
+## ----message=FALSE, warning=FALSE---------------------------------------------
 model <- nested
 
 #### Forest plot: data #############################################################
@@ -73,15 +50,9 @@ forest.data <- forest.data %>%
 forest.data <- forest.data %>%
   mutate(fill_color = if_else(experiment == "Overall Effect", "black", "indianred"))
 
-```
 
-**Plot**
 
-Changes:
-
-  * I updated the `geom_pointinterval`-part of the code. We were using `geom_pointintervalh` from `tidybayes` which is now depracated. 
-
-```{r, message=FALSE, warning=FALSE}
+## ----message=FALSE, warning=FALSE---------------------------------------------
 ### ggplot ###
 
 
@@ -121,14 +92,9 @@ ggplot(aes(b_Intercept,
   theme_minimal() 
 
 ggsave('forest-nested.png')
-```
 
 
-# Model 2 (Section 4.2)
-
-This remains the same as above, except for changing the `model` assignment
-
-```{r, message=FALSE, warning=FALSE}
+## ----message=FALSE, warning=FALSE---------------------------------------------
 model <- nested_all_int2c
 
 #### Forest plot: data #############################################################
@@ -168,11 +134,9 @@ forest.data <- forest.data %>%
 
 ggsave('forest-nested_all_int2c.png')
 
-```
 
-The code for the plot can also be reused from above, since they are based on the same data frame.
 
-```{r, message=FALSE, warning=FALSE}
+## ----message=FALSE, warning=FALSE---------------------------------------------
 ### ggplot ###
 
 
@@ -210,14 +174,9 @@ ggplot(aes(b_Intercept,
   
   xlim(0,11) +
   theme_minimal() 
-```
 
 
-# Model 3 (Section 4.3)
-
-This remains the same as above, except for changing the `model` assignment and the data frame that we're matching to to `df_estimates_proDrop`
-
-```{r, message=FALSE, warning=FALSE}
+## ----message=FALSE, warning=FALSE---------------------------------------------
 model <- pro_drop
 
 #### Forest plot: data #############################################################
@@ -254,11 +213,9 @@ forest.data <- forest.data %>%
 
 forest.data <- forest.data %>%
   mutate(fill_color = if_else(experiment == "Overall Effect", "black", "indianred"))
-```
 
 
-This remains the same code as above as well. 
-```{r, message=FALSE, warning=FALSE}
+## ----message=FALSE, warning=FALSE---------------------------------------------
 ### ggplot ###
 
 ggplot(aes(b_Intercept, 
@@ -299,12 +256,8 @@ ggplot(aes(b_Intercept,
 
 ggsave('forest-pro-drop.png')
 
-```
 
 
-**Final comment:** Hwang (2022b) is making us extend the x-axis a lot longer than would otherwise we visually appealing. What do you think of clipping the CI for this study (saying so in the caption) so that we don't have to have so much white space across plots?
-
-Generating file with only R-code in this document:
-```{r, message=FALSE, warning=FALSE}
+## ----message=FALSE, warning=FALSE---------------------------------------------
 knitr::purl('planting-trees-for-language.qmd')
-```
+

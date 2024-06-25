@@ -415,7 +415,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Difference in pronoun use (measured in odds ratio)"</span>, <span class="co"># summary measure</span></span>
 <span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
 <span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">13.5</span>) <span class="sc">+</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="dv">22</span>) <span class="sc">+</span></span>
 <span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
@@ -429,6 +429,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">'forest-pro-drop.png'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+</div>
+<p><strong>Final comment:</strong> Hwang (2022b) is making us extend the x-axis a lot longer than would otherwise we visually appealing. What do you think of clipping the CI for this study (saying so in the caption) so that we don’t have to have so much white space across plots?</p>
+<p>Generating file with only R-code in this document:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">purl</span>(<span class="st">'planting-trees-for-language.qmd'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/16                   
+2/16 [unnamed-chunk-17]
+3/16                   
+4/16 [unnamed-chunk-18]
+5/16                   
+6/16 [unnamed-chunk-19]
+7/16                   
+8/16 [unnamed-chunk-20]
+9/16                   
+10/16 [unnamed-chunk-21]
+11/16                   
+12/16 [unnamed-chunk-22]
+13/16                   
+14/16 [unnamed-chunk-23]
+15/16                   
+16/16 [unnamed-chunk-24]</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "planting-trees-for-language.R"</code></pre>
+</div>
 </div>
 </section>
 
