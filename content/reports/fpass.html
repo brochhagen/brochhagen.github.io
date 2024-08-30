@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Thomas Brochhagen">
+
+<title>Eye-tracking: First pass</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="fpass_files/libs/clipboard/clipboard.min.js"></script>
+<script src="fpass_files/libs/quarto-html/quarto.js"></script>
+<script src="fpass_files/libs/quarto-html/popper.min.js"></script>
+<script src="fpass_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="fpass_files/libs/quarto-html/anchor.min.js"></script>
+<link href="fpass_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="fpass_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="fpass_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="fpass_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="fpass_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Eye-tracking: First pass</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Thomas Brochhagen </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>relative_path <span class="ot">&lt;-</span> <span class="st">'Dropbox/ch5-analysis-deDiosFlores/'</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#relative_path &lt;- './'#'Dropbox/ch5-analysis-deDiosFlores/'</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">### BRMS settings </span><span class="al">###</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>chns <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#brms number of chains</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>itrs <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co">#brms number of iterations per chain</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>center_vars <span class="ot">&lt;-</span> <span class="cf">function</span>(df_in){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  df_in<span class="sc">$</span>c.memory_pcu <span class="ot">&lt;-</span> df_in<span class="sc">$</span>memory_pcu <span class="sc">-</span> <span class="fu">mean</span>(df_in<span class="sc">$</span>memory_pcu)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  df_in<span class="sc">$</span>c.rating <span class="ot">&lt;-</span> df_in<span class="sc">$</span>rating <span class="sc">-</span> <span class="fu">mean</span>(df_in<span class="sc">$</span>rating)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  df_in<span class="sc">$</span>c.NP_freq <span class="ot">&lt;-</span> df_in<span class="sc">$</span>NP_freq <span class="sc">-</span> <span class="fu">mean</span>(df_in<span class="sc">$</span>NP_freq)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  df_in<span class="sc">$</span>c.freq_guipuzkoa <span class="ot">&lt;-</span> df_in<span class="sc">$</span>freq_guipuzkoa <span class="sc">-</span> <span class="fu">mean</span>(df_in<span class="sc">$</span>freq_guipuzkoa)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  df_in<span class="sc">$</span>c.NP_mean_age <span class="ot">&lt;-</span> df_in<span class="sc">$</span>NP_mean_age <span class="sc">-</span> <span class="fu">mean</span>(df_in<span class="sc">$</span>NP_mean_age)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  df_in<span class="sc">$</span>c.Nchar <span class="ot">&lt;-</span> df_in<span class="sc">$</span>Nchar <span class="sc">-</span> <span class="fu">mean</span>(df_in<span class="sc">$</span>Nchar)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  df_in<span class="sc">$</span>c.verb_oind_freq <span class="ot">&lt;-</span> df_in<span class="sc">$</span>verb_oind_freq <span class="sc">-</span> <span class="fu">mean</span>(df_in<span class="sc">$</span>verb_oind_freq)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  df_in<span class="sc">$</span>c.control_preferences <span class="ot">&lt;-</span> df_in<span class="sc">$</span>control_preferences <span class="sc">-</span> <span class="fu">mean</span>(df_in<span class="sc">$</span>control_preferences)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df_in)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#system(paste0('Rscript ', relative_path,'pre-processing.R'))</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_exp <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="fu">paste0</span>(relative_path, <span class="st">'df_exp.csv'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df_fpass <span class="ot">&lt;-</span> df_exp <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">first_pass =</span> <span class="fu">na_if</span>(first_pass, <span class="st">'.'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">first_pass =</span> <span class="fu">as.numeric</span>(first_pass))<span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(first_pass <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">center_vars</span>()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>df_gpast <span class="ot">&lt;-</span> df_exp <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">go_past =</span> <span class="fu">na_if</span>(go_past, <span class="st">'.'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">go_past =</span> <span class="fu">as.numeric</span>(go_past))<span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(go_past <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            <span class="fu">center_vars</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="first-pass" class="level1">
+<h1>First pass</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_analysis <span class="ot">&lt;-</span> df_fpass</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="region-3-np2" class="level3">
+<h3 class="anchored" data-anchor-id="region-3-np2">Region 3 (NP2)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>measure_prefix      <span class="ot">&lt;-</span> <span class="st">'fp-'</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>r_path <span class="ot">&lt;-</span> <span class="fu">paste0</span>(relative_path,<span class="st">'/models/r3/'</span>,measure_prefix)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>region3 <span class="ot">&lt;-</span> df_analysis <span class="sc">%&gt;%</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(region <span class="sc">==</span><span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">log.first_pass =</span> <span class="fu">log</span>(first_pass))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region3,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">3000</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m0'</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m0,<span class="st">'loo'</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region3,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">3000</span>,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m1'</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m1, <span class="st">'loo'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loo_compare</span>(m0, m1) <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 12%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">elpd_diff</th>
+<th style="text-align: right;">se_diff</th>
+<th style="text-align: right;">elpd_loo</th>
+<th style="text-align: right;">se_elpd_loo</th>
+<th style="text-align: right;">p_loo</th>
+<th style="text-align: right;">se_p_loo</th>
+<th style="text-align: right;">looic</th>
+<th style="text-align: right;">se_looic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">m1</td>
+<td style="text-align: right;">0.000000</td>
+<td style="text-align: right;">0.000000</td>
+<td style="text-align: right;">-1359.001</td>
+<td style="text-align: right;">55.08203</td>
+<td style="text-align: right;">99.24232</td>
+<td style="text-align: right;">2.586277</td>
+<td style="text-align: right;">2718.003</td>
+<td style="text-align: right;">110.1641</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m0</td>
+<td style="text-align: right;">-1.372498</td>
+<td style="text-align: right;">1.881039</td>
+<td style="text-align: right;">-1360.374</td>
+<td style="text-align: right;">55.02467</td>
+<td style="text-align: right;">98.78753</td>
+<td style="text-align: right;">2.565981</td>
+<td style="text-align: right;">2720.748</td>
+<td style="text-align: right;">110.0493</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>In terms of ELPD, the model with <code>control</code> is better than the one that has only the intercept. However, that the standard error in their difference in ELPD (<code>se_diff</code>) is high (1.9) when compared to the elpd_diff itself (-1.3). So the model comparison is essentially telling us that it cannot pick one model over the other but that, if we had to choose, we should go with the one with <code>control</code>. Still, with that close of a call, there’s probably not a clear effect for control:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(m1) <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Est.Error</th>
+<th style="text-align: right;">Q2.5</th>
+<th style="text-align: right;">Q97.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: right;">5.6598048</td>
+<td style="text-align: right;">0.0348919</td>
+<td style="text-align: right;">5.5876337</td>
+<td style="text-align: right;">5.7265015</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject</td>
+<td style="text-align: right;">0.0184181</td>
+<td style="text-align: right;">0.0100902</td>
+<td style="text-align: right;">-0.0014178</td>
+<td style="text-align: right;">0.0381285</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>and that is, indeed, the case. So no clear effect for <code>control</code>; and almost indistinguishable to not having that effect.</p>
+<section id="summary-first-pass-region-3" class="level4">
+<h4 class="anchored" data-anchor-id="summary-first-pass-region-3">Summary (First pass: region 3)</h4>
+<p>There is no clear effect of control. We know this both from the estimate of the model itself and from the model comparison against a simpler model –though this is slightly less pronounced than for <code>go past</code>.</p>
+</section>
+</section>
+<section id="region-4-infinitive" class="level3">
+<h3 class="anchored" data-anchor-id="region-4-infinitive">Region 4 (infinitive)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>measure_prefix      <span class="ot">&lt;-</span> <span class="st">'fp-'</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>r_path <span class="ot">&lt;-</span> <span class="fu">paste0</span>(relative_path,<span class="st">'/models/r4/'</span>,measure_prefix)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>region4 <span class="ot">&lt;-</span> df_analysis <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(region <span class="sc">==</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">log.first_pass =</span> <span class="fu">log</span>(first_pass))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region4,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">3000</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m0'</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m0,<span class="st">'loo'</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region4,</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">3000</span>,</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m1'</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m1, <span class="st">'loo'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Model comparison:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loo_compare</span>(m0, m1) <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">elpd_diff</th>
+<th style="text-align: right;">se_diff</th>
+<th style="text-align: right;">elpd_loo</th>
+<th style="text-align: right;">se_elpd_loo</th>
+<th style="text-align: right;">p_loo</th>
+<th style="text-align: right;">se_p_loo</th>
+<th style="text-align: right;">looic</th>
+<th style="text-align: right;">se_looic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">m0</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">-595.2241</td>
+<td style="text-align: right;">45.41541</td>
+<td style="text-align: right;">76.19461</td>
+<td style="text-align: right;">2.752141</td>
+<td style="text-align: right;">1190.448</td>
+<td style="text-align: right;">90.83081</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m1</td>
+<td style="text-align: right;">-0.8042235</td>
+<td style="text-align: right;">0.3806622</td>
+<td style="text-align: right;">-596.0284</td>
+<td style="text-align: right;">45.42460</td>
+<td style="text-align: right;">76.99901</td>
+<td style="text-align: right;">2.764528</td>
+<td style="text-align: right;">1192.057</td>
+<td style="text-align: right;">90.84920</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Inspecting the fixed effect for <code>control</code> as sanity check:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(m1) <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">format =</span> <span class="st">"html"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Estimate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Est.Error</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q2.5</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q97.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: right;">5.3983344</td>
+<td style="text-align: right;">0.0296774</td>
+<td style="text-align: right;">5.3374665</td>
+<td style="text-align: right;">5.4563199</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject</td>
+<td style="text-align: right;">-0.0042831</td>
+<td style="text-align: right;">0.0118604</td>
+<td style="text-align: right;">-0.0277276</td>
+<td style="text-align: right;">0.0186416</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</div>
+<section id="summary-first-pass-region-4" class="level4">
+<h4 class="anchored" data-anchor-id="summary-first-pass-region-4">Summary (First pass: region 4)</h4>
+<p>There is no effect of control. We know this both from the estimate of the model itself and from the model comparison against a simpler model.</p>
+</section>
+</section>
+<section id="region-6-adjective" class="level3">
+<h3 class="anchored" data-anchor-id="region-6-adjective">Region 6 (adjective)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>measure_prefix      <span class="ot">&lt;-</span> <span class="st">'fp-'</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>r_path <span class="ot">&lt;-</span> <span class="fu">paste0</span>(relative_path,<span class="st">'/models/r6/'</span>,measure_prefix)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>region6 <span class="ot">&lt;-</span> df_analysis <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(region <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">log.first_pass =</span> <span class="fu">log</span>(first_pass))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region6,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m0'</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m0, <span class="st">'loo'</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region6,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m1'</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m1, <span class="st">'loo'</span>)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region6,</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> grammatical <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m2'</span>)</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m2, <span class="st">'loo'</span>)</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region6,</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> distractor <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m3'</span>)</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m3, <span class="st">'loo'</span>)</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region6,</span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">*</span> grammatical <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m4'</span>)</span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m4, <span class="st">'loo'</span>)</span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>m5 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region6,</span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">*</span> distractor <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m5'</span>)</span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>m5 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m5, <span class="st">'loo'</span>)</span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>m6 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region6,</span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> grammatical <span class="sc">*</span> distractor <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m6'</span>)</span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>m6 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m6, <span class="st">'loo'</span>)</span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>m7 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region6,</span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">*</span> grammatical <span class="sc">*</span> distractor <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m7'</span>)</span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>m7 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m7, <span class="st">'loo'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Model comparison:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loo_compare</span>(m0, m1, m2, m3, m4, m5, m6, m7) <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">elpd_diff</th>
+<th style="text-align: right;">se_diff</th>
+<th style="text-align: right;">elpd_loo</th>
+<th style="text-align: right;">se_elpd_loo</th>
+<th style="text-align: right;">p_loo</th>
+<th style="text-align: right;">se_p_loo</th>
+<th style="text-align: right;">looic</th>
+<th style="text-align: right;">se_looic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">m2</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">-1126.404</td>
+<td style="text-align: right;">53.75706</td>
+<td style="text-align: right;">122.2024</td>
+<td style="text-align: right;">3.112612</td>
+<td style="text-align: right;">2252.808</td>
+<td style="text-align: right;">107.5141</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m0</td>
+<td style="text-align: right;">-0.0599841</td>
+<td style="text-align: right;">1.5743065</td>
+<td style="text-align: right;">-1126.464</td>
+<td style="text-align: right;">53.79051</td>
+<td style="text-align: right;">121.1275</td>
+<td style="text-align: right;">3.086180</td>
+<td style="text-align: right;">2252.928</td>
+<td style="text-align: right;">107.5810</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">m1</td>
+<td style="text-align: right;">-0.9292867</td>
+<td style="text-align: right;">1.7145091</td>
+<td style="text-align: right;">-1127.334</td>
+<td style="text-align: right;">53.82328</td>
+<td style="text-align: right;">122.3500</td>
+<td style="text-align: right;">3.128299</td>
+<td style="text-align: right;">2254.667</td>
+<td style="text-align: right;">107.6466</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m3</td>
+<td style="text-align: right;">-1.0581036</td>
+<td style="text-align: right;">1.5782268</td>
+<td style="text-align: right;">-1127.462</td>
+<td style="text-align: right;">53.78673</td>
+<td style="text-align: right;">122.0713</td>
+<td style="text-align: right;">3.115059</td>
+<td style="text-align: right;">2254.925</td>
+<td style="text-align: right;">107.5735</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">m4</td>
+<td style="text-align: right;">-1.5429829</td>
+<td style="text-align: right;">0.9911375</td>
+<td style="text-align: right;">-1127.947</td>
+<td style="text-align: right;">53.80474</td>
+<td style="text-align: right;">124.2327</td>
+<td style="text-align: right;">3.165659</td>
+<td style="text-align: right;">2255.894</td>
+<td style="text-align: right;">107.6095</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m6</td>
+<td style="text-align: right;">-2.3599794</td>
+<td style="text-align: right;">0.2334834</td>
+<td style="text-align: right;">-1128.764</td>
+<td style="text-align: right;">53.76855</td>
+<td style="text-align: right;">124.4631</td>
+<td style="text-align: right;">3.175783</td>
+<td style="text-align: right;">2257.528</td>
+<td style="text-align: right;">107.5371</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">m5</td>
+<td style="text-align: right;">-2.5038938</td>
+<td style="text-align: right;">1.7996648</td>
+<td style="text-align: right;">-1128.908</td>
+<td style="text-align: right;">53.78618</td>
+<td style="text-align: right;">123.7246</td>
+<td style="text-align: right;">3.151554</td>
+<td style="text-align: right;">2257.816</td>
+<td style="text-align: right;">107.5724</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m7</td>
+<td style="text-align: right;">-3.4708787</td>
+<td style="text-align: right;">2.4047859</td>
+<td style="text-align: right;">-1129.875</td>
+<td style="text-align: right;">53.68563</td>
+<td style="text-align: right;">128.3383</td>
+<td style="text-align: right;">3.267352</td>
+<td style="text-align: right;">2259.750</td>
+<td style="text-align: right;">107.3713</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>There’s a lot of uncertainty about which model is best. The difference is small. The simpler models win due to their simplicity</p>
+<section id="summary-first-pass-region-6" class="level4">
+<h4 class="anchored" data-anchor-id="summary-first-pass-region-6">Summary (First pass: region 6)</h4>
+<p>There is no clear effect of control, grammaticality, distractor; or their interaction. This is in line with Iria’s PhD results</p>
+</section>
+</section>
+</section>
+<section id="here" class="level1">
+<h1>HERE</h1>
+<section id="region-7-infinitive" class="level3">
+<h3 class="anchored" data-anchor-id="region-7-infinitive">Region 7 (infinitive)</h3>
+<p>Now to the interesting region:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>measure_prefix      <span class="ot">&lt;-</span> <span class="st">'fp-'</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>r_path <span class="ot">&lt;-</span> <span class="fu">paste0</span>(relative_path,<span class="st">'/models/r7/'</span>,measure_prefix)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>region7 <span class="ot">&lt;-</span> df_analysis <span class="sc">%&gt;%</span> </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(region <span class="sc">==</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">log.first_pass =</span> <span class="fu">log</span>(first_pass))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m0'</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m0, <span class="st">'loo'</span>)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m1'</span>)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m1, <span class="st">'loo'</span>)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> grammatical <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m2'</span>)</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m2, <span class="st">'loo'</span>)</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> distractor <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m3'</span>)</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m3, <span class="st">'loo'</span>)</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">*</span> grammatical <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m4'</span>)</span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m4, <span class="st">'loo'</span>)</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>m5 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">*</span> distractor <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m5'</span>)</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>m5 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m5, <span class="st">'loo'</span>)</span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>m6 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> grammatical <span class="sc">*</span> distractor <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m6'</span>)</span>
+<span id="cb14-69"><a href="#cb14-69" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a>m6 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m6, <span class="st">'loo'</span>)</span>
+<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>m7 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.first_pass <span class="sc">~</span> control <span class="sc">*</span> grammatical <span class="sc">*</span> distractor <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m7'</span>)</span>
+<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a>m7 <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m7, <span class="st">'loo'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Model comparison:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loo_compare</span>(m0, m1, m2, m3, m4, m5, m6, m7) <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 13%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">elpd_diff</th>
+<th style="text-align: right;">se_diff</th>
+<th style="text-align: right;">elpd_loo</th>
+<th style="text-align: right;">se_elpd_loo</th>
+<th style="text-align: right;">p_loo</th>
+<th style="text-align: right;">se_p_loo</th>
+<th style="text-align: right;">looic</th>
+<th style="text-align: right;">se_looic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">m7</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">0.000000</td>
+<td style="text-align: right;">-1450.535</td>
+<td style="text-align: right;">60.27122</td>
+<td style="text-align: right;">126.1502</td>
+<td style="text-align: right;">3.739888</td>
+<td style="text-align: right;">2901.070</td>
+<td style="text-align: right;">120.5424</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m6</td>
+<td style="text-align: right;">-0.0673984</td>
+<td style="text-align: right;">2.723928</td>
+<td style="text-align: right;">-1450.602</td>
+<td style="text-align: right;">60.12070</td>
+<td style="text-align: right;">122.6652</td>
+<td style="text-align: right;">3.633585</td>
+<td style="text-align: right;">2901.205</td>
+<td style="text-align: right;">120.2414</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">m3</td>
+<td style="text-align: right;">-1.0788604</td>
+<td style="text-align: right;">3.591801</td>
+<td style="text-align: right;">-1451.614</td>
+<td style="text-align: right;">60.03288</td>
+<td style="text-align: right;">120.7458</td>
+<td style="text-align: right;">3.568421</td>
+<td style="text-align: right;">2903.227</td>
+<td style="text-align: right;">120.0658</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m0</td>
+<td style="text-align: right;">-1.5067198</td>
+<td style="text-align: right;">4.144422</td>
+<td style="text-align: right;">-1452.042</td>
+<td style="text-align: right;">60.03605</td>
+<td style="text-align: right;">119.1987</td>
+<td style="text-align: right;">3.550286</td>
+<td style="text-align: right;">2904.083</td>
+<td style="text-align: right;">120.0721</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">m5</td>
+<td style="text-align: right;">-1.9822512</td>
+<td style="text-align: right;">3.312318</td>
+<td style="text-align: right;">-1452.517</td>
+<td style="text-align: right;">60.12474</td>
+<td style="text-align: right;">122.6676</td>
+<td style="text-align: right;">3.632123</td>
+<td style="text-align: right;">2905.034</td>
+<td style="text-align: right;">120.2495</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m1</td>
+<td style="text-align: right;">-1.9982501</td>
+<td style="text-align: right;">3.889460</td>
+<td style="text-align: right;">-1452.533</td>
+<td style="text-align: right;">60.12894</td>
+<td style="text-align: right;">120.7104</td>
+<td style="text-align: right;">3.594984</td>
+<td style="text-align: right;">2905.066</td>
+<td style="text-align: right;">120.2579</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">m2</td>
+<td style="text-align: right;">-2.7265433</td>
+<td style="text-align: right;">4.041303</td>
+<td style="text-align: right;">-1453.261</td>
+<td style="text-align: right;">60.10287</td>
+<td style="text-align: right;">120.8543</td>
+<td style="text-align: right;">3.592908</td>
+<td style="text-align: right;">2906.523</td>
+<td style="text-align: right;">120.2057</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m4</td>
+<td style="text-align: right;">-3.9447805</td>
+<td style="text-align: right;">3.765887</td>
+<td style="text-align: right;">-1454.480</td>
+<td style="text-align: right;">60.17207</td>
+<td style="text-align: right;">123.0052</td>
+<td style="text-align: right;">3.651441</td>
+<td style="text-align: right;">2908.959</td>
+<td style="text-align: right;">120.3441</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>OK. So this is a lot more interesting. We can see that the best models are <code>m7</code> (fixed effect: <code>grammatical * distractor * control</code>) closely followed by <code>m6</code> (<em>grammatical </em> distractor*) and then <code>m3</code> (fixed effect: <code>distractor</code>). This is in line with what we discussed, for whatever reason, <code>distractor</code> seems to be best in predicting <code>log.first_pass</code> but having information about <code>grammaticality</code> also helps. The information about <code>control</code> is pretty secondary.</p>
+<p>Let’s look at the top two models.</p>
+<p>Here’s the model with the triple interaction:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>m7 <span class="sc">%&gt;%</span> <span class="fu">fixef</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 58%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Est.Error</th>
+<th style="text-align: right;">Q2.5</th>
+<th style="text-align: right;">Q97.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: right;">5.9402774</td>
+<td style="text-align: right;">0.0375442</td>
+<td style="text-align: right;">5.8654539</td>
+<td style="text-align: right;">6.0128747</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject</td>
+<td style="text-align: right;">0.0382574</td>
+<td style="text-align: right;">0.0212122</td>
+<td style="text-align: right;">-0.0034988</td>
+<td style="text-align: right;">0.0794634</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">grammaticalungrammatical</td>
+<td style="text-align: right;">0.0126261</td>
+<td style="text-align: right;">0.0208932</td>
+<td style="text-align: right;">-0.0280005</td>
+<td style="text-align: right;">0.0542024</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">distractormismatch</td>
+<td style="text-align: right;">0.0217137</td>
+<td style="text-align: right;">0.0211360</td>
+<td style="text-align: right;">-0.0202504</td>
+<td style="text-align: right;">0.0640902</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">controlsubject:grammaticalungrammatical</td>
+<td style="text-align: right;">-0.0481004</td>
+<td style="text-align: right;">0.0298151</td>
+<td style="text-align: right;">-0.1062131</td>
+<td style="text-align: right;">0.0097755</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject:distractormismatch</td>
+<td style="text-align: right;">-0.0450117</td>
+<td style="text-align: right;">0.0298907</td>
+<td style="text-align: right;">-0.1041173</td>
+<td style="text-align: right;">0.0135094</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">grammaticalungrammatical:distractormismatch</td>
+<td style="text-align: right;">-0.0028678</td>
+<td style="text-align: right;">0.0296191</td>
+<td style="text-align: right;">-0.0609916</td>
+<td style="text-align: right;">0.0551226</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject:grammaticalungrammatical:distractormismatch</td>
+<td style="text-align: right;">0.0953232</td>
+<td style="text-align: right;">0.0420301</td>
+<td style="text-align: right;">0.0132286</td>
+<td style="text-align: right;">0.1784649</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>So it’s only the triple interaction that is suggested to have a clear (positive) effect.</p>
+<p>This is other model, without <code>control</code> added (<code>m6</code>):</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>m6 <span class="sc">%&gt;%</span> <span class="fu">fixef</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 51%">
+<col style="width: 12%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Est.Error</th>
+<th style="text-align: right;">Q2.5</th>
+<th style="text-align: right;">Q97.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: right;">5.9589848</td>
+<td style="text-align: right;">0.0358091</td>
+<td style="text-align: right;">5.8873363</td>
+<td style="text-align: right;">6.0269199</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grammaticalungrammatical</td>
+<td style="text-align: right;">-0.0112254</td>
+<td style="text-align: right;">0.0149271</td>
+<td style="text-align: right;">-0.0404189</td>
+<td style="text-align: right;">0.0181170</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">distractormismatch</td>
+<td style="text-align: right;">-0.0008736</td>
+<td style="text-align: right;">0.0149190</td>
+<td style="text-align: right;">-0.0300408</td>
+<td style="text-align: right;">0.0282698</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grammaticalungrammatical:distractormismatch</td>
+<td style="text-align: right;">0.0449625</td>
+<td style="text-align: right;">0.0210949</td>
+<td style="text-align: right;">0.0039017</td>
+<td style="text-align: right;">0.0869971</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>In pictures (<code>m7</code>)</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">conditional_effects</span>(m7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fpass_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fpass_files/figure-html/unnamed-chunk-18-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fpass_files/figure-html/unnamed-chunk-18-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fpass_files/figure-html/unnamed-chunk-18-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fpass_files/figure-html/unnamed-chunk-18-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fpass_files/figure-html/unnamed-chunk-18-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In pictures (<code>m6</code>)</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">conditional_effects</span>(m6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fpass_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fpass_files/figure-html/unnamed-chunk-19-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fpass_files/figure-html/unnamed-chunk-19-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="summary-go-past-region-7" class="level3">
+<h3 class="anchored" data-anchor-id="summary-go-past-region-7">Summary (Go past: region 7)</h3>
+<p>There is a small but pretty robust effect on the interaction of distractor and grammaticality (and control). This is in line with there being something to the interaction between grammaticality and distractor, but apparently this is particularly clear for a model that also has control information (though the model without it is almost as good… it’s essentially a tie.)</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
