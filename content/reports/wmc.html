@@ -110,13 +110,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>relative_path <span class="ot">&lt;-</span> <span class="st">'Dropbox/ch5-analysis-deDiosFlores/'</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#relative_path &lt;- './'#'Dropbox/ch5-analysis-deDiosFlores/'</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">### BRMS settings </span><span class="al">###</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>chns <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#brms number of chains</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>itrs <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co">#brms number of iterations per chain</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>relative_path <span class="ot">&lt;-</span> <span class="st">'./ch5-analysis-deDiosFlores/'</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">### BRMS settings </span><span class="al">###</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>chns <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#brms number of chains</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>itrs <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co">#brms number of iterations per chain</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -1649,14 +1648,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb21-98"><a href="#cb21-98" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
 <span id="cb21-99"><a href="#cb21-99" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m7'</span>)</span>
 <span id="cb21-100"><a href="#cb21-100" aria-hidden="true" tabindex="-1"></a>          )</span>
-<span id="cb21-101"><a href="#cb21-101" aria-hidden="true" tabindex="-1"></a>m7wm <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m7wm, <span class="st">'loo'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-101"><a href="#cb21-101" aria-hidden="true" tabindex="-1"></a>m7wm <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m7wm, <span class="st">'loo'</span>)</span>
+<span id="cb21-102"><a href="#cb21-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-103"><a href="#cb21-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-104"><a href="#cb21-104" aria-hidden="true" tabindex="-1"></a>m8wm <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb21-105"><a href="#cb21-105" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.go_past <span class="sc">~</span> grammatical <span class="sc">*</span> distractor <span class="sc">*</span> c.memory_pcu <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb21-106"><a href="#cb21-106" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb21-107"><a href="#cb21-107" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb21-108"><a href="#cb21-108" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb21-109"><a href="#cb21-109" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m8'</span>)</span>
+<span id="cb21-110"><a href="#cb21-110" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb21-111"><a href="#cb21-111" aria-hidden="true" tabindex="-1"></a>m8wm <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m8wm, <span class="st">'loo'</span>)</span>
+<span id="cb21-112"><a href="#cb21-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-113"><a href="#cb21-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-114"><a href="#cb21-114" aria-hidden="true" tabindex="-1"></a>m9wm <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data    =</span> region7,</span>
+<span id="cb21-115"><a href="#cb21-115" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> log.go_past <span class="sc">~</span> control <span class="sc">*</span> grammatical <span class="sc">*</span> distractor <span class="sc">*</span> c.memory_pcu <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>item_identifier),</span>
+<span id="cb21-116"><a href="#cb21-116" aria-hidden="true" tabindex="-1"></a>          <span class="at">chains  =</span> <span class="dv">4</span>,</span>
+<span id="cb21-117"><a href="#cb21-117" aria-hidden="true" tabindex="-1"></a>          <span class="at">iter    =</span> <span class="dv">4000</span>,</span>
+<span id="cb21-118"><a href="#cb21-118" aria-hidden="true" tabindex="-1"></a>          <span class="at">warmup  =</span> <span class="dv">1500</span>,</span>
+<span id="cb21-119"><a href="#cb21-119" aria-hidden="true" tabindex="-1"></a>          <span class="at">file    =</span> <span class="fu">paste0</span>(r_path, <span class="st">'m9'</span>)</span>
+<span id="cb21-120"><a href="#cb21-120" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb21-121"><a href="#cb21-121" aria-hidden="true" tabindex="-1"></a>m9wm <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(m9wm, <span class="st">'loo'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Model comparison:</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loo_compare</span>(m0, m1, m2, m3, m4, m5, m6, m7, m6wm, m7wm) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loo_compare</span>(m0, m1, m2, m3, m4, m5, m6, m7, m6wm, m7wm, m8wm, m9wm) <span class="sc">%&gt;%</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
@@ -1709,6 +1728,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">134.7820</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">m8wm</td>
+<td style="text-align: right;">-0.5644302</td>
+<td style="text-align: right;">2.1224394</td>
+<td style="text-align: right;">-1824.430</td>
+<td style="text-align: right;">67.31104</td>
+<td style="text-align: right;">129.5486</td>
+<td style="text-align: right;">4.275149</td>
+<td style="text-align: right;">3648.861</td>
+<td style="text-align: right;">134.6221</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">m7wm</td>
 <td style="text-align: right;">-2.3445568</td>
 <td style="text-align: right;">1.6968306</td>
@@ -1719,7 +1749,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">3652.421</td>
 <td style="text-align: right;">134.7143</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">m7</td>
 <td style="text-align: right;">-3.0850279</td>
 <td style="text-align: right;">1.7032269</td>
@@ -1729,6 +1759,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">4.312768</td>
 <td style="text-align: right;">3653.902</td>
 <td style="text-align: right;">134.7166</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m9wm</td>
+<td style="text-align: right;">-4.6113412</td>
+<td style="text-align: right;">3.6514031</td>
+<td style="text-align: right;">-1828.477</td>
+<td style="text-align: right;">67.24463</td>
+<td style="text-align: right;">137.3794</td>
+<td style="text-align: right;">4.572374</td>
+<td style="text-align: right;">3656.955</td>
+<td style="text-align: right;">134.4893</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">m3</td>
@@ -1803,7 +1844,148 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="summary-region-7" class="level3">
 <h3 class="anchored" data-anchor-id="summary-region-7">Summary (region 7)</h3>
-<p>WMC doesn’t change the ranking nor the estimates.</p>
+<p>WMC doesn’t change the ranking nor the estimates in an interesting way, as far as I can see.</p>
+<p>One thing of note, though, is that the most complex model with WMC added (<code>m9wm</code>: <code>log.go_past ~ control * grammatical * distractor * c.memory_pcu + (1|participant) + (1|item_identifier)</code>) has a positive effect for the quadruple interaction (<code>controlsubject:grammaticalungrammatical:distractormismatch:c.memory_pcu</code>) and a negative effect for the triple interaction (<code>grammaticalungrammatical:distractormismatch:c.memory_pcu</code>). Here are the main effects in full:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>m9wm <span class="sc">%&gt;%</span> fixef <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 62%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Est.Error</th>
+<th style="text-align: right;">Q2.5</th>
+<th style="text-align: right;">Q97.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: right;">6.0325233</td>
+<td style="text-align: right;">0.0425753</td>
+<td style="text-align: right;">5.9482922</td>
+<td style="text-align: right;">6.1152905</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject</td>
+<td style="text-align: right;">0.0263362</td>
+<td style="text-align: right;">0.0232599</td>
+<td style="text-align: right;">-0.0200819</td>
+<td style="text-align: right;">0.0710072</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">grammaticalungrammatical</td>
+<td style="text-align: right;">0.0080719</td>
+<td style="text-align: right;">0.0229580</td>
+<td style="text-align: right;">-0.0380167</td>
+<td style="text-align: right;">0.0526294</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">distractormismatch</td>
+<td style="text-align: right;">0.0109919</td>
+<td style="text-align: right;">0.0230227</td>
+<td style="text-align: right;">-0.0338321</td>
+<td style="text-align: right;">0.0560645</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">c.memory_pcu</td>
+<td style="text-align: right;">-0.6588708</td>
+<td style="text-align: right;">0.4246913</td>
+<td style="text-align: right;">-1.4850381</td>
+<td style="text-align: right;">0.1720236</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject:grammaticalungrammatical</td>
+<td style="text-align: right;">-0.0417632</td>
+<td style="text-align: right;">0.0326273</td>
+<td style="text-align: right;">-0.1053450</td>
+<td style="text-align: right;">0.0227194</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">controlsubject:distractormismatch</td>
+<td style="text-align: right;">-0.0247440</td>
+<td style="text-align: right;">0.0326986</td>
+<td style="text-align: right;">-0.0878698</td>
+<td style="text-align: right;">0.0386902</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grammaticalungrammatical:distractormismatch</td>
+<td style="text-align: right;">0.0398724</td>
+<td style="text-align: right;">0.0322543</td>
+<td style="text-align: right;">-0.0225165</td>
+<td style="text-align: right;">0.1037180</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">controlsubject:c.memory_pcu</td>
+<td style="text-align: right;">0.2846109</td>
+<td style="text-align: right;">0.2486964</td>
+<td style="text-align: right;">-0.1951183</td>
+<td style="text-align: right;">0.7780743</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grammaticalungrammatical:c.memory_pcu</td>
+<td style="text-align: right;">0.3941496</td>
+<td style="text-align: right;">0.2485928</td>
+<td style="text-align: right;">-0.0887433</td>
+<td style="text-align: right;">0.8891709</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">distractormismatch:c.memory_pcu</td>
+<td style="text-align: right;">0.0846342</td>
+<td style="text-align: right;">0.2543528</td>
+<td style="text-align: right;">-0.4155973</td>
+<td style="text-align: right;">0.5751150</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject:grammaticalungrammatical:distractormismatch</td>
+<td style="text-align: right;">0.0633243</td>
+<td style="text-align: right;">0.0460526</td>
+<td style="text-align: right;">-0.0257699</td>
+<td style="text-align: right;">0.1528164</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">controlsubject:grammaticalungrammatical:c.memory_pcu</td>
+<td style="text-align: right;">-0.7017802</td>
+<td style="text-align: right;">0.3476163</td>
+<td style="text-align: right;">-1.3852823</td>
+<td style="text-align: right;">-0.0333698</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject:distractormismatch:c.memory_pcu</td>
+<td style="text-align: right;">-0.4022671</td>
+<td style="text-align: right;">0.3566970</td>
+<td style="text-align: right;">-1.1066004</td>
+<td style="text-align: right;">0.2933759</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">grammaticalungrammatical:distractormismatch:c.memory_pcu</td>
+<td style="text-align: right;">-0.2069614</td>
+<td style="text-align: right;">0.3530187</td>
+<td style="text-align: right;">-0.9087224</td>
+<td style="text-align: right;">0.4780742</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">controlsubject:grammaticalungrammatical:distractormismatch:c.memory_pcu</td>
+<td style="text-align: right;">1.0741665</td>
+<td style="text-align: right;">0.4967880</td>
+<td style="text-align: right;">0.1314576</td>
+<td style="text-align: right;">2.0559987</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
 </section>
 
