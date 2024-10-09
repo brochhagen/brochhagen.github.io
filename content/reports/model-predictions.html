@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -112,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>relative_path <span class="ot">&lt;-</span> <span class="st">'../ch5-analysis-deDiosFlores/'</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>relative_path <span class="ot">&lt;-</span> <span class="st">'../experiments-IdDF/'</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">### BRMS settings </span><span class="al">###</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span>
@@ -171,7 +171,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(m) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 58%">
 <col style="width: 10%">
@@ -281,31 +281,303 @@ Posterior probabilities of point hypotheses assume equal prior probabilities.</c
 </div>
 </div>
 <p>Et voila! Much certainty about the triple interaction being above 0 and not being 0. Pretty certain that the effect of the distractor is above 0 but it may well be 0. That’s how frustrating hypothesis testing can be :)</p>
+<p>Now let’s zoom-in on the triple interaction, using <code>emmeans</code> to compute pairwise contrasts</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> emmeans<span class="sc">::</span><span class="fu">emmeans</span>(m, <span class="at">specs =</span> pairwise <span class="sc">~</span> control<span class="sc">:</span>grammatical<span class="sc">:</span>distractor) </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>t<span class="sc">$</span>contrasts <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 65%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">lower.HPD</th>
+<th style="text-align: right;">upper.HPD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">object grammatical match - subject grammatical match</td>
+<td style="text-align: right;">-0.0381875</td>
+<td style="text-align: right;">-0.0797719</td>
+<td style="text-align: right;">0.0029409</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object grammatical match - object ungrammatical match</td>
+<td style="text-align: right;">-0.0123461</td>
+<td style="text-align: right;">-0.0550211</td>
+<td style="text-align: right;">0.0270048</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">object grammatical match - subject ungrammatical match</td>
+<td style="text-align: right;">-0.0026914</td>
+<td style="text-align: right;">-0.0450758</td>
+<td style="text-align: right;">0.0362161</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object grammatical match - object grammatical mismatch</td>
+<td style="text-align: right;">-0.0215993</td>
+<td style="text-align: right;">-0.0645159</td>
+<td style="text-align: right;">0.0195659</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">object grammatical match - subject grammatical mismatch</td>
+<td style="text-align: right;">-0.0147566</td>
+<td style="text-align: right;">-0.0560540</td>
+<td style="text-align: right;">0.0248129</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object grammatical match - object ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0314138</td>
+<td style="text-align: right;">-0.0733589</td>
+<td style="text-align: right;">0.0099555</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">object grammatical match - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0716273</td>
+<td style="text-align: right;">-0.1146883</td>
+<td style="text-align: right;">-0.0338263</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">subject grammatical match - object ungrammatical match</td>
+<td style="text-align: right;">0.0257962</td>
+<td style="text-align: right;">-0.0156239</td>
+<td style="text-align: right;">0.0662002</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subject grammatical match - subject ungrammatical match</td>
+<td style="text-align: right;">0.0354826</td>
+<td style="text-align: right;">-0.0047256</td>
+<td style="text-align: right;">0.0774693</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">subject grammatical match - object grammatical mismatch</td>
+<td style="text-align: right;">0.0164845</td>
+<td style="text-align: right;">-0.0268745</td>
+<td style="text-align: right;">0.0561868</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subject grammatical match - subject grammatical mismatch</td>
+<td style="text-align: right;">0.0233625</td>
+<td style="text-align: right;">-0.0182789</td>
+<td style="text-align: right;">0.0640553</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">subject grammatical match - object ungrammatical mismatch</td>
+<td style="text-align: right;">0.0067978</td>
+<td style="text-align: right;">-0.0347899</td>
+<td style="text-align: right;">0.0478914</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subject grammatical match - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0335418</td>
+<td style="text-align: right;">-0.0746608</td>
+<td style="text-align: right;">0.0086796</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object ungrammatical match - subject ungrammatical match</td>
+<td style="text-align: right;">0.0096087</td>
+<td style="text-align: right;">-0.0314907</td>
+<td style="text-align: right;">0.0503130</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">object ungrammatical match - object grammatical mismatch</td>
+<td style="text-align: right;">-0.0090725</td>
+<td style="text-align: right;">-0.0494983</td>
+<td style="text-align: right;">0.0313227</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object ungrammatical match - subject grammatical mismatch</td>
+<td style="text-align: right;">-0.0023779</td>
+<td style="text-align: right;">-0.0410236</td>
+<td style="text-align: right;">0.0405936</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">object ungrammatical match - object ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0188668</td>
+<td style="text-align: right;">-0.0595739</td>
+<td style="text-align: right;">0.0230390</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object ungrammatical match - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0594428</td>
+<td style="text-align: right;">-0.0994445</td>
+<td style="text-align: right;">-0.0180782</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subject ungrammatical match - object grammatical mismatch</td>
+<td style="text-align: right;">-0.0190341</td>
+<td style="text-align: right;">-0.0604957</td>
+<td style="text-align: right;">0.0214487</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">subject ungrammatical match - subject grammatical mismatch</td>
+<td style="text-align: right;">-0.0122097</td>
+<td style="text-align: right;">-0.0537973</td>
+<td style="text-align: right;">0.0281874</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subject ungrammatical match - object ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0287598</td>
+<td style="text-align: right;">-0.0696879</td>
+<td style="text-align: right;">0.0129688</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">subject ungrammatical match - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0691497</td>
+<td style="text-align: right;">-0.1087662</td>
+<td style="text-align: right;">-0.0271168</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">object grammatical mismatch - subject grammatical mismatch</td>
+<td style="text-align: right;">0.0067669</td>
+<td style="text-align: right;">-0.0352414</td>
+<td style="text-align: right;">0.0471953</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object grammatical mismatch - object ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0099075</td>
+<td style="text-align: right;">-0.0498174</td>
+<td style="text-align: right;">0.0324424</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">object grammatical mismatch - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0503434</td>
+<td style="text-align: right;">-0.0896242</td>
+<td style="text-align: right;">-0.0082491</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">subject grammatical mismatch - object ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0163793</td>
+<td style="text-align: right;">-0.0560903</td>
+<td style="text-align: right;">0.0259555</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subject grammatical mismatch - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0567600</td>
+<td style="text-align: right;">-0.0980029</td>
+<td style="text-align: right;">-0.0171438</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object ungrammatical mismatch - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0402863</td>
+<td style="text-align: right;">-0.0816267</td>
+<td style="text-align: right;">0.0007442</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>That’s a lot of information. Let’s filter only for cases that are strictly positive or strictly negative (i.e., there is a likely non-zero difference):</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tt <span class="ot">&lt;-</span> t<span class="sc">$</span>contrasts <span class="sc">%&gt;%</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tt<span class="sc">$</span>effectPos <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(tt<span class="sc">$</span>lower.HPD <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> tt<span class="sc">$</span>upper.HPD <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>tt<span class="sc">$</span>effectNeg <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(tt<span class="sc">$</span>lower.HPD <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> tt<span class="sc">$</span>upper.HPD <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>tt <span class="ot">&lt;-</span> tt <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">eff =</span> <span class="fu">ifelse</span>(effectPos <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> effectNeg <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">'effectPos'</span>, <span class="st">'effectNeg'</span>))</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>tt <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(eff <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>eff) <span class="sc">%&gt;%</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 65%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">lower.HPD</th>
+<th style="text-align: right;">upper.HPD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">object grammatical match - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0716273</td>
+<td style="text-align: right;">-0.1146883</td>
+<td style="text-align: right;">-0.0338263</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object ungrammatical match - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0594428</td>
+<td style="text-align: right;">-0.0994445</td>
+<td style="text-align: right;">-0.0180782</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subject ungrammatical match - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0691497</td>
+<td style="text-align: right;">-0.1087662</td>
+<td style="text-align: right;">-0.0271168</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object grammatical mismatch - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0503434</td>
+<td style="text-align: right;">-0.0896242</td>
+<td style="text-align: right;">-0.0082491</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subject grammatical mismatch - subject ungrammatical mismatch</td>
+<td style="text-align: right;">-0.0567600</td>
+<td style="text-align: right;">-0.0980029</td>
+<td style="text-align: right;">-0.0171438</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>OK. So let’s go case by case and you correct me if I’m wrong:</p>
+<ol type="1">
+<li>The first difference is uninteresting. There’s a difference between grammatical object matches and ungrammatical subject mismatches. That could be anything.</li>
+<li>Similar to (1) but slightly more interesting because at least its both ungrammatical</li>
+<li>This one is what we’re after: there is a (non-zero) difference in reading times of subject ungrammatical sentences. Mismatches have higher reading times than matches</li>
+<li>This is another one we care about: there is a (non-zero) difference in subject mismatches. Ungrammatical sentences have higher reading times than grammatical sentences</li>
+</ol>
+<p>I think (3) and (4) are precisely the differences visualized below :)</p>
 <p>Let’s move on to the model predictions to make sense of what this model actually suggests is driving the effects.</p>
 <p>I’ll start by reproducing Fig 16 from Iria’s thesis (p.213)</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>m.predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(m)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df, m.predictions) <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">human =</span> log.first_pass,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">model =</span> Estimate) <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>          tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(human, model), <span class="at">names_to =</span> <span class="st">'type'</span>, <span class="at">values_to =</span> <span class="st">'log.rt'</span>) </span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="sc">%&gt;%</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> grammatical, <span class="at">y =</span> log.rt, <span class="at">col =</span> distractor)) <span class="sc">+</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  geom_violin() +</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  geom_jitter(alpha = 0.1)  +</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">stat =</span> <span class="st">'summary'</span>, <span class="at">fun =</span> <span class="st">'mean'</span>, <span class="fu">aes</span>(<span class="at">group =</span> distractor)) <span class="sc">+</span> </span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(type <span class="sc">~</span> control)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>m.predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(m)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df, m.predictions) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">human =</span> log.first_pass,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">model =</span> Estimate) <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>          tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(human, model), <span class="at">names_to =</span> <span class="st">'type'</span>, <span class="at">values_to =</span> <span class="st">'log.rt'</span>) </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> grammatical, <span class="at">y =</span> log.rt, <span class="at">col =</span> distractor)) <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  geom_violin() +</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  geom_jitter(alpha = 0.1)  +</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">stat =</span> <span class="st">'summary'</span>, <span class="at">fun =</span> <span class="st">'mean'</span>, <span class="fu">aes</span>(<span class="at">group =</span> distractor)) <span class="sc">+</span> </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(type <span class="sc">~</span> control)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="model-predictions_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="model-predictions_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -314,16 +586,16 @@ Posterior probabilities of point hypotheses assume equal prior probabilities.</c
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> grammatical, <span class="at">y =</span> log.rt, <span class="at">col =</span> distractor)) <span class="sc">+</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>)  <span class="sc">+</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(type <span class="sc">~</span> control)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> grammatical, <span class="at">y =</span> log.rt, <span class="at">col =</span> distractor)) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>)  <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(type <span class="sc">~</span> control)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="model-predictions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="model-predictions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -332,17 +604,17 @@ Posterior probabilities of point hypotheses assume equal prior probabilities.</c
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(type, grammatical, distractor, control) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean.log.rt =</span> <span class="fu">mean</span>(log.rt)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(type, grammatical, distractor, control) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean.log.rt =</span> <span class="fu">mean</span>(log.rt)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'type', 'grammatical', 'distractor'. You
 can override using the `.groups` argument.</code></pre>
 </div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">type</th>
@@ -414,56 +686,56 @@ can override using the `.groups` argument.</code></pre>
 <td style="text-align: left;">grammatical</td>
 <td style="text-align: left;">match</td>
 <td style="text-align: left;">object</td>
-<td style="text-align: right;">5.925425</td>
+<td style="text-align: right;">5.925312</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">model</td>
 <td style="text-align: left;">grammatical</td>
 <td style="text-align: left;">match</td>
 <td style="text-align: left;">subject</td>
-<td style="text-align: right;">5.964785</td>
+<td style="text-align: right;">5.964617</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">model</td>
 <td style="text-align: left;">grammatical</td>
 <td style="text-align: left;">mismatch</td>
 <td style="text-align: left;">object</td>
-<td style="text-align: right;">5.953025</td>
+<td style="text-align: right;">5.952696</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">model</td>
 <td style="text-align: left;">grammatical</td>
 <td style="text-align: left;">mismatch</td>
 <td style="text-align: left;">subject</td>
-<td style="text-align: right;">5.941765</td>
+<td style="text-align: right;">5.941666</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">model</td>
 <td style="text-align: left;">ungrammatical</td>
 <td style="text-align: left;">match</td>
 <td style="text-align: left;">object</td>
-<td style="text-align: right;">5.945299</td>
+<td style="text-align: right;">5.945530</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">model</td>
 <td style="text-align: left;">ungrammatical</td>
 <td style="text-align: left;">match</td>
 <td style="text-align: left;">subject</td>
-<td style="text-align: right;">5.932657</td>
+<td style="text-align: right;">5.932652</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">model</td>
 <td style="text-align: left;">ungrammatical</td>
 <td style="text-align: left;">mismatch</td>
 <td style="text-align: left;">object</td>
-<td style="text-align: right;">5.960871</td>
+<td style="text-align: right;">5.960854</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">model</td>
 <td style="text-align: left;">ungrammatical</td>
 <td style="text-align: left;">mismatch</td>
 <td style="text-align: left;">subject</td>
-<td style="text-align: right;">5.997560</td>
+<td style="text-align: right;">5.997542</td>
 </tr>
 </tbody>
 </table>
@@ -473,18 +745,18 @@ can override using the `.groups` argument.</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(type, control, distractor, grammatical) <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean.log.rt =</span> <span class="fu">round</span>(<span class="fu">mean</span>(log.rt),<span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">'human'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df.predictions <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(type, control, distractor, grammatical) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean.log.rt =</span> <span class="fu">round</span>(<span class="fu">mean</span>(log.rt),<span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">'human'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'type', 'control', 'distractor'. You can
 override using the `.groups` argument.</code></pre>
 </div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">type</th>
@@ -596,18 +868,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -639,7 +900,47 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -674,7 +975,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
