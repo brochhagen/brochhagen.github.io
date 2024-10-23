@@ -1,0 +1,134 @@
+---
+title: "Chapter 2: Rethinking"
+author: "Thomas Brochhagen"
+format: html
+code-fold: true
+---
+
+# Medium
+
+### 2M1
+
+```{r}
+n_grid <- 100
+
+p_grid <- seq( from = 0,
+               to   = 1,
+               length.out = n_grid
+             )
+
+prior <- rep(1, n_grid)
+```
+
+
+#### (1)
+
+```{r}
+lhs <- dbinom(3, size = 3, prob = p_grid)
+
+post <- lhs * prior
+post <- post / sum(post)
+
+plot(p_grid, post, type='b',
+     xlab = 'probability of water', ylab = 'posterior prob')
+mtext(paste0(n_grid, ' points: WWW'))
+```
+
+#### (2) 
+
+```{r}
+lhs <- dbinom(3, size = 4, prob = p_grid)
+
+post <- lhs * prior
+post <- post / sum(post)
+
+plot(p_grid, post, type='b',
+     xlab = 'probability of water', ylab = 'posterior prob')
+mtext(paste0(n_grid, ' points: WWWL'))
+```
+
+#### 3
+
+```{r}
+lhs <- dbinom(5, size = 7, prob = p_grid)
+
+post <- lhs * prior
+post <- post / sum(post)
+
+plot(p_grid, post, type='b',
+     xlab = 'probability of water', ylab = 'posterior prob')
+mtext(paste0(n_grid, ' points: LWWLWWW'))
+```
+
+### 2M2
+
+
+```{r}
+n_grid <- 100
+
+p_grid <- seq( from = 0,
+               to   = 1,
+               length.out = n_grid
+             )
+
+prior <- ifelse(p_grid < 0.5, 0, 1)
+```
+
+
+#### (1)
+
+```{r}
+lhs <- dbinom(3, size = 3, prob = p_grid)
+
+post <- lhs * prior
+post <- post / sum(post)
+
+plot(p_grid, post, type='b',
+     xlab = 'probability of water', ylab = 'posterior prob')
+mtext(paste0(n_grid, ' points: WWW'))
+```
+
+#### (2) 
+
+```{r}
+lhs <- dbinom(3, size = 4, prob = p_grid)
+
+post <- lhs * prior
+post <- post / sum(post)
+
+plot(p_grid, post, type='b',
+     xlab = 'probability of water', ylab = 'posterior prob')
+mtext(paste0(n_grid, ' points: WWWL'))
+```
+
+#### 3
+
+```{r}
+lhs <- dbinom(5, size = 7, prob = p_grid)
+
+post <- lhs * prior
+post <- post / sum(post)
+
+plot(p_grid, post, type='b',
+     xlab = 'probability of water', ylab = 'posterior prob')
+mtext(paste0(n_grid, ' points: LWWLWWW'))
+```
+
+
+### 2M3
+
+```{r}
+# numerator
+lhs.landGivenEarth <- 0.3
+priorEarth         <- 0.5
+
+#denominator
+lhs.landGivenMars  <- 1
+priorMars          <- 1 - priorEarth
+probLand <- lhs.landGivenEarth * priorEarth + lhs.landGivenMars * priorMars
+
+#posterior 
+post.earthGivenLand <- lhs.landGivenEarth * priorEarth / probLand
+
+print(post.earthGivenLand)
+```
