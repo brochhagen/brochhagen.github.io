@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Self-paced reading</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="stats-reading-25-01_files/libs/clipboard/clipboard.min.js"></script>
+<script src="stats-reading-25-01_files/libs/quarto-html/quarto.js"></script>
+<script src="stats-reading-25-01_files/libs/quarto-html/popper.min.js"></script>
+<script src="stats-reading-25-01_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="stats-reading-25-01_files/libs/quarto-html/anchor.min.js"></script>
+<link href="stats-reading-25-01_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="stats-reading-25-01_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="stats-reading-25-01_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="stats-reading-25-01_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="stats-reading-25-01_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Self-paced reading</h1>
+<p class="subtitle lead">From de Dios Flores (2020) Processing long-distance dependencies; An experimental investigation of grammatical illusions in English and Spanish, Chapter 6</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<ul>
+<li>44 participants</li>
+<li>96 critical stimuli</li>
+<li>2x2 design: <code>CONTROL</code> (subject vs.&nbsp;object) x <code>GRAMMATICALITY</code> (grammatical vs.&nbsp;ungrammatical)
+<ul>
+<li>subject x grammatical: María le prometió a Manuel ser más <strong>ordenada</strong> con los apuntes.</li>
+<li>subject x ungrammatical: Manuel le prometió a María ser más <strong>ordenada</strong> con los apuntes.</li>
+<li>object x grammatical: Manuel le ordenó a María ser más <strong>ordenada</strong> con los apuntes.</li>
+<li>object x ungrammatical: María le ordenó a Manuel ser más <strong>ordenada</strong> con los apuntes.</li>
+</ul></li>
+</ul>
+<p><strong>Disclaimer 1</strong>: This study is properly motivated in the context of other studies and measurements from de Dios Flores (2020) that we’ll be ignoring here. I chose this one because it has a simple(r) structure.</p>
+<p><strong>Disclaimer 2</strong>: Eye-tracking is hard. There are a lot of measurements. We’ll be looking at <em>total time</em> only today, at the region corresponding to the adjective. Again, not because there’s something special happening with it but because it allows us to move forward faster.</p>
+<section id="data" class="level1">
+<h1>Data</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>relative_path <span class="ot">&lt;-</span> <span class="st">'experiments-IdDF/'</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>relative_path <span class="ot">&lt;-</span> <span class="st">'./'</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df_exp <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="fu">paste0</span>(relative_path, <span class="st">'data/Experiment_6_eye_tracking/df_exp.csv'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>First look at the data:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_exp) <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 2%">
+<col style="width: 4%">
+<col style="width: 2%">
+<col style="width: 6%">
+<col style="width: 3%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 3%">
+<col style="width: 4%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 4%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 3%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">participant</th>
+<th style="text-align: right;">first_pass</th>
+<th style="text-align: right;">go_past</th>
+<th style="text-align: right;">total_time</th>
+<th style="text-align: right;">reg_out</th>
+<th style="text-align: right;">reg_out_full</th>
+<th style="text-align: right;">region</th>
+<th style="text-align: right;">presentation_order</th>
+<th style="text-align: right;">block_order</th>
+<th style="text-align: right;">list</th>
+<th style="text-align: right;">item</th>
+<th style="text-align: left;">condition</th>
+<th style="text-align: left;">grammaticality</th>
+<th style="text-align: left;">control</th>
+<th style="text-align: left;">infinitive</th>
+<th style="text-align: left;">control_verb</th>
+<th style="text-align: left;">adjgender</th>
+<th style="text-align: right;">rating</th>
+<th style="text-align: left;">NP1_gender</th>
+<th style="text-align: left;">NP2_gender</th>
+<th style="text-align: left;">NP1_NP2_gender</th>
+<th style="text-align: left;">control_verb_recoded</th>
+<th style="text-align: right;">control_preferences</th>
+<th style="text-align: right;">log.total_time</th>
+<th style="text-align: right;">log.go_past</th>
+<th style="text-align: right;">log.first_pass</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">264</td>
+<td style="text-align: right;">264</td>
+<td style="text-align: right;">442</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">ungrammatical</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">estar</td>
+<td style="text-align: left;">aconsej</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: left;">masc</td>
+<td style="text-align: left;">fem_masc</td>
+<td style="text-align: left;">a</td>
+<td style="text-align: right;">9450549451</td>
+<td style="text-align: right;">6.091310</td>
+<td style="text-align: right;">5.575949</td>
+<td style="text-align: right;">5.575949</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">206</td>
+<td style="text-align: right;">206</td>
+<td style="text-align: right;">206</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">154</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">ungrammatical</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ser</td>
+<td style="text-align: left;">aconsej</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: left;">masc</td>
+<td style="text-align: left;">fem_masc</td>
+<td style="text-align: left;">a</td>
+<td style="text-align: right;">9450549451</td>
+<td style="text-align: right;">5.327876</td>
+<td style="text-align: right;">5.327876</td>
+<td style="text-align: right;">5.327876</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">154</td>
+<td style="text-align: right;">771</td>
+<td style="text-align: right;">606</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">grammatical</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ser</td>
+<td style="text-align: left;">aconsej</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">masc</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: left;">masc_fem</td>
+<td style="text-align: left;">a</td>
+<td style="text-align: right;">9450549451</td>
+<td style="text-align: right;">6.406880</td>
+<td style="text-align: right;">6.647688</td>
+<td style="text-align: right;">5.036953</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">221</td>
+<td style="text-align: right;">221</td>
+<td style="text-align: right;">221</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">grammatical</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">estar</td>
+<td style="text-align: left;">aconsej</td>
+<td style="text-align: left;">masc</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: left;">masc</td>
+<td style="text-align: left;">fem_masc</td>
+<td style="text-align: left;">a</td>
+<td style="text-align: right;">9450549451</td>
+<td style="text-align: right;">5.398163</td>
+<td style="text-align: right;">5.398163</td>
+<td style="text-align: right;">5.398163</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">750</td>
+<td style="text-align: right;">750</td>
+<td style="text-align: right;">750</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">grammatical</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ser</td>
+<td style="text-align: left;">aconsej</td>
+<td style="text-align: left;">masc</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: left;">masc</td>
+<td style="text-align: left;">fem_masc</td>
+<td style="text-align: left;">a</td>
+<td style="text-align: right;">9450549451</td>
+<td style="text-align: right;">6.620073</td>
+<td style="text-align: right;">6.620073</td>
+<td style="text-align: right;">6.620073</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">247</td>
+<td style="text-align: right;">247</td>
+<td style="text-align: right;">247</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">ungrammatical</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">estar</td>
+<td style="text-align: left;">aconsej</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: right;">13333333333</td>
+<td style="text-align: left;">fem</td>
+<td style="text-align: left;">masc</td>
+<td style="text-align: left;">fem_masc</td>
+<td style="text-align: left;">a</td>
+<td style="text-align: right;">9450549451</td>
+<td style="text-align: right;">5.509388</td>
+<td style="text-align: right;">5.509388</td>
+<td style="text-align: right;">5.509388</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Focusing on only the variables and regions of interest:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df_exp <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(region <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(participant, item, presentation_order, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>             total_time, control, grammaticality)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 7%">
+<col style="width: 27%">
+<col style="width: 15%">
+<col style="width: 11%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">participant</th>
+<th style="text-align: right;">item</th>
+<th style="text-align: right;">presentation_order</th>
+<th style="text-align: right;">total_time</th>
+<th style="text-align: left;">control</th>
+<th style="text-align: left;">grammaticality</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">204</td>
+<td style="text-align: right;">1014</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ungrammatical</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">154</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ungrammatical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: right;">401</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">grammatical</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">413</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ungrammatical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">372</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">grammatical</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">551</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ungrammatical</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Other things to check for:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 19%">
+<col style="width: 15%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">participant</th>
+<th style="text-align: left;">item</th>
+<th style="text-align: left;">presentation_order</th>
+<th style="text-align: left;">total_time</th>
+<th style="text-align: left;">control</th>
+<th style="text-align: left;">grammaticality</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Min. : 1.00</td>
+<td style="text-align: left;">Min. : 1.00</td>
+<td style="text-align: left;">Min. : 1</td>
+<td style="text-align: left;">Min. : 82.0</td>
+<td style="text-align: left;">Length:4041</td>
+<td style="text-align: left;">Length:4041</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">1st Qu.:12.00</td>
+<td style="text-align: left;">1st Qu.:25.00</td>
+<td style="text-align: left;">1st Qu.: 60</td>
+<td style="text-align: left;">1st Qu.: 250.0</td>
+<td style="text-align: left;">Class :character</td>
+<td style="text-align: left;">Class :character</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Median :24.00</td>
+<td style="text-align: left;">Median :48.00</td>
+<td style="text-align: left;">Median :119</td>
+<td style="text-align: left;">Median : 355.0</td>
+<td style="text-align: left;">Mode :character</td>
+<td style="text-align: left;">Mode :character</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Mean :23.32</td>
+<td style="text-align: left;">Mean :48.51</td>
+<td style="text-align: left;">Mean :120</td>
+<td style="text-align: left;">Mean : 421.7</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">3rd Qu.:35.00</td>
+<td style="text-align: left;">3rd Qu.:72.00</td>
+<td style="text-align: left;">3rd Qu.:180</td>
+<td style="text-align: left;">3rd Qu.: 506.0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Max. :45.00</td>
+<td style="text-align: left;">Max. :96.00</td>
+<td style="text-align: left;">Max. :240</td>
+<td style="text-align: left;">Max. :4660.0</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>grammaticality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "ungrammatical" "grammatical"  </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>control)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "object"  "subject"</code></pre>
+</div>
+</div>
+<p>Things to look out for:</p>
+<ul>
+<li>Did the data load correctly?</li>
+<li>Are the column in the data type we want them to be? Would it be useful to transform the data in some way?</li>
+<li>Deal with missing values, data imbalances, measurement error, …</li>
+</ul>
+</section>
+<section id="visual-exploration" class="level1">
+<h1>Visual exploration</h1>
+<section id="variables-on-their-own" class="level2">
+<h2 class="anchored" data-anchor-id="variables-on-their-own">Variables on their own</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>m_tt <span class="ot">&lt;-</span> <span class="fu">mean</span>(df<span class="sc">$</span>total_time)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> total_time)) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> m_tt, <span class="at">col =</span> <span class="st">'red'</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stats-reading-25-01_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>m_tt <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">log</span>(df<span class="sc">$</span>total_time))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(total_time))) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> m_tt, <span class="at">col =</span> <span class="st">'red'</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stats-reading-25-01_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">log.tt =</span> <span class="fu">log</span>(total_time)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>total_time)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 7%">
+<col style="width: 27%">
+<col style="width: 11%">
+<col style="width: 22%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">participant</th>
+<th style="text-align: right;">item</th>
+<th style="text-align: right;">presentation_order</th>
+<th style="text-align: left;">control</th>
+<th style="text-align: left;">grammaticality</th>
+<th style="text-align: right;">log.tt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">204</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ungrammatical</td>
+<td style="text-align: right;">6.921658</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ungrammatical</td>
+<td style="text-align: right;">5.036953</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">grammatical</td>
+<td style="text-align: right;">5.993961</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ungrammatical</td>
+<td style="text-align: right;">6.023448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">grammatical</td>
+<td style="text-align: right;">5.918894</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">ungrammatical</td>
+<td style="text-align: right;">6.311735</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="relationship-between-variables" class="level2">
+<h2 class="anchored" data-anchor-id="relationship-between-variables">Relationship between variables</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> grammaticality, <span class="at">y =</span> log.tt, <span class="at">col =</span> grammaticality)) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> control) <span class="sc">+</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stats-reading-25-01_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="statistics" class="level1">
+<h1>Statistics</h1>
+<p>This is a controlled laboratory experiment so we have a few expectations (since it was designed to test those expectations)</p>
+<ul>
+<li>There may be an effect of <code>grammaticality</code> on reading time (specify)</li>
+<li>There may be an effect of <code>control</code> on reading time (specify)</li>
+<li>There may be an interaction between <code>grammaticality</code> and <code>control</code> (specify)</li>
+</ul>
+<p>This gives us the following model template for the most important things we want to check:</p>
+<p><span class="math display">\[y_i \sim N(\mu_i, \sigma)\]</span> <span class="math display">\[\mu_i = \alpha + \beta_1 \text{grammaticality}_i + \beta_2 \text{control}_i + \beta_3 (\text{grammaticality}_i \times \text{control}_i)\]</span></p>
+<p>We also know the following:</p>
+<ul>
+<li>Humans may differ in their reading times, from human to human</li>
+<li>Items may differ in their reading times</li>
+<li>Humans may differ in their reading times, the longer they participate in the experiment</li>
+</ul>
+<p>So it would be nice to add that to the model. We also need to specify the priors but let’s start with a simpler model first:</p>
+<section id="univariate-grammaticality-model" class="level2">
+<h2 class="anchored" data-anchor-id="univariate-grammaticality-model">Univariate grammaticality model</h2>
+<p><span class="math display">\[y_i \sim N(\mu_i, \sigma)\]</span> <span class="math display">\[\mu_i = \alpha + \beta_1 \text{grammaticality}_i\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(grammaticality) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean =</span> <span class="fu">mean</span>(log.tt),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">median =</span> <span class="fu">median</span>(log.tt),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(log.tt),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(log.tt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  grammaticality  mean median   min   max
+  &lt;chr&gt;          &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 grammatical     5.88   5.85  4.41  7.47
+2 ungrammatical   5.93   5.89  4.44  8.45</code></pre>
+</div>
+</div>
+<p>From this and the visualization above we know that, if there is a difference between grammatical and ungrammatical sentences, it won’t be big. Let’s go with a very conservative guess first</p>
+<p><span class="math display">\[y_i \sim N(\mu_i, \sigma)\]</span> <span class="math display">\[\mu_i = \alpha + \beta_1 \text{grammaticality}_i\]</span> <span class="math display">\[\alpha \sim N(5.9, 5)\]</span> <span class="math display">\[\bet_1 \sim N(0, 5)\]</span></p>
+<p>We can visualize these priors either analytically or by simulation. Simulation is more convenient and easier to understand.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>alpha_sim <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">mean =</span> <span class="fl">5.9</span>, <span class="at">sd =</span> <span class="dv">5</span>, <span class="at">n =</span> <span class="dv">1000</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>beta_sim  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">5</span>, <span class="at">n =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(alpha_sim)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stats-reading-25-01_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(beta_sim)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stats-reading-25-01_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>OK. This is super wide. Consider the consequences. Let’s fix <span class="math inline">\(\alpha = 5.9\)</span>, if <span class="math inline">\(\beta_1\)</span> is <span class="math inline">\(10\)</span> we get:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fl">5.9</span> <span class="sc">+</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15.9</code></pre>
+</div>
+</div>
+<p>As the effect of being ungrammatical. A difference in 10 is huge. We’re also allowing the effect to go in the other direction by having -10 in there –and some more extreme values like -20.</p>
+<p>Translated into <code>brms</code> syntax, our model is as follows:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>univariate_model <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data =</span> df,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">formula =</span> log.tt <span class="sc">~</span> grammaticality,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">family =</span> <span class="fu">gaussian</span>(),</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">prior  =</span> <span class="fu">c</span>(</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">set_prior</span>(<span class="st">"normal(5.9, 5)"</span>, <span class="at">class =</span> <span class="st">'Intercept'</span>),</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">set_prior</span>(<span class="st">'normal(0,5)'</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">class =</span> <span class="st">'b'</span>, <span class="at">coef =</span> <span class="st">'grammaticalityungrammatical'</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                                  ),</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">iter =</span> <span class="dv">1000</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">chains =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Compiling Stan program...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+</div>
+<p>There are many things happening here, so let’s go step by step.</p>
+<p>Summary of the model output:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(univariate_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: log.tt ~ grammaticality 
+   Data: df (Number of observations: 4041) 
+  Draws: 4 chains, each with iter = 1000; warmup = 500; thin = 1;
+         total post-warmup draws = 2000
+
+Regression Coefficients:
+                            Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
+Intercept                       5.88      0.01     5.86     5.91 1.00     1847
+grammaticalityungrammatical     0.05      0.02     0.02     0.08 1.00     1622
+                            Tail_ESS
+Intercept                       1219
+grammaticalityungrammatical     1356
+
+Further Distributional Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma     0.50      0.01     0.49     0.52 1.00     1816     1398
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<p>Summary of the estimates:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(univariate_model) <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Est.Error</th>
+<th style="text-align: right;">Q2.5</th>
+<th style="text-align: right;">Q97.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: right;">5.8833180</td>
+<td style="text-align: right;">0.0110696</td>
+<td style="text-align: right;">5.862108</td>
+<td style="text-align: right;">5.9054254</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grammaticalityungrammatical</td>
+<td style="text-align: right;">0.0479925</td>
+<td style="text-align: right;">0.0160518</td>
+<td style="text-align: right;">0.016196</td>
+<td style="text-align: right;">0.0785996</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Check that the priors were set correctly:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(univariate_model) <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 10%">
+<col style="width: 29%">
+<col style="width: 6%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">prior</th>
+<th style="text-align: left;">class</th>
+<th style="text-align: left;">coef</th>
+<th style="text-align: left;">group</th>
+<th style="text-align: left;">resp</th>
+<th style="text-align: left;">dpar</th>
+<th style="text-align: left;">nlpar</th>
+<th style="text-align: left;">lb</th>
+<th style="text-align: left;">ub</th>
+<th style="text-align: left;">source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">b</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">default</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">normal(0,5)</td>
+<td style="text-align: left;">b</td>
+<td style="text-align: left;">grammaticalityungrammatical</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">user</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">normal(5.9, 5)</td>
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">user</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">student_t(3, 0, 2.5)</td>
+<td style="text-align: left;">sigma</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">default</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="some-prior-checks" class="level3">
+<h3 class="anchored" data-anchor-id="some-prior-checks">Some prior checks</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Prior predictive check with sample_prior="only"</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>fitPrior <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data =</span> df,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">formula =</span> log.tt <span class="sc">~</span> grammaticality,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">family =</span> <span class="fu">gaussian</span>(),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">prior  =</span> <span class="fu">c</span>(</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">set_prior</span>(<span class="st">"normal(5.9, 5)"</span>, <span class="at">class =</span> <span class="st">'Intercept'</span>),</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">set_prior</span>(<span class="st">'normal(0,5)'</span>,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">class =</span> <span class="st">'b'</span>, <span class="at">coef =</span> <span class="st">'grammaticalityungrammatical'</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>                                  ),</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">iter =</span> <span class="dv">1000</span>,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">sample_prior =</span> <span class="st">'only'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Compiling Stan program...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plots the prior predictive check</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(fitPrior) <span class="sc">+</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using 10 posterior draws for ppc type 'dens_overlay' by default.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stats-reading-25-01_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s contrast this with the default priors from brms</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>univariate_model_def <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data =</span> df,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">formula =</span> log.tt <span class="sc">~</span> grammaticality</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Compiling Stan program...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(univariate_model_def)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: log.tt ~ grammaticality 
+   Data: df (Number of observations: 4041) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Regression Coefficients:
+                            Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
+Intercept                       5.88      0.01     5.86     5.90 1.00     4745
+grammaticalityungrammatical     0.05      0.02     0.02     0.08 1.00     4737
+                            Tail_ESS
+Intercept                       2799
+grammaticalityungrammatical     2572
+
+Further Distributional Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma     0.50      0.01     0.49     0.52 1.00     4564     3245
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(univariate_model_def) <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Est.Error</th>
+<th style="text-align: right;">Q2.5</th>
+<th style="text-align: right;">Q97.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: right;">5.8827512</td>
+<td style="text-align: right;">0.0113254</td>
+<td style="text-align: right;">5.8604285</td>
+<td style="text-align: right;">5.9047100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grammaticalityungrammatical</td>
+<td style="text-align: right;">0.0480905</td>
+<td style="text-align: right;">0.0161238</td>
+<td style="text-align: right;">0.0170957</td>
+<td style="text-align: right;">0.0802481</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(univariate_model_def) <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 10%">
+<col style="width: 28%">
+<col style="width: 6%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">prior</th>
+<th style="text-align: left;">class</th>
+<th style="text-align: left;">coef</th>
+<th style="text-align: left;">group</th>
+<th style="text-align: left;">resp</th>
+<th style="text-align: left;">dpar</th>
+<th style="text-align: left;">nlpar</th>
+<th style="text-align: left;">lb</th>
+<th style="text-align: left;">ub</th>
+<th style="text-align: left;">source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">b</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">default</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">b</td>
+<td style="text-align: left;">grammaticalityungrammatical</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">default</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">student_t(3, 5.9, 2.5)</td>
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">default</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">student_t(3, 0, 2.5)</td>
+<td style="text-align: left;">sigma</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">default</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>fitPrior_def <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data =</span> df,</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">formula =</span> log.tt <span class="sc">~</span> grammaticality,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">prior =</span> <span class="fu">c</span>(</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">set_prior</span>(<span class="st">'student_t(3, 5.9, 2.5)'</span>, <span class="at">class =</span> <span class="st">'Intercept'</span>),</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">set_prior</span>(<span class="st">'student_t(3, 0, 2.5)'</span>, <span class="at">class =</span> <span class="st">'b'</span>, <span class="at">coef =</span> <span class="st">'grammaticalityungrammatical'</span>)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>                    ),</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sample_prior =</span> <span class="st">'only'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Compiling Stan program...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(fitPrior_def) <span class="sc">+</span> </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using 10 posterior draws for ppc type 'dens_overlay' by default.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stats-reading-25-01_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>So the default priors are slighly more conservative. The estimate doesn’t change much if anything though.</p>
+</section>
+</section>
+<section id="our-model-attempt-1" class="level2">
+<h2 class="anchored" data-anchor-id="our-model-attempt-1">Our model (attempt 1)</h2>
+<p><span class="math display">\[y_i \sim N(\mu_i, \sigma)\]</span> <span class="math display">\[\mu_i = \alpha + \beta_1 \text{grammaticality}_i + \beta_2 \text{control}_i + \beta_3 (\text{grammaticality}_i \times \text{control}_i)\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>multivariate_model <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data =</span> df,</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">formula =</span> log.tt <span class="sc">~</span> grammaticality <span class="sc">+</span> control <span class="sc">+</span> grammaticality<span class="sc">:</span>control</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>                          )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Compiling Stan program...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(multivariate_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: log.tt ~ grammaticality + control + grammaticality:control 
+   Data: df (Number of observations: 4041) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Regression Coefficients:
+                                           Estimate Est.Error l-95% CI u-95% CI
+Intercept                                      5.85      0.02     5.82     5.88
+grammaticalityungrammatical                    0.09      0.02     0.05     0.14
+controlsubject                                 0.06      0.02     0.01     0.10
+grammaticalityungrammatical:controlsubject    -0.09      0.03    -0.15    -0.02
+                                           Rhat Bulk_ESS Tail_ESS
+Intercept                                  1.00     2410     2383
+grammaticalityungrammatical                1.00     2145     2666
+controlsubject                             1.00     2225     2614
+grammaticalityungrammatical:controlsubject 1.00     1928     2512
+
+Further Distributional Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma     0.50      0.01     0.49     0.52 1.00     4381     2558
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(multivariate_model) <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 12%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Est.Error</th>
+<th style="text-align: right;">Q2.5</th>
+<th style="text-align: right;">Q97.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intercept</td>
+<td style="text-align: right;">5.8531425</td>
+<td style="text-align: right;">0.0161027</td>
+<td style="text-align: right;">5.8215771</td>
+<td style="text-align: right;">5.8844431</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grammaticalityungrammatical</td>
+<td style="text-align: right;">0.0915196</td>
+<td style="text-align: right;">0.0224736</td>
+<td style="text-align: right;">0.0474115</td>
+<td style="text-align: right;">0.1353040</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">controlsubject</td>
+<td style="text-align: right;">0.0591092</td>
+<td style="text-align: right;">0.0225786</td>
+<td style="text-align: right;">0.0143310</td>
+<td style="text-align: right;">0.1034368</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grammaticalityungrammatical:controlsubject</td>
+<td style="text-align: right;">-0.0859904</td>
+<td style="text-align: right;">0.0321159</td>
+<td style="text-align: right;">-0.1468139</td>
+<td style="text-align: right;">-0.0218898</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="our-model-attempt-2" class="level2">
+<h2 class="anchored" data-anchor-id="our-model-attempt-2">Our model (attempt 2)</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>multivariate_model2 <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data =</span> df,</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">formula =</span> log.tt <span class="sc">~</span> control <span class="sc">*</span> grammaticality <span class="sc">+</span> presentation_order <span class="sc">+</span>(control <span class="sc">*</span> grammaticality <span class="sc">+</span> presentation_order <span class="sc">|</span> participant) <span class="sc">+</span> (control <span class="sc">*</span>grammaticality <span class="sc">+</span> presentation_order <span class="sc">|</span>item) </span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>                          )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Compiling Stan program...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(multivariate_model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: log.tt ~ control * grammaticality + presentation_order + (control * grammaticality + presentation_order | participant) + (control * grammaticality + presentation_order | item) 
+   Data: df (Number of observations: 4041) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Multilevel Hyperparameters:
+~item (Number of levels: 96) 
+                                                                            Estimate
+sd(Intercept)                                                                   0.15
+sd(controlsubject)                                                              0.04
+sd(grammaticalityungrammatical)                                                 0.04
+sd(presentation_order)                                                          0.00
+sd(controlsubject:grammaticalityungrammatical)                                  0.05
+cor(Intercept,controlsubject)                                                  -0.01
+cor(Intercept,grammaticalityungrammatical)                                     -0.09
+cor(controlsubject,grammaticalityungrammatical)                                -0.03
+cor(Intercept,presentation_order)                                              -0.01
+cor(controlsubject,presentation_order)                                          0.05
+cor(grammaticalityungrammatical,presentation_order)                            -0.14
+cor(Intercept,controlsubject:grammaticalityungrammatical)                      -0.33
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                 -0.14
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)    -0.07
+cor(presentation_order,controlsubject:grammaticalityungrammatical)             -0.06
+                                                                            Est.Error
+sd(Intercept)                                                                    0.02
+sd(controlsubject)                                                               0.03
+sd(grammaticalityungrammatical)                                                  0.03
+sd(presentation_order)                                                           0.00
+sd(controlsubject:grammaticalityungrammatical)                                   0.03
+cor(Intercept,controlsubject)                                                    0.33
+cor(Intercept,grammaticalityungrammatical)                                       0.34
+cor(controlsubject,grammaticalityungrammatical)                                  0.39
+cor(Intercept,presentation_order)                                                0.34
+cor(controlsubject,presentation_order)                                           0.40
+cor(grammaticalityungrammatical,presentation_order)                              0.40
+cor(Intercept,controlsubject:grammaticalityungrammatical)                        0.33
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                   0.41
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)      0.40
+cor(presentation_order,controlsubject:grammaticalityungrammatical)               0.39
+                                                                            l-95% CI
+sd(Intercept)                                                                   0.12
+sd(controlsubject)                                                              0.00
+sd(grammaticalityungrammatical)                                                 0.00
+sd(presentation_order)                                                          0.00
+sd(controlsubject:grammaticalityungrammatical)                                  0.00
+cor(Intercept,controlsubject)                                                  -0.61
+cor(Intercept,grammaticalityungrammatical)                                     -0.67
+cor(controlsubject,grammaticalityungrammatical)                                -0.76
+cor(Intercept,presentation_order)                                              -0.64
+cor(controlsubject,presentation_order)                                         -0.71
+cor(grammaticalityungrammatical,presentation_order)                            -0.80
+cor(Intercept,controlsubject:grammaticalityungrammatical)                      -0.84
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                 -0.81
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)    -0.76
+cor(presentation_order,controlsubject:grammaticalityungrammatical)             -0.78
+                                                                            u-95% CI
+sd(Intercept)                                                                   0.19
+sd(controlsubject)                                                              0.10
+sd(grammaticalityungrammatical)                                                 0.10
+sd(presentation_order)                                                          0.00
+sd(controlsubject:grammaticalityungrammatical)                                  0.11
+cor(Intercept,controlsubject)                                                   0.66
+cor(Intercept,grammaticalityungrammatical)                                      0.64
+cor(controlsubject,grammaticalityungrammatical)                                 0.69
+cor(Intercept,presentation_order)                                               0.69
+cor(controlsubject,presentation_order)                                          0.75
+cor(grammaticalityungrammatical,presentation_order)                             0.69
+cor(Intercept,controlsubject:grammaticalityungrammatical)                       0.44
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                  0.68
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)     0.74
+cor(presentation_order,controlsubject:grammaticalityungrammatical)              0.71
+                                                                            Rhat
+sd(Intercept)                                                               1.00
+sd(controlsubject)                                                          1.01
+sd(grammaticalityungrammatical)                                             1.01
+sd(presentation_order)                                                      1.01
+sd(controlsubject:grammaticalityungrammatical)                              1.01
+cor(Intercept,controlsubject)                                               1.00
+cor(Intercept,grammaticalityungrammatical)                                  1.01
+cor(controlsubject,grammaticalityungrammatical)                             1.00
+cor(Intercept,presentation_order)                                           1.00
+cor(controlsubject,presentation_order)                                      1.00
+cor(grammaticalityungrammatical,presentation_order)                         1.00
+cor(Intercept,controlsubject:grammaticalityungrammatical)                   1.00
+cor(controlsubject,controlsubject:grammaticalityungrammatical)              1.00
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical) 1.00
+cor(presentation_order,controlsubject:grammaticalityungrammatical)          1.00
+                                                                            Bulk_ESS
+sd(Intercept)                                                                   1438
+sd(controlsubject)                                                               481
+sd(grammaticalityungrammatical)                                                  467
+sd(presentation_order)                                                           407
+sd(controlsubject:grammaticalityungrammatical)                                   635
+cor(Intercept,controlsubject)                                                   2098
+cor(Intercept,grammaticalityungrammatical)                                      1343
+cor(controlsubject,grammaticalityungrammatical)                                 1391
+cor(Intercept,presentation_order)                                               2332
+cor(controlsubject,presentation_order)                                          1122
+cor(grammaticalityungrammatical,presentation_order)                             1223
+cor(Intercept,controlsubject:grammaticalityungrammatical)                       2672
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                  1922
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)     1941
+cor(presentation_order,controlsubject:grammaticalityungrammatical)              2073
+                                                                            Tail_ESS
+sd(Intercept)                                                                   2470
+sd(controlsubject)                                                              1208
+sd(grammaticalityungrammatical)                                                  947
+sd(presentation_order)                                                           957
+sd(controlsubject:grammaticalityungrammatical)                                   809
+cor(Intercept,controlsubject)                                                   2222
+cor(Intercept,grammaticalityungrammatical)                                      2126
+cor(controlsubject,grammaticalityungrammatical)                                 2110
+cor(Intercept,presentation_order)                                               2208
+cor(controlsubject,presentation_order)                                          1774
+cor(grammaticalityungrammatical,presentation_order)                             1429
+cor(Intercept,controlsubject:grammaticalityungrammatical)                       2200
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                  2082
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)     2925
+cor(presentation_order,controlsubject:grammaticalityungrammatical)              3038
+
+~participant (Number of levels: 44) 
+                                                                            Estimate
+sd(Intercept)                                                                   0.23
+sd(controlsubject)                                                              0.05
+sd(grammaticalityungrammatical)                                                 0.09
+sd(presentation_order)                                                          0.00
+sd(controlsubject:grammaticalityungrammatical)                                  0.03
+cor(Intercept,controlsubject)                                                  -0.21
+cor(Intercept,grammaticalityungrammatical)                                      0.65
+cor(controlsubject,grammaticalityungrammatical)                                -0.02
+cor(Intercept,presentation_order)                                              -0.16
+cor(controlsubject,presentation_order)                                          0.25
+cor(grammaticalityungrammatical,presentation_order)                            -0.22
+cor(Intercept,controlsubject:grammaticalityungrammatical)                       0.10
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                 -0.05
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)    -0.02
+cor(presentation_order,controlsubject:grammaticalityungrammatical)             -0.08
+                                                                            Est.Error
+sd(Intercept)                                                                    0.03
+sd(controlsubject)                                                               0.03
+sd(grammaticalityungrammatical)                                                  0.02
+sd(presentation_order)                                                           0.00
+sd(controlsubject:grammaticalityungrammatical)                                   0.02
+cor(Intercept,controlsubject)                                                    0.30
+cor(Intercept,grammaticalityungrammatical)                                       0.17
+cor(controlsubject,grammaticalityungrammatical)                                  0.33
+cor(Intercept,presentation_order)                                                0.21
+cor(controlsubject,presentation_order)                                           0.32
+cor(grammaticalityungrammatical,presentation_order)                              0.25
+cor(Intercept,controlsubject:grammaticalityungrammatical)                        0.38
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                   0.40
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)      0.39
+cor(presentation_order,controlsubject:grammaticalityungrammatical)               0.39
+                                                                            l-95% CI
+sd(Intercept)                                                                   0.18
+sd(controlsubject)                                                              0.00
+sd(grammaticalityungrammatical)                                                 0.05
+sd(presentation_order)                                                          0.00
+sd(controlsubject:grammaticalityungrammatical)                                  0.00
+cor(Intercept,controlsubject)                                                  -0.70
+cor(Intercept,grammaticalityungrammatical)                                      0.25
+cor(controlsubject,grammaticalityungrammatical)                                -0.66
+cor(Intercept,presentation_order)                                              -0.54
+cor(controlsubject,presentation_order)                                         -0.44
+cor(grammaticalityungrammatical,presentation_order)                            -0.68
+cor(Intercept,controlsubject:grammaticalityungrammatical)                      -0.65
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                 -0.78
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)    -0.70
+cor(presentation_order,controlsubject:grammaticalityungrammatical)             -0.77
+                                                                            u-95% CI
+sd(Intercept)                                                                   0.30
+sd(controlsubject)                                                              0.10
+sd(grammaticalityungrammatical)                                                 0.13
+sd(presentation_order)                                                          0.00
+sd(controlsubject:grammaticalityungrammatical)                                  0.09
+cor(Intercept,controlsubject)                                                   0.46
+cor(Intercept,grammaticalityungrammatical)                                      0.92
+cor(controlsubject,grammaticalityungrammatical)                                 0.64
+cor(Intercept,presentation_order)                                               0.29
+cor(controlsubject,presentation_order)                                          0.79
+cor(grammaticalityungrammatical,presentation_order)                             0.30
+cor(Intercept,controlsubject:grammaticalityungrammatical)                       0.77
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                  0.72
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)     0.71
+cor(presentation_order,controlsubject:grammaticalityungrammatical)              0.69
+                                                                            Rhat
+sd(Intercept)                                                               1.00
+sd(controlsubject)                                                          1.01
+sd(grammaticalityungrammatical)                                             1.00
+sd(presentation_order)                                                      1.00
+sd(controlsubject:grammaticalityungrammatical)                              1.00
+cor(Intercept,controlsubject)                                               1.01
+cor(Intercept,grammaticalityungrammatical)                                  1.01
+cor(controlsubject,grammaticalityungrammatical)                             1.01
+cor(Intercept,presentation_order)                                           1.00
+cor(controlsubject,presentation_order)                                      1.00
+cor(grammaticalityungrammatical,presentation_order)                         1.00
+cor(Intercept,controlsubject:grammaticalityungrammatical)                   1.00
+cor(controlsubject,controlsubject:grammaticalityungrammatical)              1.00
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical) 1.00
+cor(presentation_order,controlsubject:grammaticalityungrammatical)          1.00
+                                                                            Bulk_ESS
+sd(Intercept)                                                                   1234
+sd(controlsubject)                                                               558
+sd(grammaticalityungrammatical)                                                 1611
+sd(presentation_order)                                                           986
+sd(controlsubject:grammaticalityungrammatical)                                  1091
+cor(Intercept,controlsubject)                                                   1970
+cor(Intercept,grammaticalityungrammatical)                                      1678
+cor(controlsubject,grammaticalityungrammatical)                                 1003
+cor(Intercept,presentation_order)                                               1611
+cor(controlsubject,presentation_order)                                           485
+cor(grammaticalityungrammatical,presentation_order)                              997
+cor(Intercept,controlsubject:grammaticalityungrammatical)                       3459
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                  2740
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)     2904
+cor(presentation_order,controlsubject:grammaticalityungrammatical)              2921
+                                                                            Tail_ESS
+sd(Intercept)                                                                   1581
+sd(controlsubject)                                                               743
+sd(grammaticalityungrammatical)                                                 1547
+sd(presentation_order)                                                          1037
+sd(controlsubject:grammaticalityungrammatical)                                  1537
+cor(Intercept,controlsubject)                                                   1392
+cor(Intercept,grammaticalityungrammatical)                                      2310
+cor(controlsubject,grammaticalityungrammatical)                                 1260
+cor(Intercept,presentation_order)                                               2104
+cor(controlsubject,presentation_order)                                           800
+cor(grammaticalityungrammatical,presentation_order)                             1861
+cor(Intercept,controlsubject:grammaticalityungrammatical)                       2777
+cor(controlsubject,controlsubject:grammaticalityungrammatical)                  2742
+cor(grammaticalityungrammatical,controlsubject:grammaticalityungrammatical)     2850
+cor(presentation_order,controlsubject:grammaticalityungrammatical)              2903
+
+Regression Coefficients:
+                                           Estimate Est.Error l-95% CI u-95% CI
+Intercept                                      5.95      0.04     5.87     6.04
+controlsubject                                 0.06      0.02     0.02     0.10
+grammaticalityungrammatical                    0.09      0.02     0.05     0.14
+presentation_order                            -0.00      0.00    -0.00    -0.00
+controlsubject:grammaticalityungrammatical    -0.08      0.03    -0.14    -0.03
+                                           Rhat Bulk_ESS Tail_ESS
+Intercept                                  1.01      554     1159
+controlsubject                             1.00     2603     2834
+grammaticalityungrammatical                1.00     1581     2549
+presentation_order                         1.00     3616     3114
+controlsubject:grammaticalityungrammatical 1.00     2594     2757
+
+Further Distributional Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma     0.41      0.00     0.40     0.42 1.00     3405     3266
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(multivariate_model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                Estimate    Est.Error
+Intercept                                   5.9512356693 0.0420185475
+controlsubject                              0.0601140632 0.0211447966
+grammaticalityungrammatical                 0.0945444488 0.0240119570
+presentation_order                         -0.0008341729 0.0001356958
+controlsubject:grammaticalityungrammatical -0.0845624594 0.0271281320
+                                                   Q2.5         Q97.5
+Intercept                                   5.870635084  6.0353440908
+controlsubject                              0.020016835  0.1009389847
+grammaticalityungrammatical                 0.046649003  0.1418601644
+presentation_order                         -0.001095954 -0.0005594728
+controlsubject:grammaticalityungrammatical -0.138022421 -0.0310781940</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">conditional_effects</span>(multivariate_model2, <span class="at">effects=</span><span class="fu">c</span>(<span class="st">'control:grammaticality'</span>)))[[<span class="dv">1</span>]] <span class="sc">+</span> <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stats-reading-25-01_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stats-reading-25-01_files/figure-html/unnamed-chunk-31-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Missing things:</p>
+<ul>
+<li>Check what the model(s) predict as reading times</li>
+<li>Check model quality</li>
+<li>Compare to other models</li>
+<li>Sample from the model(s)</li>
+<li>Do error analysis</li>
+<li>Analyze individual-level effects</li>
+<li>…</li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
