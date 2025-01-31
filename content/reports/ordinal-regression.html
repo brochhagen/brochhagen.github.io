@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Ordinal regression</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="ordinal-regression_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ordinal-regression_files/libs/quarto-html/quarto.js"></script>
+<script src="ordinal-regression_files/libs/quarto-html/popper.min.js"></script>
+<script src="ordinal-regression_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="ordinal-regression_files/libs/quarto-html/anchor.min.js"></script>
+<link href="ordinal-regression_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ordinal-regression_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="ordinal-regression_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="ordinal-regression_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="ordinal-regression_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Ordinal regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Ordinal regression is often used when the dependent variable is ordinal. A common case in linguistics are human judgments (e.g., <em>rate this sentence for its naturalness, on a scale from 1 (completely unnatural) to 5 (completely natural)</em>). For instance, we may want to know if percieved naturalness of null subject constructions of Spanish heritage speakers in the USA is influenced by the amount of self-reported hours of Spanish they speak per week.</p>
+<p>There are different kinds of ordinal regressions. <a href="https://osf.io/preprints/psyarxiv/x8swp_v1">Bürkner &amp; Vourre’s excellent tutorial is recommended for details</a>. I will here focus on a cumulative model and contrast it with linear counterparts, borrowing some of the tutorial’s notation and framing to make it complementary.</p>
+<section id="synthetic-dataset-1" class="level1">
+<h1>Synthetic dataset 1</h1>
+<p>We begin by simulating some data to illustrate what the regression does. The following code generates ratings for <code>n_participants</code> (100) over <code>n_items</code> (20). For each participant, we sample a number of hours per week <span class="math inline">\(h\)</span> that they speak Spanish (from a Poisson distribution with <span class="math inline">\(\lambda = 5\)</span>). We then make it such that the probability of a rating <span class="math inline">\(r \in [1,5]\)</span> is as follows:</p>
+<ul>
+<li><span class="math inline">\(Pr(r = 1) \propto 0.5\)</span></li>
+<li><span class="math inline">\(Pr(r = 2) \propto 0.125 + 0.01 \times h\)</span></li>
+<li><span class="math inline">\(Pr(r = 3) \propto 0.125 + 0.015 \times h\)</span></li>
+<li><span class="math inline">\(Pr(r = 4) \propto 0.125 + 0.02 \times h\)</span></li>
+<li><span class="math inline">\(Pr(r = 5) \propto 0.125 + 0.025 \times h\)</span></li>
+</ul>
+<p>In words, a heritage speaker that speaks only 0 hour of Spanish per week is most likely to rate a null subject sentence with a 1 (probability of <span class="math inline">\(0.5\)</span> for <em>completely unnatural</em> vs.&nbsp;<span class="math inline">\(0.125\)</span> for <em>completely natural</em>). However, as the hours increase so does the perceived naturalness of the sentences. For instance, a speaker who speaks 1 hour per week has a probability of about <span class="math inline">\(0.47\)</span> to rate a null subject sentence with a <span class="math inline">\(1\)</span> vs.&nbsp;a probability of <span class="math inline">\(0.14\)</span> of rating it with a <span class="math inline">\(5\)</span>.</p>
+<p>In other words, we generated the data in such a way that higher <span class="math inline">\(h\)</span> makes higher <span class="math inline">\(r\)</span> more likely.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n_participants <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co">#number of participants</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>n_items <span class="ot">&lt;-</span> <span class="dv">20</span> <span class="co">#number of sentences rated</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>hours_per_week <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> n_participants, <span class="at">lambda =</span> <span class="dv">5</span>) <span class="co">#number of hours per week that Spanish is spoken</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>participant_id <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>,n_participants)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>base_pr <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.125</span>, <span class="fl">0.125</span>, <span class="fl">0.125</span>, <span class="fl">0.125</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#inefficient but explicit data generation</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>hh <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>rr <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_participants){</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        h <span class="ot">&lt;-</span> hours_per_week[p]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        pr <span class="ot">&lt;-</span> base_pr <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.01</span><span class="sc">*</span>h, <span class="fl">0.015</span><span class="sc">*</span>h, <span class="fl">0.02</span><span class="sc">*</span>h, <span class="fl">0.025</span><span class="sc">*</span>h) </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        pr <span class="ot">&lt;-</span> pr<span class="sc">/</span><span class="fu">sum</span>(pr)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        r <span class="ot">&lt;-</span>  <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">size =</span> n_items, <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob =</span> pr)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        pp <span class="ot">&lt;-</span> <span class="fu">c</span>(pp, <span class="fu">rep</span>(p, n_items))</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        hh <span class="ot">&lt;-</span> <span class="fu">c</span>(hh, <span class="fu">rep</span>(h, n_items))</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        rr <span class="ot">&lt;-</span> <span class="fu">c</span>(rr, r)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">participant_id =</span> pp,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                 <span class="at">hours_pw       =</span> hh,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                 <span class="at">rating         =</span> rr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="ordinal-regression-dataset-1" class="level3">
+<h3 class="anchored" data-anchor-id="ordinal-regression-dataset-1">Ordinal regression (dataset 1)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The cumulative ordinal regression model assumes that observed discrete rating <span class="math inline">\(R\)</span> comes from a latent continous latent rating <span class="math inline">\(\tilde{R}\)</span>. For a scale with 5 discrete values, based on observed ratings, the model infers:</p>
+<ul>
+<li>4 partitions <span class="math inline">\(\pi_{k \in [1,4]}\)</span> of <span class="math inline">\(\tilde{R}\)</span> (called <code>Intercept[k]</code> by <code>brms</code>)</li>
+<li>An effect of hours of Spanish per week on ratings ($_1 $ <code>hours_pw</code>)</li>
+</ul>
+<p>There’s an additional parameter, the discrimination parameter (<code>disc</code>), that could be estimated to allow for different variances of ratings across observations/groups. We are fixing this to 1 here and ignoring it in the following. This is saying that we assume the variance of ratings to be the same across values.</p>
+<p>Fitting the model in <code>brms</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>m_ord1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">formula =</span> rating <span class="sc">~</span> hours_pw <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> participant_id),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> df,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> <span class="fu">cumulative</span>(<span class="st">"probit"</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">file   =</span> <span class="st">'mord1'</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_ord1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: cumulative 
+  Links: mu = probit; disc = identity 
+Formula: rating ~ hours_pw + (1 | participant_id) 
+   Data: df (Number of observations: 2000) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Multilevel Hyperparameters:
+~participant_id (Number of levels: 100) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     0.06      0.04     0.00     0.15 1.00      962     1527
+
+Regression Coefficients:
+             Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept[1]    -0.10      0.06    -0.23     0.02 1.00     3994     2154
+Intercept[2]     0.25      0.07     0.12     0.37 1.00     4262     2137
+Intercept[3]     0.62      0.07     0.49     0.74 1.00     4404     2121
+Intercept[4]     1.17      0.07     1.03     1.30 1.00     4596     2310
+hours_pw         0.04      0.01     0.02     0.07 1.00     4428     2256
+
+Further Distributional Parameters:
+     Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+disc     1.00      0.00     1.00     1.00   NA       NA       NA
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<p>We see the estimates for partitions <span class="math inline">\(\pi_1\)</span> to <span class="math inline">\(\pi_4\)</span> (labeled as <code>Intercept[1]</code> through <code>Intercept[4]</code>) and the one for the hours per week of Spanish spoken (<code>hours_pw</code>).</p>
+<p>How do we interpret the estimates? Focusing first on the cutoffs and not the effect of Spanish spoken by each participant (let’s assume it’s 0): if <span class="math inline">\(\tilde{Y} &lt; -0.10\)</span> then the rating is estimated to be 1; if <span class="math inline">\(\tilde{Y} &lt; 0.25\)</span> then the rating is estimated to be equal or less than 2; and so on.</p>
+<p>In terms of probabilities:</p>
+<p><span class="math display">\[P(R \leq k) = \Phi(\pi_k - \mu),\]</span></p>
+<p>where <span class="math inline">\(\Phi\)</span> is the standard normal cumulative distribution function and <span class="math inline">\(\mu\)</span> refers to the sum of the other predictors in our model. So we have that, for <span class="math inline">\(h = 9\)</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="dv">9</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pnorm_est <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(<span class="fu">fixef</span>(m_ord1)[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>] <span class="sc">-</span> h <span class="sc">*</span> <span class="fu">fixef</span>(m_ord1)[<span class="dv">5</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(pnorm_est)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3120950 0.4432499 0.5889807 0.7815539</code></pre>
+</div>
+</div>
+<p>To get the actual probability of each category we need to do a little more math:</p>
+<p><span class="math display">\[P(R = 1) = P(R \leq 1) = \Phi(-0.9 - 9 \times 0.04)\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fu">fixef</span>(m_ord1)[<span class="dv">1</span>] <span class="sc">-</span> h <span class="sc">*</span> <span class="fu">fixef</span>(m_ord1)[<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.312095</code></pre>
+</div>
+</div>
+<p><span class="math display">\[P(R = 2) = P(R \leq 2) - P(R \leq 1) = \Phi(0.24 - 9 \times 0.04) - \Phi(-0.9 - 9 \times 0.04)\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fu">fixef</span>(m_ord1)[<span class="dv">2</span>] <span class="sc">-</span> h <span class="sc">*</span> <span class="fu">fixef</span>(m_ord1)[<span class="dv">5</span>]) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">fixef</span>(m_ord1)[<span class="dv">1</span>] <span class="sc">-</span> h <span class="sc">*</span> <span class="fu">fixef</span>(m_ord1)[<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.131155</code></pre>
+</div>
+</div>
+<p><span class="math display">\[P(R = 3) = P(R \leq 3) - P(R \leq 2) = \Phi(0.61 - 9 \times 0.04) - \Phi(0.24 - 9 \times 0.04)\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fu">fixef</span>(m_ord1)[<span class="dv">3</span>] <span class="sc">-</span> h <span class="sc">*</span> <span class="fu">fixef</span>(m_ord1)[<span class="dv">5</span>]) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">fixef</span>(m_ord1)[<span class="dv">2</span>] <span class="sc">-</span> h <span class="sc">*</span> <span class="fu">fixef</span>(m_ord1)[<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1457308</code></pre>
+</div>
+</div>
+<p><span class="math display">\[P(R = 4) = P(R \leq 4) - P(R \leq 3) = \Phi(1.16 - 9 \times 0.04) - \Phi(0.61 - 9 \times 0.04)\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fu">fixef</span>(m_ord1)[<span class="dv">4</span>] <span class="sc">-</span> h <span class="sc">*</span> <span class="fu">fixef</span>(m_ord1)[<span class="dv">5</span>]) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">fixef</span>(m_ord1)[<span class="dv">3</span>] <span class="sc">-</span> h <span class="sc">*</span> <span class="fu">fixef</span>(m_ord1)[<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1925732</code></pre>
+</div>
+</div>
+<p><span class="math display">\[P(R = 5) = 1 - P(R \leq 4) = 1 - \Phi(1.16 - 9 \times 0.04) \]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">fixef</span>(m_ord1)[<span class="dv">4</span>] <span class="sc">-</span> h <span class="sc">*</span> <span class="fu">fixef</span>(m_ord1)[<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2184461</code></pre>
+</div>
+</div>
+<p>Most people do not care much about the cut-offs but it’s useful to tease this apart at least once to get a feeling for the entire model. But if we designed this experiment then we probably care mainly about the effect of the hours of Spanish spoken per week on the ratings.</p>
+<p>We can see that this effect is positive from the table above, but a picture illustrates this better:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">plot</span>(<span class="fu">conditional_effects</span>(m_ord1, <span class="at">categorical=</span><span class="cn">TRUE</span>))[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ordinal-regression_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note that this makes clear that the model not only suggests a positive relationship between ratings and hours of Spanish spoken but also that the effect of hours per week is stronger on 5 than on 4 than on 3 than on 2 than on 1.</p>
+<p>This is in line with how we generated the data: There’s an increase in ratings as Spanish hours per week increase as we go up the scale.</p>
+</section>
+<section id="linear-regression-dataset-1" class="level3">
+<h3 class="anchored" data-anchor-id="linear-regression-dataset-1">Linear regression (dataset 1)</h3>
+<p>Even though the predictor’s effect is not quite continous along the scale, we expect it to still be somewhat well approximated by a linear regression. Let’s check:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>m_norm1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">formula =</span> rating <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> hours_pw <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> participant_id),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> df,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> <span class="fu">gaussian</span>(),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">file   =</span> <span class="st">'mnorm1'</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The effect of <code>h</code> on <code>r</code> can be interpreted without transformations:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(m_norm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Estimate  Est.Error       Q2.5      Q97.5
+Intercept 2.32929297 0.08884615 2.15386897 2.49755804
+hours_pw  0.05999088 0.01545748 0.03034221 0.09012347</code></pre>
+</div>
+</div>
+<p>The expected rating for a person speaking <span class="math inline">\(0\)</span> hours of Spanish per week is 2.3, and every additional hour increases the rating by 0.06.</p>
+<p>Let’s plot it:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">plot</span>(<span class="fu">conditional_effects</span>(m_norm1))[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>p  <span class="sc">+</span> <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ordinal-regression_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="linear-vs.-ordinal-regression-dataset-1" class="level3">
+<h3 class="anchored" data-anchor-id="linear-vs.-ordinal-regression-dataset-1">Linear vs.&nbsp;ordinal regression (dataset 1)</h3>
+<p>Let’s get the predicted rating for someone wo speaks Spanish 1, 5, 10, 15, 20, 25, 30 hours according to the ordinal model:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df_n <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">hours_pw =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">15</span>,<span class="dv">20</span>,<span class="dv">25</span>,<span class="dv">30</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>df_n <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cbind</span>( <span class="fu">predict</span>(m_ord1, <span class="at">newdata =</span> df_n, <span class="at">re_formula =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  hours_pw P(Y = 1) P(Y = 2) P(Y = 3) P(Y = 4) P(Y = 5)
+1        1  0.43700  0.13625  0.13175  0.15925  0.13575
+2        5  0.38125  0.13350  0.13375  0.17100  0.18050
+3       10  0.28750  0.12975  0.14800  0.19075  0.24400
+4       15  0.23000  0.11325  0.14225  0.20200  0.31250
+5       20  0.17500  0.09050  0.13600  0.21975  0.37875
+6       25  0.12075  0.08600  0.11550  0.20875  0.46900
+7       30  0.09350  0.07400  0.10125  0.19900  0.53225</code></pre>
+</div>
+</div>
+<p>Compare with the linear model:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_n <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="fu">predict</span>(m_norm1, <span class="at">newdata =</span> df_n, <span class="at">re_formula =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  hours_pw Estimate Est.Error        Q2.5    Q97.5
+1        1 2.380465  1.566082 -0.78351974 5.407080
+2        5 2.623900  1.522551 -0.38135979 5.526716
+3       10 2.889910  1.548818 -0.09494943 5.922227
+4       15 3.196386  1.509729  0.23691306 6.144930
+5       20 3.550763  1.566588  0.46464793 6.575186
+6       25 3.834593  1.560057  0.81042273 6.919207
+7       30 4.128055  1.576050  0.98395688 7.196376</code></pre>
+</div>
+</div>
+<p>Two things are particularly worth noting at this stage already:</p>
+<ol type="1">
+<li>The ordinal model gives us predictions for each discrete rating category, which is what we are actually modelling. If the effect of the predictor varies across ratings, the model will pick this up.</li>
+<li>The linear model predicts that, for less than 10 hours of Spanish per week, there’s a chance that your rating will be negative. And for all these values there’s a chance the rating will be above 5. Both of these predictions are nonsense.</li>
+<li>The linear model assumes continuity of predictors’ effects .</li>
+</ol>
+<p>These points should be enough of a reason to not use a linear model for ordinal data, but we can make it worse.</p>
+</section>
+</section>
+<section id="synthetic-dataset-2" class="level1">
+<h1>Synthetic dataset 2</h1>
+<p>If ratings are not evenly spaced (some people like to rate everything as <span class="math inline">\(3\)</span>); or the predictor’s effect (hours per week) is not roughly the same across categories the linear regression’s assumptions are even worse off.</p>
+<p>The effect of hours per week was already not proportional across thresholds but we can make this more extreme:</p>
+<ul>
+<li><span class="math inline">\(Pr(r = 1) \propto 0.5\)</span></li>
+<li>$Pr(r = 2) $</li>
+<li>$Pr(r = 3) $</li>
+<li><span class="math inline">\(Pr(r = 4) \propto 0.125 + 0.013 \times h\)</span></li>
+<li><span class="math inline">\(Pr(r = 5) \propto 0.125 + 0.05 \times h\)</span></li>
+</ul>
+<p>So the hours per week now do only influence the propensity to rate with <span class="math inline">\(r \geq 4\)</span> and the effect on 5 is markedly bigger than that on 4. We keep everything the same to not overcomplicate things. You can also imagine that there’s no effect of hours 0-5 but then suddenly &gt;5 influences ratings linearly.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>n_participants <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co">#number of participants</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>n_items <span class="ot">&lt;-</span> <span class="dv">20</span> <span class="co">#number of sentences rated</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>hours_per_week <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> n_participants, <span class="at">lambda =</span> <span class="dv">5</span>) <span class="co">#number of hours per week that Spanish is spoken</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>participant_id <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>,n_participants)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>base_pr <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.125</span>, <span class="fl">0.125</span>, <span class="fl">0.125</span>, <span class="fl">0.125</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co">#inefficient but explicit data generation</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>hh <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>rr <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_participants){</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>        h <span class="ot">&lt;-</span> hours_per_week[p]</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>        pr <span class="ot">&lt;-</span> base_pr <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.013</span><span class="sc">*</span>h, <span class="fl">0.05</span><span class="sc">*</span>h) </span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>        pr <span class="ot">&lt;-</span> pr<span class="sc">/</span><span class="fu">sum</span>(pr)</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>        r <span class="ot">&lt;-</span>  <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">size =</span> n_items, <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob =</span> pr)</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>        pp <span class="ot">&lt;-</span> <span class="fu">c</span>(pp, <span class="fu">rep</span>(p, n_items))</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>        hh <span class="ot">&lt;-</span> <span class="fu">c</span>(hh, <span class="fu">rep</span>(h, n_items))</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>        rr <span class="ot">&lt;-</span> <span class="fu">c</span>(rr, r)</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">participant_id =</span> pp,</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>                 <span class="at">hours_pw       =</span> hh,</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>                 <span class="at">rating         =</span> rr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The ordinal model for the new data:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>m_ord2 <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">formula =</span> rating <span class="sc">~</span> hours_pw <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> participant_id),</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> df,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> <span class="fu">cumulative</span>(<span class="st">"probit"</span>),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">file   =</span> <span class="st">'mord2'</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_ord2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: cumulative 
+  Links: mu = probit; disc = identity 
+Formula: rating ~ hours_pw + (1 | participant_id) 
+   Data: df (Number of observations: 2000) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Multilevel Hyperparameters:
+~participant_id (Number of levels: 100) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     0.10      0.05     0.01     0.20 1.00     1205     1750
+
+Regression Coefficients:
+             Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept[1]    -0.01      0.07    -0.14     0.13 1.00     5396     2768
+Intercept[2]     0.25      0.07     0.12     0.39 1.00     5233     2949
+Intercept[3]     0.50      0.07     0.36     0.63 1.00     5393     3113
+Intercept[4]     0.89      0.07     0.76     1.03 1.00     5292     3352
+hours_pw         0.06      0.01     0.03     0.08 1.00     5333     2926
+
+Further Distributional Parameters:
+     Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+disc     1.00      0.00     1.00     1.00   NA       NA       NA
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<p>Its Gaussian counterpart:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>m_norm2 <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">formula =</span> rating <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> hours_pw <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> participant_id),</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> df,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> <span class="fu">gaussian</span>(),</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">file   =</span> <span class="st">'mnorm2'</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(m_norm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Estimate  Est.Error       Q2.5     Q97.5
+Intercept 2.38742157 0.10206549 2.18743150 2.5785587
+hours_pw  0.08646256 0.01820073 0.05168918 0.1223808</code></pre>
+</div>
+</div>
+<p>Predictions:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df_n <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">hours_pw =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">15</span>,<span class="dv">20</span>,<span class="dv">25</span>,<span class="dv">30</span>))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>df_n <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cbind</span>( <span class="fu">predict</span>(m_ord2, <span class="at">newdata =</span> df_n, <span class="at">re_formula =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  hours_pw P(Y = 1) P(Y = 2) P(Y = 3) P(Y = 4) P(Y = 5)
+1        1  0.47775  0.10700  0.09975  0.11650  0.19900
+2        5  0.38275  0.09975  0.09525  0.14175  0.28050
+3       10  0.27925  0.08875  0.09750  0.15425  0.38025
+4       15  0.18825  0.08450  0.08400  0.15175  0.49150
+5       20  0.12975  0.05750  0.07725  0.13550  0.60000
+6       25  0.08325  0.04475  0.05475  0.11575  0.70150
+7       30  0.05225  0.03125  0.03600  0.09325  0.78725</code></pre>
+</div>
+</div>
+<p>Compare with the linear model:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df_n <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="fu">predict</span>(m_norm2, <span class="at">newdata =</span> df_n, <span class="at">re_formula =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  hours_pw Estimate Est.Error        Q2.5    Q97.5
+1        1 2.445126  1.669998 -0.90389563 5.746920
+2        5 2.784332  1.675396 -0.46625698 6.056223
+3       10 3.256835  1.682492  0.01048562 6.542656
+4       15 3.692507  1.704988  0.24069227 6.988635
+5       20 4.117002  1.711901  0.71331906 7.493010
+6       25 4.559014  1.731121  1.17783036 7.928415
+7       30 4.952798  1.785949  1.36339627 8.524079</code></pre>
+</div>
+</div>
+<p>You can clearly see that ordinal model picked up on the imbalance between ratings of 5 vs.&nbsp;lower ratings. The linear model cannot do this (and suffers from the same non-sensical predictions we discovered in the first dataset)</p>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<p>Use ordinal models for ordinal data, not linear models. The exception may be cases in which you know exactly how the ratings behave across the levels of your scale. But if you know this you don’t need to fit a model to start with.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
