@@ -212,8 +212,8 @@ If ratings are not evenly spaced (some people like to rate everything as $3$); o
 The effect of hours per week was already not proportional across thresholds but we can make this more extreme:
 
  * $Pr(r = 1) \propto 0.5$
- * $Pr(r = 2) \propto 0.125 $
- * $Pr(r = 3) \propto 0.125 $
+ * $Pr(r = 2) \propto 0.125$
+ * $Pr(r = 3) \propto 0.125$
  * $Pr(r = 4) \propto 0.125 + 0.013 \times h$
  * $Pr(r = 5) \propto 0.125 + 0.05 \times h$
 
