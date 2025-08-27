@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Thomas Brochhagen">
+<meta name="dcterms.date" content="2025-08-27">
+
+<title>Meta Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="meta-analysis-25-08_files/libs/clipboard/clipboard.min.js"></script>
+<script src="meta-analysis-25-08_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="meta-analysis-25-08_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="meta-analysis-25-08_files/libs/quarto-html/popper.min.js"></script>
+<script src="meta-analysis-25-08_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="meta-analysis-25-08_files/libs/quarto-html/anchor.min.js"></script>
+<link href="meta-analysis-25-08_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="meta-analysis-25-08_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="meta-analysis-25-08_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="meta-analysis-25-08_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="meta-analysis-25-08_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Meta Analysis</h1>
+<p class="subtitle lead">A survey and some intuitions</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Thomas Brochhagen </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 27, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>You conduct a meta analysis if there are multiple studies on an effect of interest. Intuitively, you want to be able to partially pool together the effects in a way that takes into consideration the uncertainty about the effect from each individual study, weighted by the sample size of the study.</p>
+<p>From a technical perspective, this is a hierarchical model (AKA random-/mixed-effects model). There’s nothing different happening here. Most of the work goes into checking whether the statistical assumptions below serve our purposes.</p>
+<p>We assume that each study <span class="math inline">\(i\)</span> has a a mean <span class="math inline">\(\theta_i \sim \text{Normal}(\theta, \tau^2)\)</span>, with observed effect <span class="math inline">\(y_i \sim \text{Normal}(\theta_i, s_i^2)\)</span>, and <span class="math inline">\(s_i\)</span> the standard error from study <span class="math inline">\(i\)</span>. In other words, we’re ultimately interested in unobserved <span class="math inline">\(\theta\)</span> but what we observe is <span class="math inline">\(y_i\)</span>, the mean we get from each study <span class="math inline">\(i\)</span>. Together with <span class="math inline">\(s_i\)</span> we can work backwards to estimate <span class="math inline">\(\theta\)</span>. Mutatis mutandis for other non-Normal effect of interest. The parameter <span class="math inline">\(\tau\)</span> plays the key regularizing role in aggregating information across studies. See the end of the document if this is not evident from the above.</p>
+<p>A few typical modelling challenges:</p>
+<ul>
+<li>Study <span class="math inline">\(i\)</span> doesn’t report <span class="math inline">\(\theta_i\)</span> but something else. This something else can often be recast as <span class="math inline">\(\theta_i\)</span>, or we can calculate it ourselves;</li>
+<li>Study <span class="math inline">\(i\)</span> doesn’t report: <span class="math inline">\(s_i\)</span>, its raw data; the number of participants; or other values needed to fill the blanks. That is suboptimal since the ideal is to propagate uncertainty about <span class="math inline">\(\theta_i\)</span> to our estimate of <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\tau\)</span>. But there are ways to address this.</li>
+</ul>
+<p>From a conceptual perspective, the main question is if it makes sense to treat study <span class="math inline">\(i\)</span> and study <span class="math inline">\(j\)</span> as informing us about the same underlying <span class="math inline">\(\theta\)</span>. There is no point to aggregate information across studies if they study different things.</p>
+<p>From a practical perspective, a lot of effort goes into systematically reviewing the literature and contacting authors for missing information. I will not go into the details of how to properly do a literature review here (do ask if interested) but see <a href="https://www.prisma-statement.org/">PRISMA statement</a>.</p>
+<section id="meta-analysis-in-language-sciences" class="level4">
+<h4 class="anchored" data-anchor-id="meta-analysis-in-language-sciences">Meta-analysis in Language Sciences</h4>
+<p>It is not (yet) all that common to conduct meta-analyses in language sciences. Two useful references to use as templates, and also to see how to deal with the roadblocks mentioned above:</p>
+<ul>
+<li><span class="citation" data-cites="nicenboim+etal:2018">Nicenboim, Roettger, and Vasishth (<a href="#ref-nicenboim+etal:2018" role="doc-biblioref">2018</a>)</span>. See also their <a href="https://osf.io/g5ndw/wiki/home/">OSF repositories</a>;</li>
+<li><span class="citation" data-cites="liao+etal:2025">Liao et al. (<a href="#ref-liao+etal:2025" role="doc-biblioref">2025</a>)</span>. See also our <a href="https://osf.io/qyahc/">OSF repository</a>.</li>
+</ul>
+</section>
+</section>
+<section id="example-referent-predictability-liao-et-al.-2025" class="level2">
+<h2 class="anchored" data-anchor-id="example-referent-predictability-liao-et-al.-2025">Example: Referent predictability (Liao et al.&nbsp;2025)</h2>
+<p>In <span class="citation" data-cites="liao+etal:2025">Liao et al. (<a href="#ref-liao+etal:2025" role="doc-biblioref">2025</a>)</span>, we study whether referent predictability affects pronoun production:</p>
+<ul>
+<li>Peter gave a book to Mary. _____</li>
+</ul>
+<p>Possible continuations: he, she, Peter, Mary, …</p>
+<p><strong>Sketch of a question</strong>: Do we use reduced forms (e.g., a pronoun) more often for predictable referents?</p>
+<p>Some factors that affect referent predictability:</p>
+<ul>
+<li>Verb (<em>give</em> (Source-Goal) vs.&nbsp;<em>catch</em> (Goal-Source))</li>
+<li>Discourse relations (<em>Peter gave a book to Mary so…</em> vs.&nbsp;<em>because</em> vs.&nbsp;…)</li>
+<li>…</li>
+</ul>
+<p>Some factors that may affect <span class="math inline">\(\theta_i\)</span>:</p>
+<ul>
+<li>Predictable object vs.&nbsp;subject</li>
+<li>Experimental setup (cloze task, corpus, …)</li>
+<li>Experimental modality (written vs.&nbsp;oral vs.&nbsp;signed)</li>
+<li>Language (family?). In particular, if it allows null subjects</li>
+<li>…</li>
+</ul>
+<section id="the-study-in-figures" class="level4">
+<h4 class="anchored" data-anchor-id="the-study-in-figures">The study in figures</h4>
+<p><img src="metafig1.png" class="img-fluid"></p>
+<hr>
+<p><img src="metafig2.png" class="img-fluid"></p>
+<hr>
+<p><img src="metafig3.png" class="img-fluid"></p>
+<hr>
+<p><img src="metafig4.png" class="img-fluid"></p>
+<hr>
+<p><img src="metafig5.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="step-by-step-with-simulated-data" class="level2">
+<h2 class="anchored" data-anchor-id="step-by-step-with-simulated-data">Step by step with simulated data</h2>
+<p>In <span class="citation" data-cites="liao+etal:2025">Liao et al. (<a href="#ref-liao+etal:2025" role="doc-biblioref">2025</a>)</span> we study <code>Pr(pronoun | referent.predictability)</code>, with the effect being log odds and the model a logistic regression. To use a more familiar distribution and identity as a link function, let’s assume the effect size to be in milliseconds, studying the relative advantage of two types of constructions: a positive <span class="math inline">\(y_i\)</span> is an advantage of Construction I and a negative <span class="math inline">\(y_i\)</span> the advantage of Construction II. I’ll use the notation and setup from <span class="citation" data-cites="vasishth:2015">Vasishth (<a href="#ref-vasishth:2015" role="doc-biblioref">2015</a>)</span>:</p>
+<p>Here’s the model:</p>
+<p><span class="math display">\[y_i \sim N(\theta_i,\sigma^2_i), i = 1, ..., n,\]</span> <span class="math display">\[\theta_i \sim N(\theta, \tau^2), \]</span> <span class="math display">\[\theta \sim N(0, 100),\]</span> <span class="math display">\[\tau \sim \text{Half-Cauchy}(0, 5)\]</span></p>
+<p>Here’s a simulation for <code>n = 20</code> studies with true <span class="math inline">\(\theta = 15\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">308</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">20</span> <span class="co">#number of studies</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="dv">15</span> <span class="co">#true effect in ms</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>tau<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="dv">5</span><span class="sc">^</span><span class="dv">2</span> <span class="co">#between study variance</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>sd.i <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co">#standard deviation for each study</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>n_per_study <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="at">mean =</span> <span class="dv">30</span>, <span class="at">sd =</span> <span class="dv">10</span>, <span class="at">n =</span> n), <span class="dv">0</span>) <span class="co">#participants per study</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>se.i <span class="ot">&lt;-</span> sd.i <span class="sc">/</span> <span class="fu">sqrt</span>(n_per_study)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>theta.i <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">mean =</span> theta,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                 <span class="at">sd =</span> <span class="fu">sqrt</span>(tau<span class="fl">.2</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#not necessary but for illustration:</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>y.i <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="fu">length</span>(theta.i),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">mean =</span> theta.i, </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">sd =</span> se.i</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>             )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Study-level data, <span class="math inline">\(\theta_i\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(theta.i)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 21.194635 11.565383 14.837168 12.441210 21.347495  8.351430 14.475389
+ [8] 17.208223 17.915959 21.404732 24.155435 15.971243 12.084358 12.101124
+[15] 10.846422 16.645236 17.604575  8.650741 25.678199 17.868510</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df_study_summary <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">study =</span> <span class="fu">paste</span>(<span class="st">'Study'</span>,<span class="fu">seq</span>(<span class="dv">1</span>, n)),</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ms.delta =</span> theta.i,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stdE =</span> se.i,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">participants =</span> n_per_study)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(df_study_summary))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    study ms.delta      stdE participants
+1 Study 1 21.19463 0.5303301           32
+2 Study 2 11.56538 0.6000000           25
+3 Study 3 14.83717 0.8017837           14
+4 Study 4 12.44121 0.4574957           43
+5 Study 5 21.34750 0.6546537           21
+6 Study 6  8.35143 0.6882472           19</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggokabeito)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>df_study_summary <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ms.delta)) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">8</span>, <span class="at">alpha=</span><span class="fl">0.8</span>) <span class="sc">+</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> theta, , <span class="at">color=</span><span class="st">'red'</span>), <span class="at">size=</span><span class="dv">8</span>) <span class="sc">+</span> </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">20</span>) <span class="sc">+</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">guides</span>(<span class="at">color=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="meta-analysis-25-08_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In principle, we can also go further down and generate study-level data:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>generate_data <span class="ot">&lt;-</span> <span class="cf">function</span>(n, mean, sd) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Generate n random numbers from Normal(0,1)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  initial_data <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Standardize the data to have a sample mean of exactly 0 and sd of 1</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># That is: z-score the generated sample.</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  standardized_data <span class="ot">&lt;-</span> (initial_data <span class="sc">-</span> <span class="fu">mean</span>(initial_data)) <span class="sc">/</span> <span class="fu">sd</span>(initial_data)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Scale and shift the standardized data to match the desired mean and sd</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  final_data <span class="ot">&lt;-</span> (standardized_data <span class="sc">*</span> sd) <span class="sc">+</span> mean</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(final_data)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>ms.delta <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>study <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>n_obs <span class="ot">&lt;-</span> n_per_study</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        study_label <span class="ot">&lt;-</span> <span class="fu">rep</span>(df_study_summary<span class="sc">$</span>study[i], <span class="at">times =</span> n_obs[i])</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        ms.delta_study <span class="ot">&lt;-</span> <span class="fu">generate_data</span>(<span class="at">n =</span> n_obs[i], df_study_summary<span class="sc">$</span>ms.delta[i], sd.i)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        study <span class="ot">&lt;-</span> <span class="fu">c</span>(study, study_label)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        ms.delta <span class="ot">&lt;-</span> <span class="fu">c</span>(ms.delta, ms.delta_study)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>}  </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">study =</span> study, <span class="at">ms.delta =</span> ms.delta)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    study ms.delta
+1 Study 1 18.81253
+2 Study 1 22.54600
+3 Study 1 20.30073
+4 Study 1 24.40315
+5 Study 1 23.76150
+6 Study 1 23.92795</code></pre>
+</div>
+</div>
+<p>For the sake of realism, we could also generate multiple <code>ms.delta</code> per participant ID and stimulus ID and maybe add a few different conditions per experiments. These hierarchies can be stacked in the usual way. For simplicity, we won’t do this here.</p>
+<p>Here’s the empirical landscape for our imaginary meta-analysis:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> study, <span class="at">y =</span> ms.delta)) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>((<span class="at">base_size =</span> <span class="dv">20</span>)) <span class="sc">+</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="meta-analysis-25-08_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see that, overall, the studies dance around true <span class="math inline">\(\theta\)</span> but we can also see that some <span class="math inline">\(\theta_i\)</span> are far above and some are below. This is why it’s important to not only conduct one study on the effect we’re interested in. And also why meta-analysis is so important: We want to be able to sensibly aggregate this information. Also, here we assumed that there is nothing odd happening in the literature, so the studies stochastically center around true <span class="math inline">\(\theta\)</span>. In reality, there will be many differences from study to study that will make <span class="math inline">\(\theta_i\)</span> vary from one <span class="math inline">\(i\)</span> to the next. Another reason to conduct a meta-analysis is to shed light on these factors (AKA <em>moderators</em>).</p>
+<p>On to the model. We do not have any moderators (which can otherwise model as fixed-/random-effects) so we just model follow the specification above, estimating <span class="math inline">\(\theta\)</span> based on <span class="math inline">\(\theta_i\)</span> and <span class="math inline">\(s_i^2\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> <span class="dv">4</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="at">class =</span> Intercept),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">prior</span>(<span class="fu">cauchy</span>(<span class="dv">0</span>,<span class="dv">5</span>),    <span class="at">class =</span> sd)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">brm</span>(<span class="at">data =</span> df_study_summary,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">formula =</span> ms.delta <span class="sc">|</span> <span class="fu">se</span>(stdE) <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> study),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">prior =</span> priors,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">iter =</span> <span class="dv">6000</span>, </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">seed =</span> <span class="dv">244</span>,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">file =</span> <span class="st">'~/brochhagen.github.io/content/reports/m'</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: ms.delta | se(stdE) ~ 1 + (1 | study) 
+   Data: df_study_summary (Number of observations: 20) 
+  Draws: 4 chains, each with iter = 6000; warmup = 3000; thin = 1;
+         total post-warmup draws = 12000
+
+Multilevel Hyperparameters:
+~study (Number of levels: 20) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     5.13      0.89     3.74     7.20 1.00     1062     2124
+
+Regression Coefficients:
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept    16.06      1.14    13.76    18.35 1.00      982     1045
+
+Further Distributional Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma     0.00      0.00     0.00     0.00   NA       NA       NA
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<p>Between study heterogeneity is estimated as <span class="math inline">\(\hat{\tau} = 5.13\)</span> (<span class="math inline">\(\tau = 5\)</span>). Individual studies’ deviation from <span class="math inline">\(\hat{\theta}\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ranef</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>$study
+, , Intercept
+
+            Estimate Est.Error        Q2.5      Q97.5
+Study 1   5.08147285  1.250733   2.6176111  7.5673976
+Study 10  5.30174059  1.233778   2.8670650  7.7387871
+Study 11  8.00291366  1.259214   5.4883763 10.4789250
+Study 12 -0.06201958  1.525677  -3.0542862  2.9006140
+Study 13 -3.90242918  1.297111  -6.5035524 -1.3262251
+Study 14 -3.89391416  1.301451  -6.4493948 -1.2986424
+Study 15 -5.15998793  1.223137  -7.6300573 -2.7330929
+Study 16  0.58654994  1.214178  -1.8473425  2.9828366
+Study 17  1.52602496  1.270210  -1.0073306  4.0482610
+Study 18 -7.34391190  1.215575  -9.7648384 -4.9004665
+Study 19  9.50462049  1.258570   7.0255228 12.0046020
+Study 2  -4.42281040  1.275150  -6.9791906 -1.9036109
+Study 20  1.78672896  1.235963  -0.7043511  4.2656960
+Study 3  -1.17947170  1.366349  -3.8947137  1.5280288
+Study 4  -3.58645113  1.224431  -6.0335788 -1.1153879
+Study 5   5.20450168  1.301325   2.6050815  7.8192712
+Study 6  -7.55591632  1.312237 -10.2068862 -4.9503500
+Study 7  -1.56601347  1.249973  -4.0913068  0.9169966
+Study 8   1.12729631  1.347010  -1.5246728  3.8228434
+Study 9   1.84149720  1.287352  -0.7064879  4.3990182</code></pre>
+</div>
+</div>
+<p>And here’s <span class="math inline">\(\hat{\theta}\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Estimate Est.Error     Q2.5    Q97.5
+Intercept 16.05574  1.142487 13.76453 18.34886</code></pre>
+</div>
+</div>
+<p>All together in a nicer visual representation:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>study.draws <span class="ot">&lt;-</span> <span class="fu">spread_draws</span>(m, r_study[study, ], b_Intercept) <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">b_Intercept =</span> r_study <span class="sc">+</span> b_Intercept)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>pooled.effect.draws <span class="ot">&lt;-</span> <span class="fu">spread_draws</span>(m, b_Intercept) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">study =</span> <span class="st">'Pooled effect (theta-hat)'</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>forest.df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(pooled.effect.draws, study.draws) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">study =</span> <span class="fu">reorder</span>(study, b_Intercept))</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>forest.df.sm <span class="ot">&lt;-</span> <span class="fu">group_by</span>(forest.df, study) <span class="sc">%&gt;%</span> <span class="fu">mean_qi</span>(b_Intercept)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>forest.df <span class="ot">&lt;-</span> forest.df <span class="sc">%&gt;%</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cls =</span> <span class="fu">ifelse</span>(study <span class="sc">==</span> <span class="st">'Pooled effect (theta-hat)'</span>, <span class="st">'p'</span>, <span class="st">'i'</span>)) </span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>forest.df <span class="sc">%&gt;%</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(b_Intercept, <span class="fu">relevel</span>(study, <span class="st">"Pooled effect (theta-hat)"</span>, <span class="at">after =</span> <span class="cn">Inf</span>))) <span class="sc">+</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density_ridges</span>(<span class="at">rel_min_height =</span> <span class="fl">0.0001</span>, <span class="fu">aes</span>(<span class="at">fill =</span> cls)) <span class="sc">+</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="fu">mutate_if</span>(forest.df.sm, is.numeric, round, <span class="dv">2</span>),</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">glue</span>(<span class="st">"{b_Intercept} | {.lower}, {.upper}"</span>),</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">x =</span> <span class="cn">Inf</span>, <span class="at">hjust =</span> <span class="st">"inward"</span>)) <span class="sc">+</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="st">"Difference Construction I and Construction II (ms.)"</span>) <span class="sc">+</span> </span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">35</span>) <span class="sc">+</span> </span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">15</span>) <span class="sc">+</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_okabe_ito</span>(<span class="at">name =</span> <span class="st">'cls'</span>) <span class="sc">+</span> </span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="meta-analysis-25-08_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="partial-pooling" class="level3">
+<h3 class="anchored" data-anchor-id="partial-pooling">Partial pooling</h3>
+<p>A meta-analysis has (minimally) two levels. Within-study:</p>
+<p><span class="math display">\[y_i \sim \text{Normal}(\theta_i, \sigma^2_i)\]</span></p>
+<p>And between study:</p>
+<p><span class="math display">\[\theta_i \sim \text{Normal}(\theta, \tau^2)\]</span></p>
+<p>The between-study variance, <span class="math inline">\(\tau\)</span> controls the pooling continuum. In the extreme, <span class="math inline">\(\tau = 0\)</span> leads to full pooling: No between-study variance means we treat all studies as the same, <span class="math inline">\(\theta_i = \theta\)</span>. Any difference is attributed to sampling error (<span class="math inline">\(\sigma^2_i\)</span>). On the other extreme, <span class="math inline">\(\tau \rightarrow \infty\)</span> means that <span class="math inline">\(\theta\)</span> is no informative about any <span class="math inline">\(\theta_i\)</span> since each study is very different from one another. In between these extremes, partial pooling lives.</p>
+<p><span class="math display">\[\hat{\theta_i} \approx \frac{\frac{1}{\sigma^2_i}y_i + \frac{1}{\tau^2}\hat{\theta}}{\frac{1}{\sigma^2_i} + \frac{1}{\tau^2}}\]</span></p>
+<p>A high precision (small error), <span class="math inline">\(\frac{1}{\sigma^2_i}\)</span>, thus consequently means that <span class="math inline">\(y_i\)</span> influences our estimate of <span class="math inline">\(\theta_i\)</span> more. And, analogously, for <span class="math inline">\(\frac{1}{\tau^2}\)</span>. So small <span class="math inline">\(\tau\)</span> generates strong pooling and large <span class="math inline">\(\tau\)</span> weak pooling.</p>
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-liao+etal:2025" class="csl-entry" role="listitem">
+Liao, Xixian, Thomas Brochhagen, Gemma Boleda, and Laia Mayol. 2025. <span>“The Role of Referent Predictability in Pronoun Production: Insights from a Bayesian Meta-Analysis.”</span> <em>Language</em> vv: nn–.
+</div>
+<div id="ref-nicenboim+etal:2018" class="csl-entry" role="listitem">
+Nicenboim, Bruno, Timo B Roettger, and Shravan Vasishth. 2018. <span>“Using Meta-Analysis for Evidence Synthesis: The Case of Incomplete Neutralization in <span>German</span>.”</span> <em>Journal of Phonetics</em> 70: 39–55.
+</div>
+<div id="ref-vasishth:2015" class="csl-entry" role="listitem">
+Vasishth, Shravan. 2015. <span>“A Meta-Analysis of Relative Clause Processing in Mandarin Chinese Using Bias Modelling.”</span>
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

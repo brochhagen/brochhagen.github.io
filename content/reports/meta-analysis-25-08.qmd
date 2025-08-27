@@ -1,0 +1,274 @@
+---
+title: "Meta Analysis"
+subtitle: "A survey and some intuitions"
+author: Thomas Brochhagen
+date: today
+format: html
+code-fold: true
+bibliography: metaref.bib
+---
+
+## Introduction
+
+You conduct a meta analysis if there are multiple studies on an effect of interest. Intuitively, you want to be able to partially pool together the effects in a way that takes into consideration the uncertainty about the effect from each individual study, weighted by the sample size of the study. 
+
+From a technical perspective, this is a hierarchical model (AKA random-/mixed-effects model). There's nothing different happening here. Most of the work goes into checking whether the statistical assumptions below serve our purposes. 
+
+We assume that each study $i$ has a a mean $\theta_i \sim \text{Normal}(\theta, \tau^2)$, with observed effect $y_i \sim \text{Normal}(\theta_i, s_i^2)$, and $s_i$ the standard error from study $i$. In other words, we're ultimately interested in unobserved $\theta$ but what we observe is $y_i$, the mean we get from each study $i$. Together with $s_i$ we can work backwards to estimate $\theta$. Mutatis mutandis for other non-Normal effect of interest. The parameter $\tau$ plays the key regularizing role in aggregating information across studies. See the end of the document if this is not evident from the above.
+
+A few typical modelling challenges: 
+
+* Study $i$ doesn't report $\theta_i$ but something else. This something else can often be recast as $\theta_i$, or we can calculate it ourselves;
+* Study $i$ doesn't report: $s_i$, its raw data; the number of participants; or other values needed to fill the blanks. That is suboptimal since the ideal is to propagate uncertainty about $\theta_i$ to our estimate of $\theta$ and $\tau$. But there are ways to address this.
+
+From a conceptual perspective, the main question is if it makes sense to treat study $i$ and study $j$ as informing us about the same underlying $\theta$. There is no point to aggregate information across studies if they study different things.
+
+From a practical perspective, a lot of effort goes into systematically reviewing the literature and  contacting authors for missing information. I will not go into the details of how to properly do a literature review here (do ask if interested) but see [PRISMA statement](https://www.prisma-statement.org/).
+
+#### Meta-analysis in Language Sciences
+
+It is not (yet) all that common to conduct meta-analyses in language sciences. Two useful references to use as templates, and also to see how to deal with the roadblocks mentioned above:
+
+* @nicenboim+etal:2018. See also their [OSF repositories](https://osf.io/g5ndw/wiki/home/);
+* @liao+etal:2025. See also our [OSF repository](https://osf.io/qyahc/).
+
+## Example: Referent predictability (Liao et al. 2025)
+
+In @liao+etal:2025, we study whether referent predictability affects pronoun production: 
+
+* Peter gave a book to Mary. _____ 
+
+Possible continuations: he, she, Peter, Mary, ...
+
+__Sketch of a question__: Do we use reduced forms (e.g., a pronoun) more often for predictable referents?
+
+Some factors that affect referent predictability:
+
+* Verb (*give* (Source-Goal) vs. *catch* (Goal-Source)) 
+* Discourse relations (*Peter gave a book to Mary so...* vs. *because* vs. ...)
+* ...
+
+Some factors that may affect $\theta_i$:
+
+* Predictable object vs. subject
+* Experimental setup (cloze task, corpus, ...)
+* Experimental modality (written vs. oral vs. signed)
+* Language (family?). In particular, if it allows null subjects
+* ...
+
+#### The study in figures
+
+![](metafig1.png)
+
+*** 
+
+![](metafig2.png)
+
+*** 
+
+![](metafig3.png)
+
+***
+
+![](metafig4.png)
+
+***
+
+![](metafig5.png)
+
+## Step by step with simulated data
+
+In @liao+etal:2025 we study `Pr(pronoun | referent.predictability)`, with the effect being log odds and the model a logistic regression. To use a more familiar distribution and identity as a link function, let's assume the effect size to be in milliseconds, studying the relative advantage of two types of constructions: a positive $y_i$ is an advantage of Construction I and a negative $y_i$ the advantage of Construction II. I'll use the notation and setup from @vasishth:2015:
+
+Here's the model:
+
+$$y_i \sim N(\theta_i,\sigma^2_i), i = 1, ..., n,$$
+$$\theta_i \sim N(\theta, \tau^2), $$
+$$\theta \sim N(0, 100),$$
+$$\tau \sim \text{Half-Cauchy}(0, 5)$$
+
+Here's a simulation for `n = 20` studies with true $\theta = 15$:
+
+```{r}
+set.seed(308)
+
+n <- 20 #number of studies
+theta <- 15 #true effect in ms
+tau.2 <- 5^2 #between study variance
+sd.i <- 3 #standard deviation for each study
+n_per_study <- round(rnorm(mean = 30, sd = 10, n = n), 0) #participants per study
+se.i <- sd.i / sqrt(n_per_study)
+
+theta.i <- rnorm(n = n,
+                 mean = theta,
+                 sd = sqrt(tau.2)
+                 )
+
+#not necessary but for illustration:
+y.i <- rnorm(n = length(theta.i),
+             mean = theta.i, 
+             sd = se.i
+             )
+
+```
+
+Study-level data, $\theta_i$:
+
+```{r}
+print(theta.i)
+```
+
+```{r}
+df_study_summary <- data.frame(study = paste('Study',seq(1, n)),
+                 ms.delta = theta.i,
+                 stdE = se.i,
+                 participants = n_per_study)
+print(head(df_study_summary))
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(ggokabeito)
+library(dplyr)
+
+df_study_summary %>%
+  ggplot(aes(x = ms.delta)) +
+        geom_histogram(bins=8, alpha=0.8) + 
+        geom_vline(aes(xintercept = theta, , color='red'), size=8) + 
+        theme_minimal(base_size = 20) + 
+        guides(color="none")
+```
+
+In principle, we can also go further down and generate study-level data:
+```{r}
+generate_data <- function(n, mean, sd) {
+  # 1. Generate n random numbers from Normal(0,1)
+  initial_data <- rnorm(n)
+  
+  # 2. Standardize the data to have a sample mean of exactly 0 and sd of 1
+  # That is: z-score the generated sample.
+  standardized_data <- (initial_data - mean(initial_data)) / sd(initial_data)
+  
+  # 3. Scale and shift the standardized data to match the desired mean and sd
+  final_data <- (standardized_data * sd) + mean
+  
+  return(final_data)
+}
+
+ms.delta <- c()
+study <- c()
+n_obs <- n_per_study
+
+for (i in 1:n){
+        study_label <- rep(df_study_summary$study[i], times = n_obs[i])
+        ms.delta_study <- generate_data(n = n_obs[i], df_study_summary$ms.delta[i], sd.i)
+        study <- c(study, study_label)
+        ms.delta <- c(ms.delta, ms.delta_study)
+}  
+
+df <- data.frame(study = study, ms.delta = ms.delta)
+
+print(head(df))
+```
+
+For the sake of realism, we could also generate multiple `ms.delta` per participant ID and stimulus ID and maybe add a few different conditions per experiments. These hierarchies can be stacked in the usual way. For simplicity, we won't do this here. 
+
+Here's the empirical landscape for our imaginary meta-analysis:
+
+```{r}
+df %>%
+  ggplot(aes(x = study, y = ms.delta)) +
+  geom_boxplot() +
+  theme_minimal((base_size = 20)) + 
+  theme(axis.text.x=element_blank())
+```
+
+We can see that, overall, the studies dance around true $\theta$ but we can also see that some $\theta_i$ are far above and some are below. This is why it's important to not only conduct one study on the effect we're interested in. And also why meta-analysis is so important: We want to be able to sensibly aggregate this information. Also, here we assumed that there is nothing odd happening in the literature, so the studies stochastically center around true $\theta$. In reality, there will be many differences from study to study that will make $\theta_i$ vary from one $i$ to the next. Another reason to conduct a meta-analysis is to shed light on these factors (AKA *moderators*).
+
+On to the model. We do not have any moderators (which can otherwise model as fixed-/random-effects) so we just model follow the specification above, estimating $\theta$ based on $\theta_i$ and $s_i^2$:
+ 
+```{r, warning=FALSE, message=FALSE}
+library(brms)
+options(mc.cores = 4)
+
+priors <- c(prior(normal(0, 100), class = Intercept),
+            prior(cauchy(0,5),    class = sd)
+            )
+
+
+m <- brm(data = df_study_summary,
+         formula = ms.delta | se(stdE) ~ 1 + (1 | study),
+         prior = priors,
+         iter = 6000, 
+         chains = 4,
+         seed = 244,
+         file = '~/brochhagen.github.io/content/reports/m')
+
+summary(m)
+```
+
+
+Between study heterogeneity is estimated as $\hat{\tau} = 5.13$ ($\tau = 5$). Individual studies' deviation from $\hat{\theta}$:
+
+```{r}
+ranef(m)
+```
+
+And here's $\hat{\theta}$:
+
+```{r}
+fixef(m)
+```
+
+All together in a nicer visual representation:
+
+```{r, warning=FALSE, message=FALSE}
+library(tidybayes)
+library(ggridges)
+library(glue)
+
+study.draws <- spread_draws(m, r_study[study, ], b_Intercept) %>%
+  mutate(b_Intercept = r_study + b_Intercept)
+
+pooled.effect.draws <- spread_draws(m, b_Intercept) %>% 
+  mutate(study = 'Pooled effect (theta-hat)')
+
+forest.df <- bind_rows(pooled.effect.draws, study.draws) %>% 
+  ungroup() %>%
+  mutate(study = reorder(study, b_Intercept))
+
+forest.df.sm <- group_by(forest.df, study) %>% mean_qi(b_Intercept)
+
+forest.df <- forest.df %>%
+  mutate(cls = ifelse(study == 'Pooled effect (theta-hat)', 'p', 'i')) 
+
+forest.df %>%
+  ggplot(aes(b_Intercept, relevel(study, "Pooled effect (theta-hat)", after = Inf))) +
+  geom_density_ridges(rel_min_height = 0.0001, aes(fill = cls)) +
+  geom_text(data = mutate_if(forest.df.sm, is.numeric, round, 2),
+            aes(label = glue("{b_Intercept} | {.lower}, {.upper}"),
+            x = Inf, hjust = "inward")) +
+  labs(y = element_blank(),
+  x = "Difference Construction I and Construction II (ms.)") + 
+  xlim(-1,35) + 
+  theme_minimal(base_size = 15) +
+  scale_fill_okabe_ito(name = 'cls') + 
+  theme(legend.position = 'none')
+```
+
+
+### Partial pooling
+
+A meta-analysis has (minimally) two levels. Within-study:
+
+$$y_i \sim \text{Normal}(\theta_i, \sigma^2_i)$$
+
+And between study:
+
+$$\theta_i \sim \text{Normal}(\theta, \tau^2)$$
+
+The between-study variance, $\tau$ controls the pooling continuum. In the extreme, $\tau = 0$ leads to full pooling: No between-study variance means we treat all studies as the same, $\theta_i = \theta$. Any difference is attributed to sampling error ($\sigma^2_i$). On the other extreme, $\tau \rightarrow \infty$ means that $\theta$ is no informative about any $\theta_i$ since each study is very different from one another. In between these extremes, partial pooling lives.
+
+$$\hat{\theta_i} \approx \frac{\frac{1}{\sigma^2_i}y_i + \frac{1}{\tau^2}\hat{\theta}}{\frac{1}{\sigma^2_i} + \frac{1}{\tau^2}}$$
+
+A high precision (small error), $\frac{1}{\sigma^2_i}$, thus consequently means that $y_i$ influences our estimate of $\theta_i$ more. And, analogously, for $\frac{1}{\tau^2}$. So small $\tau$ generates strong pooling and large $\tau$ weak pooling.
