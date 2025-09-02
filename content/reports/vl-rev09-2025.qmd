@@ -1,0 +1,177 @@
+---
+title: "Overview VL review extraction"
+author: Thomas Brochhagen
+date: today
+format: html
+code-fold: true
+
+---
+
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+
+setwd('~')
+df <- readr::read_csv('Downloads/extracted_N=356.csv')
+
+```
+
+This is an overview of the data from the systematic review's data extraction phase. A total of `r nrow(df)` studies went through this final phase of extraction (i.e., these are the relevant studies for the systematic review after screening). 
+
+Here are the columns of the file
+
+```{r}
+print(colnames(df))
+```
+
+### Structural matters
+
+Studies with missing data in at least one column:
+
+```{r}
+df[!complete.cases(df),] %>% select(`Covidence #`, Title, `Study ID`)
+```
+
+The columns `Covidence #`, `Title` and `Study ID` give similar information but note that there are repeated values in `Study ID` (printed below), so always use `Covidence #` as a unique identifier for each study. Repeated Study IDs:
+
+```{r}
+#length(unique(df$`Covidence #`))
+#length(unique(df$`Title`))
+df[duplicated(df$`Study ID`), ]$`Study ID`
+```
+
+Looking at the titles associated with `KROODSMA 1980` to check:
+```{r}
+df %>% filter(`Study ID` == 'KROODSMA 1980') %>% pull(Title)
+```
+
+So `Study ID` is non-unique when authors publish multiple papers in a single year.
+
+### Vocalizer-related counts
+
+In the following I am splitting multiple entries into individual entries. Recall that some studies are about multiple `Taxa`, or have multiple labels, and so on. For instance, a cell with `bats; cetaceans` means that the study is on both bats and cetaceans. To get counts, I split these into `bats` and `cetaceans`. So, after splitting, there are more than 356 entries for most of these columns.
+
+Also, for normalization purposes, trailing spaces and enclosing square brackets were removed (e.g. `[Melospiza melodia]` vs. `Melospiza melodia`). And everything was lowercased. I don't remember what `+`, `x` and quotation marks (e.g., `“calliphlox” evelynae`) indicate so those were left untouched.
+
+::: {.panel-tabset}
+#### Taxa 
+```{r}
+split_and_expand <- function(string_vector) {
+  split_list <- strsplit(string_vector, split = ";\\s*")
+  expanded_vector <- unlist(split_list)
+  norm_vector <- trimws(expanded_vector, which = "right")
+  norm_vector <- gsub("\\[|\\]", "", norm_vector)
+  norm_vector <- tolower(norm_vector)
+  return(norm_vector)
+}
+
+taxa <- split_and_expand(df$Taxa)
+species.scient <- split_and_expand(df$`Species (scientific name)`)
+species.comm <- split_and_expand(df$`Species (common name)`)
+mobility <- split_and_expand(df$Mobility)
+voc.sex <- split_and_expand(df$`Vocalizer sex`)
+int.receiver <- split_and_expand(df$`Intended receiver`)
+age <- split_and_expand(df$`Age`)
+vocalization.type <- split_and_expand(df$`Vocalization type`)
+h.interaction <- split_and_expand(df$`Heterospecific interaction`)
+
+addmargins(sort(table(taxa),decreasing = TRUE)) %>% kable()
+```
+
+#### Species scientific name
+```{r}
+addmargins(sort(table(species.scient), decreasing = TRUE)) %>% kable()
+```
+
+#### Species common name
+```{r}
+addmargins(sort(table(species.comm), decreasing = TRUE)) %>% kable()
+```
+
+#### Mobility
+```{r}
+addmargins(sort(table(mobility),decreasing = TRUE)) %>% kable()
+```
+
+#### Vocalizer sex
+```{r}
+addmargins(sort(table(voc.sex),decreasing = TRUE)) %>% kable()
+```
+
+#### Intended receiver
+```{r}
+addmargins(sort(table(int.receiver), decreasing = TRUE)) %>% kable()
+```
+
+#### Age
+```{r}
+addmargins(sort(table(age), decreasing = TRUE)) %>% kable()
+```
+
+#### Vocalization type
+```{r}
+addmargins(sort(table(vocalization.type),, decreasing = TRUE)) %>% kable()
+```
+
+#### Heterospecific interaction
+```{r}
+addmargins(sort(table(h.interaction), decreasing = TRUE)) %>% kable()
+```
+:::
+
+To keep in mind for future data analysis/summary statistics: the `Sum` does not match across columns. For instance, `Taxa` has 360 entries but `Age` has `448`. That is probably due to, say, a study on a single taxon across multiple stages of ontological development. 
+
+
+
+### Study-related counts
+
+Same as above but for properties that are more about the study than the animal
+
+```{r}
+type <- split_and_expand(df$`Type of study`)
+primary <- split_and_expand(df$`Primary evidence of VL`)
+focus <- split_and_expand(df$`Focus of the study`)
+manipulation <- split_and_expand(df$`Manipulation / intervention`)
+focal.species <- split_and_expand(df$`The focal species is/are`)
+ac.analysis <- split_and_expand(df$`Acoustic analysis`)
+labels <- split_and_expand(df$`Labels`)
+```
+
+::: {.panel-tabset}
+#### Type
+```{r}
+addmargins(sort(table(type), decreasing = TRUE)) %>% kable()
+```
+
+#### Primary VL evidence
+```{r}
+addmargins(sort(table(primary), decreasing = TRUE)) %>% kable()
+```
+
+#### Focus of study
+```{r}
+addmargins(sort(table(focus), decreasing = TRUE)) %>% kable()
+```
+
+#### Manipulation
+```{r}
+addmargins(sort(table(manipulation), decreasing = TRUE)) %>% kable()
+```
+
+#### Focal species are...
+```{r}
+addmargins(sort(table(focal.species), decreasing = TRUE)) %>% kable()
+```
+
+#### Acoustic analysis
+```{r}
+addmargins(sort(table(ac.analysis), decreasing = TRUE)) %>% kable()
+```
+
+#### Labels
+```{r}
+addmargins(sort(table(labels), decreasing = TRUE)) %>% kable()
+```
+:::
