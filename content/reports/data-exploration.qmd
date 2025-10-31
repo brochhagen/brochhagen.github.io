@@ -1,0 +1,141 @@
+---
+title: "Colors and referent data"
+subtitle: "A first look"
+author: Thomas Brochhagen
+date: today
+format: html
+code-fold: true
+---
+
+## Introduction
+
+This is a summary of my first closer look at the data to identify potential forks in the analysis and take some decisions in advance. Particularly prior to collecting the image data.
+
+```{r, warning=FALSE, message=FALSE} 
+library(dplyr)
+setwd('~/color')
+
+df <- readr::read_csv('data/colors and referents data.csv')
+
+dff <- df %>% filter(!is.na(source))
+
+df_colex <- dff %>%
+  filter(stringr::str_detect(source, ","))
+
+df_unraveled <- dff %>% tidyr::separate_rows(source, sep = ",") %>% 
+  mutate(source = stringr::str_trim(source))
+```
+
+There are `r nrow(df)` total data points, with `r nrow(dff)` rows that indicate a source referent for a given color word in a language. Out of the latter, there are `r nrow(df_colex)` rows that have more than one source (e.g., `RAW, FRESH` for *green* instead of just `RAW` or just `FRESH`). Unravelling these ambiguous entries so that each possible source gets its own row gives a total of `r nrow(df_unraveled)` data points with a potential source (but at most `r nrow(dff)` will be the true source, the others are incidental colexifications or unclear sources).
+
+In other words, 355 data points are straightforward to analyze in that they provide a one-to-one color-source mapping. The other 223 entries need to be dealt with, probably case by case since they are a mixed bag. More on this at the end of the document.
+
+## Sources
+
+To get a better feeling for the data, I focused on the sources and their potential representation by images. I expect that this will be the main factor impacting the amount of data we ultimately have to analyze. Taking all potential sources as a starting point, we have `r length(unique(df_unraveled$source))` in total. 
+
+Here's the top 20, with total count of occurence added:
+
+```{r}
+df_unraveled %>%
+  group_by(source) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n)) %>% 
+  head(n = 20)
+```
+
+This is to say that there's some repetition but also a long tail of sources that appear only once. 
+
+Here's the tail:
+
+```{r}
+df_unraveled %>%
+  group_by(source) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n)) %>% 
+  tail(n = 20)
+```
+
+Inspecting `r length(unique(df_unraveled$source))` cases is not that much work. I am attaching the list to an email to you for convenience. What follows are my comments based on this inspection.
+
+```{r}
+writeLines(unique(df_unraveled$source), 'data/unique_sources.txt')
+```
+
+## Comments
+
+In trying to make sense of the data, I tried to roughly categorize the sources. Here's what I got, in very rough strokes:
+
+* **Category 1**: Depictable by a concrete object without an issue
+  * Examples: NILGIRI BARBERRY, GREAT CUCKOO DOVE, SCARLET FLYCATCHER, WESTERN BLUEBERRY
+* **Category 2**: Depictable indirectly through many instances since it may vary in color/shape from instance to instance but not very context/culture/environment dependent if we take a big enough sample
+  * Examples: NIGHT, SKY, SMOKE, BRUISE
+* **Category 3**: Not depictable because it is abstract and/or the color is relative to the object it modifies
+  * Examples: BEAUTY, PALE, JAUNDICE, FAIR, CLEAN, SHINE 
+* **Category 4**: Possibly depictable indirectly through many instances but some pre-selection may be required (compared to Category 2)
+  * Examples: RAW/FRESH/RIPE (as pictures of raw fruit but not other raw objects, like meat), DARK, POWDER
+* **Category 5**: Depictable but local context may matter for color
+  * Examples: ROSE, CLAY, MUD
+
+*** 
+
+My comments on this, in no particular order:
+
+1. Categories 1,2,3 are relatively straightforward. For Category 1 and Category 2 I would just try to get a large enough sample, process those and let the results be what they will be. I see no way to retain data from Category 3 (e.g., `BEAUTY`). 
+
+2. On the topic of membership to Category 3: As a community, we really should push for English not be used as a meta-language. Not being able to tell properties from referents (e.g., `DARK` instead of, say, `OSCURO` vs. `OSCURIDAD` using Spanish) makes me doubt if some sources that look adjectival could be treated more like nouns for the present purpose. If `DARK` is about *the dark*/*darkness* then we can treat it like `NIGHT` and just look at many images that depict darkness. If it's a dark object then it's Category 3 for me (like `BEAUTIFUL`) because that largely depends on a comparison class (*dark for a X*).
+
+3. This is a good transition into the next category. Category 4 is tricky because I think that's where it's easiest to deceive ourselves by selecting based on the color term (e.g., selecting green fruit for `RAW` because the basic color term is often *green*). A solution would be to have the images collected by someone who doesn't know the color term; or even better, has no knowledge of the project at all. This is risky though since we may be burrying the true result in the noise we get by selecting without full information. One may argue that we "know" that the referents should be *green* because we know the SOURCE->COLOR path that we're trying to describe. But that sounds pretty biased in favour of ourselves and what we think we may find to me.
+
+4. Category 5 is like 4 but a little less controversial: where we suspect that context of where the language is spoken matters, we select for images of sources that -as much as possible- are close to those found in the environment where the language is spoken. This is what we have discussed the most but, on a skim, there are not that many cases of these compared to Category 3 or the property/referent issue mentioned above.
+
+5. Multiple sources for a single color term. Matthias raised this issue already: there are entries with multiple potential sources like `GOLD, CASSUMUNAR GINGER` for *yellow*. If we do not have a way to determine what the source is, which I imagine we will not have, I see three options:
+
+  * Exclude these data points since it is unclear what the source is;
+  * Retain all sources that can be depicted and run the analysis once per potential source for each color term. So we end up with a lot of analyses. For instance, one using `GOLD` for *yellow* and the other using `CASSUMUNAR GINGER` for *yellow*, for the example above. One of these is "the true analysis" where each correct source is analyzed. Maybe this shouldn't be done as the main analysis but it could be a robustness check with this "fuller" set of data. 
+  * Retain all sources that can be depicted but, after pruning the data for only sources that can be depicted, exclude those data points that still have multiple potential sources. This allows us to retain some data points if, by chance, after prunning for depictability, they now only have one source left. But this also introduces a bias toward an analysis that prioritizes potential sources that are depictable. There are some theoretical reasons why this may not be too bad of a bias --a lot of researchers have argued that the most common extension is from concrete to abstract, and this probably correlates with depictable vs. non-depictable-- but it's something to keep in mind.
+
+6. Pseudo-synonymy: one-to-many color-source mappings.  The assumption of using only basic color terms (which I still endorse for lack of a better alternative) shows its limits very fast in some languages. For Basque, for instance, there are a lot of words associated to *gray* but different sources (`MUD` vs. `DIRTY`, vs. `BRUISE`) and word forms. I imagine these different words do not really denote the same color but that they are all being conflated under the label, *gray*. I don't know what to do with these. There are 97 cases (out of 579) in which for a given glottocode and a given basic color term there is more than one entry for its potential source. 
+
+```{r, eval=FALSE}
+dff %>% 
+  select(glottocode, standardized_reference_color, source) %>% 
+  unique() %>%
+  group_by(glottocode, standardized_reference_color) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n)) %>% 
+  filter(n > 1) %>% 
+  nrow()
+```
+
+
+7. Relatedly, there's also the opposite case where different basic color terms match to the same source concept: Again, for Basque, there's *red* (gorri) and *purple* (gorrindol) that both have `RED WINE, RUDDY` as source. That makes sense because they partially colexify, with purple being (`RED`+indol). So the data codification here is working as intended. But I'm pointing this out because at some point we worried that maybe we were testing something obvious that follows from the way we're preparing the data; and this is a clear example of how messy things get: these many-to-one mappings necessarily go against the hypothesis that focal colors of source referents map to focal color spaces --since the same referent can't both the prototypically `RED` and prototypically `PURPLE`. Two options I see:
+
+  * We acknowledge that this works against our hypothesis and just live with it; or
+  * We elaborate exclusion criteria that deal with (some of) these. Since the data is small, I think we can do that. Taking Basque as an example that I think can/should be excluded, "gorrindol" is the more complex form (`RED`+suffix). I think it's sensible in this case to exclude the morphologically more complex form when two colors partially colexify. The argument is that we're studying `SOURCE`->`COLOR` relationships and in this case the likely chain is `RED WINE, RUDDY`->`RED`->`PURPLE`. So we are not interested in "gorrindol"/`PURPLE` since the chain is longer and we exclude it. The counterargument is obviously that `RED`->`PURPLE` is still a `SOURCE`->`COLOR` relationship so it ought to be included. There are also cases where the source is another color serves as the source (the source for purple in Bororoan is `RED`) but I see no surface similarity between the forms. In that case, I think we just need to live with it. There's a total of 87 cases where for a given glottocode the same source is associated with more than one basic color term. 
+
+```{r, eval=FALSE}
+dff %>% 
+  select(glottocode, standardized_reference_color, source) %>% 
+  unique() %>%
+  group_by(glottocode, source) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n)) %>% 
+  filter(n > 1) %>% 
+  nrow()
+```
+
+
+*** 
+
+## Decisions
+
+* Do we treat sources that would otherwise be discarded because they are properties relative to a referent (`DARK` or `LIGHT`) as "nouns" so that we can depict them ("darkness" (oscuridad; Dunkelheit) and "light" (luz; Licht)? I would say yes. That saves some of the data that would otherwise be part of Category 3 but not all of it (`BEAUTY`).
+
+* How to select images for Category 4 in the most unbiased way possible without adding noise that will work against the analysis later on (Comment 4). Not sure about this one. The cleanest solution I have is to categorize most of them as Category 3, since they are relative to the referent they modify (e.g., `RAW`) and to move the remainder up to Category 5 (e.g., `POWDER`). In other words, maybe Category 4 is not a helpful category after all and it just comes from my attempt to retain some sources where I can imagine the color to be appropriately captures (`RAW` as green).
+
+* What do do with cases of multiple sources (Comment 5). I would do the third option I mention for the main analysis; and the second one as a robustness/sanity check. But I'm not too sure so very open to suggestions.
+
+* What do do with Pseudo-Synonymy (Comment 6). Not sure here.
+
+* What to do with many-colors-to-one-source mappins (Comment 7). I think we just need to live with it. It is concerning that this is about 1/5 of the data (prior to pruning for sources that can be depicted) but I see no way around it.
