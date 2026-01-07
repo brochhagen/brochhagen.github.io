@@ -1,0 +1,62 @@
+---
+title: "Phylogenetic model of binary traits"
+subtitle: "potential and limitations"
+format: html
+author: Thomas Brochhagen
+date: today
+code-fold: true
+---
+
+This is just a small demo to showcase the kind of analysis one could (not) conduct with the phylogenetic model we worked on. The model is based on @cathart:2023 (implementing Felsenstein's pruning algorithm [@felsenstein:1981] in a regression framework).
+
+In a nutshell, given a phylogenetic tree and (potentially) other predictors, the model estimates the stationary distribution and speed of change of a binary trait. This is done by estimating the probability that the trait is distributed along the tips of the tree (observed data for actual languages) given the tree and the predictors. So it's very similar to a regression, only that it also takes into consideration the way in which languages are related, according to the tree. 
+
+The model estimates:
+
+* The long term transition probability $\pi$ from not having the trait (0) to having the trait (1); and
+* The speed of this change $s$.
+* Optionaly: The effect that any other predictors codified as fixed or random effects 
+
+Speed and probability are decoupled because you can imagine that it could be very likely to, say, gain a trait, but then this change may either happen very slowly but it could also happen very often. Put together, the gain rate of a trait is $\pi s$ and the loss-rate is $(1 - \pi)s$.   
+
+A few things to keep in mind:
+
+* As currently implemented, the algorithm expects one binary trait per tip (language). In other words, it is not straightforward to model multiple binary traits per language (e.g., the colexification status of multiple meaning pairs in a language). The data would have to be recoded.
+
+### A short demo
+
+Please bear in mind that this should not be taken as a serious attempt to model the data. To be able to easily a decent amount of data coverage across different languages and language families, I selected a few concepts from Concepticon that are related to cold. These are
+
+> 'FREEZE', 'ICE', 'FROST', 'HOARFROST', 'COLD (CHILL)', 'WINTER', 'COLD (OF WEATHER)', 'COLD', 'FRESH'
+
+I then recoded the data such that the binary trait I characterize in the following is whether a language colexifies at least two of these in any of its words listed in Lexibank. This is a (very) noisy way of doing something that could be, in principle, interesting: To group concepts by domain and to recode the data along these lines.  
+
+I am using three phylogenies for this analysis: Indo-European (@hegg23), Turkic (@hrus15) and Uralic (@honk13). This yields 32, 22, and 14 data points, respectively. 
+
+N.B.: For phyologenetic analyses of this sort, you usually have to modify the data a little to match the tree (if you only have data on Galician but your tree only includes Portugese; you can either add a new branch nearby for Galician or you can swap Galician for Portuguese; and so on). We have data on only 32, 22, and 14 languages for these families because I didn't do so. 
+
+The model below estimates, for colexifying at least one cold-related meaning, (i) the stationary distribution ($\pi$), (ii) the speed of change ($s$) and (iii) the effect that Latitude may have on (i) and (ii) modulo phylogenetic tree(s).  
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(pisrms)
+model <- readRDS("~/Downloads/m_cold_agg.rds")
+```
+
+```{r}
+print(summary(model))
+```
+
+```{r}
+plot(model, what=c("pi"));
+```
+
+```{r}
+plot(model, what=c('s'))
+```
+
+Qs for Dan:
+
+* Are the predictors, such as `Latitude`, tree-level predictors? Looks like that from the README with the tone (mean_humidity_by_family) 
+* How does the passing two DVs at once work? You have simple and complex tone. Do these 
+
