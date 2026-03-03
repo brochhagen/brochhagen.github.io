@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Linear (and less linear) models</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Thomas Brochhagen" />
+    <link href="intro-lm-and-others_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="intro-lm-and-others_files/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Linear (and less linear) models
+### Thomas Brochhagen
+### Training &amp; Discussion Session, 10/12/2020
+
+---
+
+
+
+
+
+
+# Today's menu
+
+.large[
+* Linear models
+
+* Generalized linear models
+
+* Generalized additive models
+]
+
+---
+# Disclaimers
+We will focus on a **conceptual overview** and **applied workflows** to ensure your inferences stick 
+&lt;br&gt;&lt;br&gt;
+We'll mainly use "base package" fitting functions 
+&lt;br&gt;&lt;br&gt;
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+.footnote[
+***
+.pull-left[Recommended readings for less hand-waving:
+* McElreath's [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/)
+* Gelman et al's [Regression and Other Stories](https://avehtari.github.io/ROS-Examples/)
+* Wood's [Generalized Additive Models](https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331)
+]
+.pull-right[Engage with the community:
+* talk to your colleagues
+* [Andrew Gelman's blog](https://statmodeling.stat.columbia.edu/)
+* [Cross-validated](https://stats.stackexchange.com/)
+* [Stan forums](https://discourse.mc-stan.org/)
+]
+]
+---
+#Linear model
+### A quick example of something you might have done before
+
+```r
+data(Howell1) #partial !Kung San census data
+d &lt;- Howell1
+str(d)
+```
+
+```
+## 'data.frame':	544 obs. of  4 variables:
+##  $ height: num  152 140 137 157 145 ...
+##  $ weight: num  47.8 36.5 31.9 53 41.3 ...
+##  $ age   : num  63 63 65 41 51 35 32 27 19 54 ...
+##  $ male  : int  1 0 0 1 0 1 0 1 0 1 ...
+```
+
+---
+### Subsetting to only data from male adults
+
+
+```r
+d_males &lt;- d %&gt;% filter(age &gt; 18,
+                        male == 1)
+str(d_males)
+```
+
+```
+## 'data.frame':	164 obs. of  4 variables:
+##  $ height: num  152 157 164 169 165 ...
+##  $ weight: num  47.8 53 63 55.5 54.5 ...
+##  $ age   : num  63 41 35 27 54 66 36 44 39 56 ...
+##  $ male  : int  1 1 1 1 1 1 1 1 1 1 ...
+```
+
+---
+
+```r
+p1 &lt;- ggplot(data= d_males, aes(x = weight, y=height)) +
+      geom_point() +
+      theme_minimal() + theme(text= element_text(size=20))
+```
+&lt;img src="intro-lm-and-others_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+
+```r
+p1 +
+*geom_smooth(method='lm', level=0.89) #level sets the CI
+```
+
+&lt;img src="intro-lm-and-others_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+---
+#Numeric summary of our regression
+
+```r
+lmodel_dmales &lt;- lm(data = d_males, formula(height ~ weight))
+summary(lmodel_dmales)
+```
+
+```
+## 
+## Call:
+## lm(formula = formula(height ~ weight), data = d_males)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -21.8883  -2.7864   0.3957   2.8706  13.7366 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 126.39660    3.10055   40.77   &lt;2e-16 ***
+## weight        0.69896    0.06336   11.03   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.566 on 162 degrees of freedom
+## Multiple R-squared:  0.429,	Adjusted R-squared:  0.4255 
+## F-statistic: 121.7 on 1 and 162 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+class: center, inverse
+
+#In a sense we're done
+#but what does this all mean?
+
+---
+class: center, inverse
+
+# Neither this
+
+![](https://imgs.xkcd.com/comics/machine_learning.png )
+
+---
+class: center, inverse
+
+# Nor this
+
+![](http://abacus.bates.edu/~ganderso/biology/resources/stats_flow_chart_v2014.gif)
+
+---
+
+#Goal 
+Characterize (predictive) relationship of a **response** to one or multiple **predictors** 
+--
+
+## Subgoals
+* Quantify not only directionality and existence of effect but its magnitude
+
+* Quantify certainty of estimate
+
+* Quantify relative predictive contribution of different predictors
+
+
+---
+#A family of models
+
+###Linear Models
+Linear relationship of a normally distributed response to one or multiple predictors
+--
+
+###Generalized Linear Models
+Linear relationship of a not-necessarily normally distributed response to one or multiple predictors
+--
+
+###Generalized Additive models
+Not-necessarily linear relationship of a not-necessarily normally distributed response to one or multiple predictors
+
+---
+
+
+# General workflow: Model check
+**Validity** &lt;br&gt;Does the data and model you are analyzing map to the research question?
+&lt;br&gt;
+
+**Additivity and linearity**&lt;br&gt;
+The most important mathematical assumption of a regression model is that its deterministic component is a linear function of the separate predictors
+&lt;br&gt;
+
+**Independence of errors**&lt;br&gt;&lt;br&gt;
+
+**Equal variance of errors**&lt;br&gt;&lt;br&gt;
+
+**Normality of errors**
+
+
+
+.footnote[
+***
+Snippets from Gelman &amp; Hill's [Data Analysis Using Regression and Multilevel/Hierarchical Models](http://www.stat.columbia.edu/~gelman/arm/)
+]
+
+---
+### Tip #1: Do multiple visual checks, first with simulated data
+&lt;img src="intro-lm-and-others_files/figure-html/misspecify-1.png" style="display: block; margin: auto;" /&gt;
+.pull-right[.footnote[
+.small[&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Examples from [Gavin &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Simpson's webinar on GAMs](https://github.com/gavinsimpson/intro-gam-webinar-2020/blob/master/gam-intro.Rmd)
+]]]
+---
+### "Simulated data" sounds fancy but it doesn't have to be
+
+```r
+set.seed(5)
+
+fake.heights &lt;- rnorm(1000,
+                      mean = mean(d_males$height),
+                      sd = 10)
+
+
+fake.weights &lt;- (fake.heights * 0.3) +
+                rnorm(1000,0,5)
+
+
+fake.df &lt;- data.frame('height' = fake.heights,
+                      'weight' = fake.weights)
+```
+
+---
+
+
+```r
+str(fake.df)
+```
+
+```
+## 'data.frame':	1000 obs. of  2 variables:
+##  $ height: num  152 174 148 161 177 ...
+##  $ weight: num  38.3 58.5 42.2 48.4 53.9 ...
+```
+
+```r
+summary(lm(data=fake.df, height ~ weight))
+```
+
+```
+## 
+## Call:
+## lm(formula = height ~ weight, data = fake.df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -31.0712  -5.4603   0.0626   5.6696  27.4716 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 115.91559    2.25910   51.31   &lt;2e-16 ***
+## weight        0.91972    0.04621   19.90   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 8.567 on 998 degrees of freedom
+## Multiple R-squared:  0.2841,	Adjusted R-squared:  0.2834 
+## F-statistic: 396.1 on 1 and 998 DF,  p-value: &lt; 2.2e-16
+```
+---
+
+#General workflow: It's an iterative process
+1. What assumptions go into the model(s)? 
+2. Reversely, what's the right model for these assumptions?
+3. Check with simulated data &amp;#128257;
+4. Check simplest model with real data &amp;#128257;
+5. Check more complex models with real data / more of the data &amp;#128257;
+6. Model comparison if you have multiple models
+
+.footnote[***
+The verb *check* means: (i) model diagnostics; (ii) model validation; (iii) model evaluation; (iv) predictive checks]
+
+
+---
+
+class: inverse, center
+#Linear models
+Linear relationship of a normally distributed response to one or multiple predictors
+
+---
+
+#Quick note on normals being normal
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+`$$y \sim \text{Normal}(\mu,\sigma)$$`
+.footnote[ ***
+Useful to remember: about `\(95\%\)` of values around `\(\mu\)` are within `\(2 \times \sigma\)` &lt;br&gt;
+More of a mouthful: ["The 68-95-99 Rule"](https://en.wikipedia.org/wiki/68%E2%80%9395%E2%80%9399.7_rule)
+]
+---
+
+```r
+n1 &lt;- rnorm(1000,mean=5,sd=1)
+n2 &lt;- rnorm(1000,mean=5,sd=0.1)
+n3 &lt;- rnorm(1000,mean=5,sd=5)
+```
+
+&lt;img src="intro-lm-and-others_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## Back to the !Kung San data 
+&lt;img src="intro-lm-and-others_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Linear model
+.left-column[
+General form
+] `$$y_i \sim \text{Normal}(\mu,\sigma)\\ \mu = \beta_0 + \beta_1 x_{1i} + ... + \beta_n x_{ni}$$`
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+.left-column[
+Our example 
+] `$$\text{height}_i \sim \text{Normal}(\mu,\sigma)\\ \mu = \beta_0 + \beta_1 \text{weight}_i$$`
+---
+
+.pull-left[
+![](intro-lm-and-others_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+`$$\text{height}_i \sim \text{Normal}(\mu,\sigma)\\ \mu = \beta_0 + \beta_1 \text{weight}_i$$`
+&lt;br&gt;&lt;br&gt;
+Point prediction for a `\(53\)`kg adult male: `\(126+(53\times0.7) = 163\text{cm}\)`. **Is this reasonable?**
+]
+
+
+
+```
+## 
+## Call:
+## lm(formula = formula(height ~ weight), data = d_males)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -21.8883  -2.7864   0.3957   2.8706  13.7366 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 126.39660    3.10055   40.77   &lt;2e-16 ***
+## weight        0.69896    0.06336   11.03   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.566 on 162 degrees of freedom
+## Multiple R-squared:  0.429,	Adjusted R-squared:  0.4255 
+## F-statistic: 121.7 on 1 and 162 DF,  p-value: &lt; 2.2e-16
+```
+---
+
+#Practical consideration:&lt;br&gt; Transform your data where relevant
+
+
+```r
+precis(lmodel_dmales)
+```
+
+```
+##                    mean         sd       5.5%       94.5%
+## (Intercept) 126.3966004 3.10055061 121.441322 131.3518791
+## weight        0.6989594 0.06335555   0.597705   0.8002138
+```
+
+```r
+*d_males$weight_centered &lt;- d_males$weight - mean(d_males$weight)
+lmodel2_males &lt;- lm(data=d_males, formula=height ~ weight_centered)
+precis(lmodel2_males)
+```
+
+```
+##                        mean         sd       5.5%       94.5%
+## (Intercept)     160.3760280 0.35650861 159.806258 160.9457977
+## weight_centered   0.6989594 0.06335555   0.597705   0.8002138
+```
+
+---
+# Workflow: Model check (so far)
+1. Our model and data make sense for the research question we're after  ✓
+
+2. Visual check(s) ✓
+
+3. Sanity check of coefficients and their errors ✓
+
+4. Errors
+
+  * Independence of errors
+  * Equal variance of errors
+  * Normality of errors
+---
+# Residual error
+
+&lt;img src="intro-lm-and-others_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+Well-behaved errors have no trend and (less importantly) are normally distributed with mean of 0
+
+
+```r
+plot(lmodel2_males, which=c(1))
+```
+
+&lt;img src="intro-lm-and-others_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Workflow: Model evaluation and model comparison
+1. Are there more/less predictors that could be included in a model? Or alternative models? Or alternative parametrizations? How does this affect  *performance*?
+  * Watch out for: collinearity &amp; masked relationships
+  * Be mindful of: model identifiability
+  * Decide in advance: criterion for model ranking
+  
+2. Question your model(s): Am I interested in just characterizing the data?  What is a good metric for performance in the first place? Do I want to prediction unseen data points?
+
+.footnote[
+***
+N.B.: If there is interest in a session on (1)
+]
+
+---
+class: inverse, center
+# Questions so far?
+---
+
+class: inverse, center
+#Generalized linear models
+Linear relationship of a not-necessarily normally distributed response to one or multiple predictors
+
+---
+# Non-normal data: far from abnormal
+A lot of (linguistic) data does not have an approximately normal form
+
+* Experimental data: binary, Likert scales, ...
+
+* Corpus data: counts, ...
+* ...
+
+---
+# GLMs: What's new
+
+1. Distribution: How your data's (assumed to be) distributed 
+
+2. Link function: Distribution we impose on error terms. More practically: Its job is to map a linear space of the model to the non-linear space of a parameter. 
+--
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+.left-column[LM as GLM]
+`$$y_i \sim \text{Normal}(\mu,\sigma)\\
+f(\mu) = \beta_0 + \beta x_i$$`
+
+&lt;br&gt;&lt;br&gt;.left-column[A Bernoulli GLM]
+`$$y_i \sim \text{Binomial}(1,p_i)\\
+f(p_i) = \beta_0 + \beta x_i$$`
+
+---
+### Link functions
+* Looks complex, but just an added assumption to keep track of
+
+* Can be put to the test
+  * Informally: check what happens if you change the link function
+  * Formally: Sensitivity testing, a.o.
+  
+* In practical terms, [each distribution comes with a canonical link function](https://en.wikipedia.org/wiki/Generalized_linear_model#Link_function)
+
+* In more practical terms: *log*, *logit*, or *probit* are likely to meet your needs
+
+---
+###A starting point
+![](linkfunc.png)
+
+---
+# Colexification
+
+
+
+```r
+glimpse(df) #raw-ish data enriched with fastText cosine sims
+```
+
+```
+## Rows: 61,986
+## Columns: 8
+## $ clics_form          &lt;chr&gt; "s@", "s@", "avir@", "jang", "dzju", "thong", "gi…
+## $ Concepticon_ID.x    &lt;dbl&gt; 1369, 1369, 1035, 1425, 1425, 1481, 1277, 1277, 1…
+## $ Glottocode          &lt;chr&gt; "hrus1242", "hrus1242", "miji1239", "chug1252", "…
+## $ Concepticon_Gloss.x &lt;chr&gt; "gold", "gold", "good", "green", "green", "hammer…
+## $ Concepticon_ID.y    &lt;dbl&gt; 1927, 946, 923, 847, 1424, 1409, 1199, 981, 639, …
+## $ Concepticon_Gloss.y &lt;chr&gt; "bamboo", "blood", "love", "thirsty", "yellow", "…
+## $ colex               &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ cosine_sim          &lt;dbl&gt; 0.25082484, 0.24408447, 0.32151990, 0.16748094, 0…
+```
+
+---
+# What are we modeling?
+## Option A
+Model that predicts likelihood of concepts `\(x\)` and `\(y\)` colexifying (in language `\(i\)`?) based on cosine similarity; associativity; phyologenetic distance; geographic distance; ...
+
+  * Response: `\(p(\text{colex}(x_i,y_i))\)` for language `\(i\)`
+  
+  * Predictors: cosine similarity, ...
+  * Distribution: Bernoulli 
+  * Canonical link function: logit
+  
+---
+## Option B
+Model that predicts how often `\(x\)` and `\(y\)` colexify based on the above
+  * Response: `\(P(\sum_i\text{colex}(x_i,y_i) = k)\)`
+  
+  * Predictors: ...
+  * Distribution: Possion
+  * Canonical link function: log
+  
+---
+#Specifying Option B
+`$$count.colex(\langle x,y\rangle_i) \sim \text{Pois}(\lambda)\\
+log(\lambda) = \beta_0 + \beta_1 cosine.sim(\langle x,y\rangle_i)$$`
+
+---
+#Getting the counts 
+
+```r
+df_counts &lt;- df %&gt;% select(Concepticon_Gloss.x,Concepticon_Gloss.y,
+                           colex, cosine_sim) %&gt;%
+       group_by(Concepticon_Gloss.x,Concepticon_Gloss.y) %&gt;%
+       mutate(colex.sum = sum(colex)) %&gt;%
+       ungroup() %&gt;%
+       arrange(desc(colex.sum)) %&gt;%
+       select(-c(colex)) %&gt;%
+       unique() %&gt;% drop_na
+glimpse(df_counts)
+```
+
+```
+## Rows: 27,954
+## Columns: 4
+## $ Concepticon_Gloss.x &lt;chr&gt; "tree", "foot", "boat", "skin", "dish", "fingerna…
+## $ Concepticon_Gloss.y &lt;chr&gt; "wood", "leg", "canoe", "leather", "plate", "claw…
+## $ cosine_sim          &lt;dbl&gt; 0.4008849, 0.5679256, 0.6888264, 0.3117073, 0.489…
+## $ colex.sum           &lt;dbl&gt; 292, 218, 177, 174, 166, 157, 156, 153, 151, 139,…
+```
+
+---
+##Visual impression
+
+
+&lt;img src="intro-lm-and-others_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Numeric output
+
+```r
+m.colex_counts &lt;- glm(data=df_counts,
+                      formula=colex.sum ~ cosine_sim,
+*                     family=poisson(link = 'log'))
+summary(m.colex_counts)
+```
+
+```
+## 
+## Call:
+## glm(formula = colex.sum ~ cosine_sim, family = poisson(link = "log"), 
+##     data = df_counts)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -7.582  -0.780  -0.399  -0.092  43.923  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -0.150936   0.007269  -20.76   &lt;2e-16 ***
+## cosine_sim   3.836244   0.019641  195.31   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 118962  on 27953  degrees of freedom
+## Residual deviance:  89694  on 27952  degrees of freedom
+## AIC: 152898
+## 
+## Number of Fisher Scoring iterations: 6
+```
+
+---
+# Some practical implications
+
+```r
+precis(m.colex_counts)
+```
+
+```
+##                   mean          sd       5.5%      94.5%
+## (Intercept) -0.1509358 0.007269455 -0.1625538 -0.1393178
+## cosine_sim   3.8362443 0.019641453  3.8048534  3.8676351
+```
+
+```r
+intercept &lt;- precis(m.colex_counts)$mean[1]
+beta_cosine &lt;- precis(m.colex_counts)$mean[2]
+
+*exp( intercept + beta_cosine*0.1 )
+```
+
+```
+## [1] 1.261988
+```
+
+```r
+*exp( intercept + beta_cosine*0.5 )
+```
+
+```
+## [1] 5.854358
+```
+
+```r
+*exp( intercept + beta_cosine*0.9 )
+```
+
+```
+## [1] 27.15834
+```
+
+
+---
+
+# To note
+GLM residuals can look funky
+
+Checking them is conditioned on the assumed response distribution
+
+We won't deal with this today
+
+---
+
+class: inverse, center
+#Generalized Additive Models
+Not-necessarily linear relationship of a not-necessarily normally distributed response to one or multiple predictors
+
+---
+#A colexification GAM
+`$$count.colex(\langle x,y\rangle_i) \sim \text{Pois}(\lambda)\\
+log(\lambda) = \beta_0 + s(\beta_1 cosine.sim(\langle x,y\rangle_i))$$`
+
+---
+
+#Visual impression
+&lt;img src="intro-lm-and-others_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Numeric output
+
+
+```r
+*gam.colex_counts &lt;- gam(colex.sum ~ s(cosine_sim, k=10),
+                      data=df_counts,
+                      family=poisson(link = 'log'),
+*                     method='REML')
+```
+
+```
+## 
+## Family: poisson 
+## Link function: log 
+## 
+## Formula:
+## colex.sum ~ s(cosine_sim, k = 10)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) 0.583615   0.004721   123.6   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Approximate significance of smooth terms:
+##                 edf Ref.df Chi.sq p-value    
+## s(cosine_sim) 8.604   8.95  40808  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## R-sq.(adj) =  0.0874   Deviance explained = 28.6%
+## -REML =  74123  Scale est. = 1         n = 27954
+```
+
+---
+
+# The predictor
+
+
+```r
+plot(gam.colex_counts)
+```
+
+&lt;img src="intro-lm-and-others_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Outlook: New GAM decisions
+
+* What kind of estimator to use 
+
+* What kind of a basis function for a predictor (e.g., thin plate splines)
+* Number of basis functions
+
+---
+
+class: inverse, center
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
